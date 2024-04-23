@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>
+    <script src="/js/JSPDF/jspdf.min.js"></script>
+    <script src="/js/JSPDF/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
+</head>
+
+<style>
+  .border-black{
+    border-color: black;
+  }
+  .res{
+    border: 1px solid black;
+    padding: 5px;
+    font-size: 11px;
+  }
+</style>
+
+<body id="g-body">
+    
+  <h2>Trama Saludpol</h2>
+  <p></p>
+
+    
+    <div class="input-group mb-3">
+
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelectProductionMonth">Mes de producción</label>
+      </div>
+      <select class="custom-select" id="inputGroupSelectProductionMonth">
+       
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelectProductionYear">Año</label>
+      </div>
+      
+      <select class="custom-select" id="inputGroupSelectProductionYear">
+      </select>
+
+      <button class="btn btn-primary" id="btn-query" onclick="query()" ><i class="bi bi-search"></i>&nbsp;Consultar atenciones</button>
+      <button style="background-color: #004073;border-color: #004073;" class="btn btn-primary" id="btn-deleted" onclick="showModalDeleteAccount()" ><i class="bi bi-pencil-square"></i>&nbsp;Editar consulta de atenciones</button>
+      &nbsp; 
+      <a><div class="loaderSmall" id="loader"></div></a>
+
+    </div>
+
+    
+    </div>
+
+    <p></p>
+
+    <div class="input-group mb-3">
+      <H2 style="margin-top: 5x;">OPCIONES : </H2>&nbsp;&nbsp;
+      <button style="display: none;" class="btn btn-dark" id="btn-trama" onclick="buildTrama()" ><i class="bi bi-bounding-box"></i>&nbsp;Generar trama</button>
+      <button style="display: none;" class="btn btn-dark" id="btn-upload-trama"><i class="bi bi-upload"></i><a target="_blank" style="color: white;text-decoration:none; " href="https://app-gtips.saludpol.gob.pe:38071/app-gtips/">&nbsp;Subir trama</a></button>
+      <button style="display: none;" class="btn btn-danger" id="btn-obs" onclick="obtenerDatos()" ><i class="bi bi-exclamation-triangle"></i>&nbsp;Observar atenciones</button>
+      <button style="display: none;" class="btn btn-success" id="btn-report" onclick="fetchSequentially()" ><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Generar reporte</button>
+      <button style="display: none;" class="btn btn-light border-black" id="btn-resum" onclick="fetchResum()"><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Generar resumen</button>
+      <button style="display: none; background-color: #49002b;border-color: #49002b;" class="btn btn-success" id="btn-no-ate" onclick="showModalEditAtention()" ><i class="bi bi-eye-slash-fill"></i>&nbsp;Atenciones no figuradas</button>
+    </div>
+
+      
+  <div id="body">
+    <br>
+    <label style="font-weight: bolder;font-size: 22px;">Trama 1</label>
+    <div class="table-responsive">
+     <table class="table table-hover table-bordered display" id="tb-data-1">
+         <thead>
+           <tr id="tr-table-1">
+           </tr>
+         </thead>
+         <tbody id="tbody">
+         </tbody>
+       </table>
+     </div>
+
+     <br>
+
+     <label style="font-weight: bolder;font-size: 22px;">Trama 2</label>
+     <div class="table-responsive">
+      <table class="table table-hover table-bordered display" id="tb-data-2">
+          <thead>
+            <tr id="tr-table-2">
+            </tr>
+          </thead>
+          <tbody id="tbody2">
+          </tbody>
+        </table>
+      </div>
+
+      <br>
+ 
+      <label style="font-weight: bolder;font-size: 22px;">Trama 3</label>
+      <div class="table-responsive">
+       <table class="table table-hover table-bordered display" id="tb-data-3">
+           <thead>
+             <tr id="tr-table-3">
+             </tr>
+           </thead>
+           <tbody id="tbody3">
+           </tbody>
+         </table>
+       </div>
+
+       <br>
+ 
+       <label style="font-weight: bolder;font-size: 22px;">Trama 4</label>
+       <div class="table-responsive">
+        <table class="table table-hover table-bordered display" id="tb-data-4">
+            <thead>
+              <tr id="tr-table-4">
+              </tr>
+            </thead>
+            <tbody id="tbody4">
+            </tbody>
+          </table>
+        </div>
+
+     </div>
+
+<!---->
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalDeleteLabel">Agrege a la tabla los N° de cuentas</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">N° de cuenta</span>
+          <input type="number" id="nAccount" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+          <button class="btn btn-success" onclick="addToTableIn()" ><i class="bi bi-plus-circle"></i>&nbsp; Incluir</button>
+          <button class="btn btn-danger" onclick="addToTable()" ><i class="bi bi-x-circle"></i>&nbsp; Excluir</button>
+        </div>
+    
+        <label style="color: green;">Cuentas incluidas</label>
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered display" id="tb-data-accounts-in">
+              <thead>
+                <tr>
+                  <th class="minText" scope="col"><center><b># de cuenta</b></center></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tbodyAccountIn">
+              </tbody>
+            </table>
+          </div>
+
+          <br>
+
+          <label style="color: red;">Cuentas excluidas</label>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered display" id="tb-data-accounts">
+                <thead>
+                  <tr>
+                    <th class="minText" scope="col"><center><b># de cuenta</b></center></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyAccount">
+                </tbody>
+              </table>
+            </div>
+
+      </div>
+      <div class="modal-footer">
+        <button onclick="consult()" type="button" class="btn btn-primary"><i class="bi bi-check-all"></i>&nbsp; Consultar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="detailModalLabel">Detalle de atención</h1>
+        &nbsp;
+        <button id="btn-edit-account" onclick="showModalEditAccount()" class="btn btn-secondary"><i class="bi bi-gear-fill"></i></button>
+        &nbsp;
+        <button id="btn-edit-account" onclick="printAtention()" class="btn btn-primary"><i class="bi bi-printer-fill"></i></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <center id="loaderDetails"><a><div style="display: block;" class="loader"></div></a></center>
+        
+        <div id="div-details">
+          <label style="font-weight: bold;">Tipo de atención :</label>&nbsp;<label id="d-ate"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Doc.Autorización :</label>&nbsp;<label id="d-auth"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">N° de cuenta :</label>&nbsp;<label id="d-account"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">ID prestación :</label>&nbsp;<label id="d-fua"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Historia :</label>&nbsp;<label id="d-history"></label>
+          <p></p>
+          <label style="font-weight: bold;">DNI :</label>&nbsp;<label id="d-dni"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Paciente :</label>&nbsp;<label id="d-fullname"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Sexo :</label>&nbsp;<label id="d-sex"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">F.nacimiento :</label>&nbsp;<label id="d-nac"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Edad :</label>&nbsp;<label id="d-age"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">ID paciente :</label>&nbsp;<label id="d-id-patient"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">ID atención :</label>&nbsp;<label id="d-id-atention"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <P></P>
+          <label style="font-weight: bold;">Servicio ingreso :</label>
+          &nbsp;<label id="d-svi"></label>&nbsp;-&nbsp;<label id="d-id-svi"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Fecha ingreso :</label>&nbsp;<label id="d-fi"></label><p></p>
+          <label style="font-weight: bold;">Servicio egreso :</label>
+          &nbsp;<label id="d-sve"></label>&nbsp;-&nbsp;<label id="d-id-sve"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Fecha egreso :</label>&nbsp;<label id="d-fe"></label><p></p>
+          <label style="font-weight: bold;">Digitador :</label>&nbsp;<label id="d-dig"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Fuente de financiamiento :</label>&nbsp;
+          <label id="d-ff"></label>
+          &nbsp;<label id="d-tipo-ff"></label>
+          <label>-</label>
+          &nbsp;<label id="d-id-ff"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Fecha de ultima receta :</label>&nbsp;<label id="d-fur"></label>
+          <P></P>
+          <label style="font-weight: bold;">Médico :</label>
+          <label id="d-id-medico"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label style="font-weight: bold;">Colegiatura :</label>
+          <label id="d-id-medic-col"></label>
+        </div>
+        
+        <br><br>
+
+        <label style="color:#0192ac; font-weight: bolder ;font-size: 20px;">Diagnosticos</label>
+        <div class="d-flex justify-content-end mb-2">
+        <button onclick="showModalAddDiagnosys()" style="margin-bottom: 10px;background-color: #0192ac;border-color: #0192ac;" class="btn btn-success"><i class="bi bi-prescription"></i>&nbsp;Agregar diagnostico</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered display" id="tb-data-diag">
+            <thead>
+                <tr>
+                  <th>Tipo de diagnostico</th>
+                  <th>CIE 10</th>
+                  <th>Descripción</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tbodyDiag">
+              </tbody>
+            </table>
+          </div>
+          
+        <br><br>
+
+        <label style="color:#d3a202; font-weight: bolder ;font-size: 20px;">Procedimientos</label>
+        <div class="d-flex justify-content-end mb-2">
+        <button onclick="openModalAddProcedure()" style="color: #222222;margin-bottom: 10px;background-color: #d3a202;border-color: #d3a202;" class="btn btn-success"><i class="bi bi-file-earmark-medical-fill"></i>&nbsp;Agregar procedimiento</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered display" id="tb-data-pro">
+            <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Nombre</th>
+                  <th>Cantidad</th>
+                  <th>Precio Unit.</th>
+                  <th>Precio</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tbodyPro">
+              </tbody>
+            </table>
+          </div>
+          
+          <label style="font-size: 18px;color: green;font-weight: bold;float: right;margin-right: 10px;" id="t-pro"></label>
+          <label style="font-size: 18px;font-weight: bold;float: right;">Total procedimientos :S/</label>
+
+          <br><br>
+
+          <label style="color:#d3a202; font-weight: bolder ;font-size: 20px;">Laboratorio</label>
+          <div class="d-flex justify-content-end mb-2">
+          <button onclick="openModalAddLaboratory()" style="color: #222222;margin-bottom: 10px;background-color: #d3a202;border-color: #d3a202;" class="btn btn-success"><i class="bi bi-clipboard2-pulse"></i>&nbsp;Agregar laboratorio</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered display" id="tb-data-lab">
+              <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit.</th>
+                    <th>Precio</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyLab">
+                </tbody>
+              </table>
+            </div>  
+            
+            <label style="font-size: 18px;color: green;font-weight: bold;float: right;" id="t-lab"></label>
+            <label style="font-size: 18px;font-weight: bold;float: right;">Total laboratorio :S/</label>
+
+          <br><br>
+
+          <label style="color:#d3a202; font-weight: bolder ;font-size: 20px;">Imágenes</label>
+          <div class="d-flex justify-content-end mb-2">
+            <button onclick="openModalAddImages()" style="color: #222222;background-color: #d3a202; border-color: #d3a202;" class="btn btn-success">
+              <i class="bi bi-card-image"></i>&nbsp;Agregar imágenes
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered display" id="tb-data-img">
+              <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit.</th>
+                    <th>Precio</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyImg">
+                </tbody>
+              </table>
+            </div>
+            
+            <label style="font-size: 18px;color: green;font-weight: bold;float: right;" id="t-img"></label> 
+            <label style="font-size: 18px;font-weight: bold;float: right;">Total imágenes :S/</label> 
+
+          <br><br>
+
+          <label style="color:#ac0039; font-weight: bolder ;font-size: 20px;">Medicamentos</label>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered display" id="tb-data-med">
+              <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Diagnostico</th>
+                    <th>Precio Unit.</th>
+                    <th>Precio</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyMed">
+                </tbody>
+              </table>
+            </div>  
+        
+            <label style="font-size: 18px;color: green;font-weight: bold;float: right;" id="t-med"></label>
+            <label style="font-size: 18px;font-weight: bold;float: right;">Total medicamentos :S/</label>
+
+            <br><br>
+
+            <label style="color:#ac0039; font-weight: bolder ;font-size: 20px;">Insumos</label>
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered display" id="tb-data-ins">
+                <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nombre</th>
+                      <th>Cantidad</th>
+                      <th>Diagnostico</th>
+                      <th>Precio Unit.</th>
+                      <th>Precio</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyIns">
+                  </tbody>
+                </table>
+              </div>  
+
+              <label style="font-size: 18px; color: green;font-weight: bold;float: right;" id="t-ate"></label>
+              <label style="font-size: 18px;font-weight: bold;float: right;">CONSUMO TOTAL :S/</label>
+
+              <label style="visibility: hidden;float: right;">.........</label>
+              
+              <label style="font-size: 18px;color: green;font-weight: bold;float: right;" id="t-ins"></label>
+              <label style="font-size: 18px;font-weight: bold;float: right;">Total insumos :S/</label>
+    
+
+          <!---->
+
+          <!-- Modal -->
+          <div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="detailProcedure" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content border border-dark rounded" 
+              style="background-color: #fffefb;">
+                  <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                      <label style="visibility: hidden;" id="index-pro"></label>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <center><div id="loader-procedure-detail" class="loaderSmall"></div><p></p></center>
+                     
+                      <p></p>
+                      <label><b>Procedimiento :</b></label>&nbsp;<label id="id-detail-procedure"></label>
+                      <p></p>
+                      <label><b>Código :</b></label>&nbsp;<label id="id-detail-code"></label>
+                      <p></p>
+                      <label><b>ID orden :</b></label>&nbsp;<label id="id-order"></label>
+                      <p></p>
+                      <label><b>ID producto :</b></label>&nbsp;<label id="id-product"></label>
+                      <p></p>
+                      <h5>Actualización / Eliminación</h5>
+                      <p></p>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Cantidad</span>
+                        <input type="number" id="detail-procedure-quantity" class="form-control" placeholder="..." aria-label="Username" aria-describedby="basic-addon1">
+                        <button class="btn btn-success" onclick="updateQuantityProcedure()" type="button">Actualizar</button>
+                        <button onclick="modalDeleteProcedure()" class="btn btn-danger">Eliminar</button>
+                      </div>
+                      <p></p>
+                
+                      <p></p>
+                  
+                    </div>
+                
+                  </div>
+                </div>
+              </div>
+
+          <!---->
+
+
+         <!-- Modal -->
+         <div class="modal fade" style="background-color: #fffcfc8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="editAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content border border-dark rounded">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar cuenta N°</h1>
+                <h1 class="modal-title fs-5" id="ed-account"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <h5>Atención</h5>
+                <p></p>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Doc.de autorización</span>
+                  <input type="text" id="ed-doc-auth" class="form-control" aria-describedby="basic-addon1">
+                  <button onclick="updateNroCodeOrigin()" class="btn btn-success">Actualizar</button>
+                </div>
+                <p></p>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Fecha de ingreso</span>
+                  <input id="et-f-in" type="date" class="form-control" aria-describedby="basic-addon1">
+                  <span class="input-group-text" id="basic-addon1">Fecha de egreso</span>
+                  <input id="et-f-out" type="date" class="form-control" aria-describedby="basic-addon1">
+                  <button onclick="updateDate()" class="btn btn-success">Actualizar</button>
+                </div>
+             
+                <h5>Paciente</h5>
+                <p></p>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">DNI</span>
+                  <input type="number" id="ed-dni" maxlength="8" class="form-control" aria-describedby="basic-addon1">
+                  <button onclick="updateDniPatient()" class="btn btn-success">Actualizar</button>
+                </div>
+                <p></p>
+
+                <h5>Servicio</h5>
+                <p></p>
+                <div class="input-group mb-3">
+                  <span style="color: #ac0039;" class="input-group-text" id="basic-addon1">Servicio de ingreso</span>
+                  <input disabled style="color: black;background-color: white" type="text" id="ed-service" class="form-control" aria-describedby="basic-addon1">
+                  <span class="input-group-text" id="basic-addon1">ID</span>
+                  <input disabled style="color: black;background-color: white;" type="text" id="id-ed-service" class="form-control" aria-describedby="basic-addon1">
+                  <button onclick="openModalSearchService(1)" class="btn btn-primary">Buscar</button>
+                </div>
+                <div class="input-group mb-3">
+                  <span style="color: #005222;" class="input-group-text" id="basic-addon1">Servicio de egreso</span>
+                  <input disabled style="color: black;background-color: white" type="text" id="ed-service-2" class="form-control" aria-describedby="basic-addon1">
+                  <span class="input-group-text" id="basic-addon1">ID</span>
+                  <input disabled style="color: black;background-color: white;" type="text" id="id-ed-service-2" class="form-control" aria-describedby="basic-addon1">
+                  <button onclick="openModalSearchService(2)" class="btn btn-primary">Buscar</button>
+                </div>
+                <p></p>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-text">
+                    <input class="form-check-input mt-0" style="width: 30PX;height: 30px;" id="maleCheckbox" type="checkbox" value="1" >
+                    &nbsp;<i style="color: #001173;font-size: 30px;font-weight: bolder;" class="bi bi-gender-male"></i>&nbsp;
+                    <label>Masculino</label>
+                    &nbsp;&nbsp;
+                    <input class="form-check-input mt-0" style="width: 30PX;height: 30px;" id="femaleCheckbox" type="checkbox" value="2" aria-label="Checkbox for following text input">
+                    &nbsp;<i style="color: #ff2f41;font-size: 30px;font-weight: bolder;" class="bi bi-gender-female"></i>&nbsp;
+                    <label>Femenino</label>
+                  </div>
+                  
+                  <button onclick="updateGenderPatient()" class="btn btn-success">Actualizar</button>
+
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+          
+       <!---->
+
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="addProcedure" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content border border-dark rounded" 
+    style="background-color: #fbfdff;">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5">Agregar procedimiento</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+         
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+              <input type="text" id="in-procedure" onkeyup="searchProcedure()" class="form-control" placeholder="Nombre de procedimiento..." aria-describedby="basic-addon1">
+            </div>       
+            
+            <div class="input-group mb-3">
+              <span style="background-color: #ac0039;" onclick="searchProcedureByCode()" class="input-group-text" id="basic-addon1"><i class="bi bi-search" style="color: white;"></i></span>
+              <input type="tel" id="in-procedure-code" class="form-control" placeholder="Código de procedimiento..." aria-describedby="basic-addon1">
+            </div>  
+
+            <br>
+
+            <table class="table table-hover table-bordered display" id="tb-data-search-procedure">
+              <thead>
+                  <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodySeachProcedure">
+                </tbody>
+              </table>
+
+              <br>
+
+              <h3>Parámetros</h3>
+
+              <label>Procedimiento :&nbsp;</label><label style="color: #cf7c00;" id="select-name-procedure"></label>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-border-middle"></i>&nbsp;ID Producto</span>
+                <input disabled style="background-color: white;color: #000833;" type="text" id="edt-id-product" class="form-control" aria-describedby="basic-addon1">
+    
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-tag"></i>&nbsp;Precio</span>
+                <input disabled style="background-color: white;color: #000833;" type="number" id="edt-product-price" class="form-control" aria-describedby="basic-addon1">
+
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-boxes"></i>&nbsp;Cantidad</span>
+                <input maxlength="1" onkeyup="addQuantityAndPriceProcedure()" style="background-color: white;color: #000833;" type="tel" id="edt-product-quantity" class="form-control" aria-describedby="basic-addon1">
+
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-tags"></i>&nbsp;Total</span>
+                <input disabled style="background-color: white;color: #000833;" type="text" id="edt-product-total-price" class="form-control" aria-describedby="basic-addon1">
+
+                <button onclick="showModaladdProcedureAccount()" class="btn btn-success"><i class="bi bi-clipboard-plus"></i>&nbsp;Agregar</button>
+
+              </div>   
+        
+          </div>
+      
+        </div>
+      </div>
+    </div>
+
+<!---->
+    <div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="addService" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content border border-dark rounded" 
+        style="background-color: #fbfdff;">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Editar servicio de</h1>
+                &nbsp;
+                <h1 class="modal-title fs-5" id="type-serv"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+             
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                  <input type="text" id="ser-service" onkeyup="searchService()" class="form-control" placeholder="Nombre de servicio..." aria-describedby="basic-addon1">
+                </div>       
+
+                <br>
+    
+                <table class="table table-hover table-bordered display" id="tb-data-search-service">
+                  <thead>
+                      <tr>
+                        <th></th>
+                        <th>Nombre</th>
+                        <th>ID</th>
+                        <th>Especialidad</th>
+                        <th>Tipo de servicio</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbodySeachService">
+                    </tbody>
+                  </table>
+
+              </div>
+          
+            </div>
+          </div>
+        </div>    
+
+<!-- Modal -->
+<div class="modal fade" style="background-color: #ffffff8f;" id="modalAddDiagnosys" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar diagnostico</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="input-group mb-3">
+          <label class="input-group-text">Tipo de atención</label>
+          <select onchange="getSubDiagnosys()" class="form-select" id="inputGroupSelectTypeAtention">
+            <option value="0" disabled selected>Seleccione una opción...</option>
+            <option value="1">CONSULTORIOS EXTERNOS</option>
+            <option value="2">CONSULTORIOS DE EMERGENCIA</option>
+            <option value="3">HOSPITALIZACIÓN</option>
+          </select>
+        </div>
+
+        <p></p>
+
+        <div class="input-group mb-3" id="selectSubClass" style="display: none;">
+          <label class="input-group-text" for="inputGroupSelect01">Tipo de diagnostico</label>
+          <select class="form-select" id="inputGroupSelectSubClass">
+            
+          </select>
+        </div>
+
+        <p></p>
+
+        <div class="input-group mb-3" id="input-diagnosys" style="display: none;">
+          <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+          <input type="text" id="in-diagnosys" onkeyup="searchDiagnosys()" class="form-control" placeholder="Nombre de diagnostico..." aria-describedby="basic-addon1">
+        </div>    
+
+        <p></p>
+
+        <table class="table table-hover table-bordered display" id="tb-data-search-diagnosys">
+          <thead>
+              <tr>
+                <th></th>
+                <th>ID</th>
+                <th>Nombre</th>
+              </tr>
+            </thead>
+            <tbody id="tbodySeachDiagnosys">
+            </tbody>
+          </table>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" style="background-color: #ffffff8f;" id="modalAddLab" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar laboratorio</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+         <label style="font-weight: 700;">Busque y seleccione un diagnostico</label>
+        <p></p>
+
+        <div class="input-group mb-3" id="input-diagnosys">
+          <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+          <input type="text" id="in-diagnosys-by-lab" onkeyup="searchDiagnosysByLab()" class="form-control" placeholder="Nombre de diagnostico..." aria-describedby="basic-addon1">
+        </div>    
+
+        <table class="table table-hover table-bordered display" id="tb-data-search-diagnosys-by-lab">
+          <thead>
+              <tr>
+                <th></th>
+                <th>ID</th>
+                <th>Nombre</th>
+              </tr>
+            </thead>
+            <tbody id="tbodySeachDiagnosysByLab">
+            </tbody>
+          </table>
+          
+          <p></p>
+          <b style="color: #ac0039;">*</b><label style="color: #0192ac;">Diagnostico seleccionado :</label>
+          <label style="font-weight: 500;" id="lab-diagnosys"></label>
+          <p></p>
+          <b style="color: #ac0039;">*</b><label style="color: #0192ac;">Código :</label>
+          <label style="font-weight: 500;" id="lab-diagnosys-code"></label>
+          
+          <br><p></p>
+
+          <div  id="lab-t-t1" style="display: none;">
+            <label>Busque y seleccione un procedimiento de laboratorio</label>
+            <p></p>
+            <div class="input-group mb-3" id="input-diagnosys">
+              <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+              <input type="text" id="in-procedure-by-lab" onkeyup="searchProcedureLab()" class="form-control" placeholder="Nombre de procedimiento de lab..." aria-describedby="basic-addon1">
+            </div>    
+          </div>
+
+          <p></p>
+
+          <table class="table table-hover table-bordered display" style="display: none;" id="tb-data-search-procedure-by-lab">
+            <thead>
+                <tr>
+                  <th></th>
+                  <th>ID</th>
+                  <th>Cód</th>
+                  <th>Descripcion</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody id="tbodySeachProcedureByLab">
+              </tbody>
+            </table>
+
+            <br>
+
+            <label>Procedimiento de laboratorio :&nbsp;</label><label style="color: #cf7c00;" id="select-name-procedure-lab"></label>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-border-middle"></i>&nbsp;ID Producto</span>
+                <input disabled style="background-color: white;color: #000833;" type="text" id="edt-id-product-lab" class="form-control" aria-describedby="basic-addon1">
+    
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-tag"></i>&nbsp;Precio</span>
+                <input disabled style="background-color: white;color: #000833;" type="number" id="edt-product-price-lab" class="form-control" aria-describedby="basic-addon1">
+
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-boxes"></i>&nbsp;Cantidad</span>
+                <input maxlength="1" onkeyup="addQuantityAndPriceProcedureLab()" style="background-color: white;color: #000833;" type="tel" id="edt-product-quantity-lab" class="form-control" aria-describedby="basic-addon1">
+
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-tags"></i>&nbsp;Total</span>
+                <input disabled style="background-color: white;color: #000833;" type="text" id="edt-product-total-price-lab" class="form-control" aria-describedby="basic-addon1">
+
+                <button onclick="showModaladdProcedureLabAccount()" class="btn btn-success"><i class="bi bi-clipboard-plus"></i>&nbsp;Agregar</button>
+
+              </div>   
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" style="background-color: #ffffff8f;" id="modalAddImg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Agregar imágenes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+         <label style="font-weight: 700;">Busque y seleccione un diagnostico</label>
+        <p></p>
+
+        <div class="input-group mb-3" id="input-diagnosys">
+          <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+          <input type="text" id="in-diagnosys-by-img" onkeyup="searchDiagnosysByImg()" class="form-control" placeholder="Nombre de diagnostico..." aria-describedby="basic-addon1">
+        </div>    
+
+        <table class="table table-hover table-bordered display" id="tb-data-search-diagnosys-by-img">
+          <thead>
+              <tr>
+                <th></th>
+                <th>ID</th>
+                <th>Nombre</th>
+              </tr>
+            </thead>
+            <tbody id="tbodySeachDiagnosysByImg">
+            </tbody>
+          </table>
+          
+          <p></p>
+          <b style="color: #ac0039;">*</b><label style="color: #0192ac;">Diagnostico seleccionado :</label>
+          <label style="font-weight: 500;" id="img-diagnosys"></label>
+          <p></p>
+          <b style="color: #ac0039;">*</b><label style="color: #0192ac;">Código :</label>
+          <label style="font-weight: 500;" id="img-diagnosys-code"></label>
+          
+          <br><p></p>
+
+          <div  id="img-t-t1" style="display: none;">
+            <label>Busque y seleccione un procedimiento de imágenes</label>
+            <p></p>
+            <div class="input-group mb-3" id="input-diagnosys">
+              <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+              <input type="text" id="in-procedure-by-img" onkeyup="searchProcedureImg()" class="form-control" placeholder="Nombre de procedimiento de imagenes..." aria-describedby="basic-addon1">
+            </div>    
+          </div>
+
+          <p></p>
+
+          <table class="table table-hover table-bordered display" style="display: none;" id="tb-data-search-procedure-by-img">
+            <thead>
+                <tr>
+                  <th></th>
+                  <th>ID</th>
+                  <th>Cód</th>
+                  <th>Descripcion</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody id="tbodySeachProcedureByImg">
+              </tbody>
+            </table>
+
+            <br>
+
+            <label>Procedimiento de imágenes :&nbsp;</label><label style="color: #cf7c00;" id="select-name-procedure-img"></label>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-border-middle"></i>&nbsp;ID Producto</span>
+                <input disabled style="background-color: white;color: #000833;" type="text" id="edt-id-product-img" class="form-control" aria-describedby="basic-addon1">
+    
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-tag"></i>&nbsp;Precio</span>
+                <input disabled style="background-color: white;color: #000833;" type="number" id="edt-product-price-img" class="form-control" aria-describedby="basic-addon1">
+
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-boxes"></i>&nbsp;Cantidad</span>
+                <input maxlength="1" onkeyup="addQuantityAndPriceProcedureImg()" style="background-color: white;color: #000833;" type="tel" id="edt-product-quantity-img" class="form-control" aria-describedby="basic-addon1">
+
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-tags"></i>&nbsp;Total</span>
+                <input disabled style="background-color: white;color: #000833;" type="text" id="edt-product-total-price-img" class="form-control" aria-describedby="basic-addon1">
+
+                <button onclick="showModaladdProcedureImgAccount()" class="btn btn-success"><i class="bi bi-clipboard-plus"></i>&nbsp;Agregar</button>
+
+              </div>   
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+
+    <!-- Modal -->
+    <div class="modal fade" style="background-color: #ffffff8f;" id="modalMedical" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-4" >Detalle de medicamento</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+           <center>
+
+            <div class="input-group mb-3" style="width: 50%;">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="font-weight: bold;" id="basic-addon1">ID receta</span>
+              </div>
+              <input type="number" id="med-idReceta" class="form-control" disabled style="color: black;">
+            </div>
+            
+            <div class="input-group mb-3" style="width: 50%;">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="font-weight: bold;" id="basic-addon1">Item</span>
+              </div>
+              <input type="number" id="med-idItem" class="form-control" disabled style="color: black;">
+            </div>
+         
+            <div class="input-group mb-3" style="width: 50%;">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="font-weight: bold;" id="basic-addon1">Diagnostico</span>
+              </div>
+              <input type="text" id="med-dx" class="form-control" style="color: black;">
+              <button class="btn btn-success" onclick="updateDX()"><i class="bi bi-arrow-down-up"></i>&nbsp;Actualizar</button>
+            </div>
+         
+          </center>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!---->
+
+    <div class="modal fade" style="background-color: #ffffff8f;" id="modalEditAtention" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-4" >Consultar atención</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+           
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><b>Número de cuenta</b></span>
+              </div>
+              <input type="number" maxlength="8" id="no-ate-account" class="form-control">
+              <button class="btn btn-primary" onclick="fetchQueryNoAtention()"><i class="bi bi-search"></i>&nbsp;Buscar</button>
+            </div>
+            
+            <br>
+
+            <label><b>Nombres :</b>&nbsp;</label><label id="no-ate-name"></label>
+            &nbsp;&nbsp;&nbsp;
+            <label><b>Edad :</b>&nbsp;</label><label id="no-ate-age"></label>
+            &nbsp;&nbsp;&nbsp;
+            <label><b>DNI :</b>&nbsp;</label><label id="no-ate-dni"></label>
+            &nbsp;&nbsp;&nbsp;
+            <label><b>Sexo :</b>&nbsp;</label><label id="no-ate-gender"></label>
+
+            <br><br>
+
+            <label><b>Servicio :</b>&nbsp;</label><label id="no-ate-service"></label>
+            &nbsp;&nbsp;&nbsp;
+            <label><b>N° Cuenta :</b>&nbsp;</label><label id="no-ate-account-q"></label>
+            &nbsp;&nbsp;&nbsp;
+            <label><b>ID paciente :</b>&nbsp;</label><label id="no-ate-id-patient"></label>
+            &nbsp;&nbsp;&nbsp;
+            <label><b>Doc de Autorización :</b>&nbsp;</label><label id="no-ate-auth"></label>
+
+            <br><br>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><b>Fecha de ingreso</b></span>
+              </div>
+              <input type="date" id="no-ate-in-date" class="form-control">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><b>Hora de ingreso</b></span>
+              </div>
+              <input type="time" id="no-ate-in-hour" class="form-control">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><b>Fecha de egreso</b></span>
+              </div>
+              <input type="date" id="no-ate-out-date" class="form-control">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><b>Hora de egreso</b></span>
+              </div>
+              <input type="time" id="no-ate-out-hour" class="form-control">
+              <button onclick="updateDateAtentionSaludpol()" class="btn btn-success">Actualizar</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!----->
+
+    <!-- Modal -->
+<div class="modal fade" id="modalResum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="btn btn-primary" onclick="printResum()"><i class="bi bi-printer-fill"></i></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <table style="border-collapse: collapse;font-size: 8px;line-height: 1;" id="tablaResumen">
+          <thead>
+            <tr>
+             <th class="res" colspan="11"><center>RESUMEN DEL CONSUMO DETALLADO SALUDPOL - <label id="monthResum"></label>&nbsp;<label id="yearResum"></label></center></th>
+            </tr>
+            <tr>
+              <th class="res" colspan="10" align="left">TOTAL</th>
+              <th class="res" align="right">S/.<label id="totalResum"></label></th>
+            </tr>
+            <tr>
+              <th class="res" colspan="1"><center>TIPO DE CONSUMO</center></th>
+              <th class="res" colspan="2"><center>ORIGEN DE SERVICIO</center></th>
+              <th class="res" colspan="3"><center>DESCRIPCION DEL CONSUMO</center></th>
+              <th class="res" colspan="4"><center>CANT.</center></th>
+              <th class="res" colspan="5"><center>MONTO</center></th>
+            </tr>
+            <tr>
+              <td class="res" colspan="6">Farmacia</td>
+              <td class="res" colspan="4" align="center"><label id="QPharmacy"></label></td>
+              <td class="res" align="right">S/.<label id="TPharmacy"></label></td>
+            </tr>
+            <tr>
+              <td class="res" colspan="6">Laboratorio</td>
+              <td class="res" colspan="4" align="center"><label id="QLab"></td>
+              <td class="res" align="right">S/.<label id="TLab"></td>
+            </tr>
+          </thead>
+          <!--------------------------------------------------------------->
+          <tbody id="tbodyResum">
+          
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+   <!---->
+
+     <script>
+
+     for(let i = 1 ; i<= 24 ; i++ ){
+      
+      let values = ["","Prestacion","Cuenta","Doc.autorizacion","Tipo de documento","N° documento","A.Paterno","A.Materno",
+      "Nombres","Historia","F.nacimiento","Sexo","T.atencion","F.ingreso","F.alta","T.Doc.Responsable","N°.Doc.Responsable",
+      "AP.Responsable","AM.Responsable","N.Responsable","Profesion responsable","N° colegiatura","Especialidad","N° registro","Condicion de alta"]
+      
+      let item = `<th class="minText" scope="col"><center>${values[i]}</center></th>`
+      
+      if(i == 1){
+        let x = `
+        <th class="minText" scope="col"><center></center></th>
+        <th class="minText" scope="col"><center></center></th>
+        `
+        $(x).appendTo('#tr-table-1')
+      }
+      $(item).appendTo('#tr-table-1')
+     }
+
+     for(let i = 1 ; i<= 4 ; i++ ){
+
+      let values = ["","Prestacion","Tipo diagnostico","Codigo diagnostico","Descripcion de diagnostico"]
+
+      let item = `<th class="minText" scope="col"><center>${values[i]}</center></th>`
+      $(item).appendTo('#tr-table-2')
+     }
+
+     for(let i = 1 ; i<= 4 ; i++ ){
+      let values = ["","Prestacion","Codigo CPT","cantidad","Valorizado"]
+      let item = `<th class="minText" scope="col"><center>${values[i]}</center></th>`
+      $(item).appendTo('#tr-table-3')
+     }
+
+     for(let i = 1 ; i<= 5 ; i++ ){
+      let values = ["","Prestacion","Codigo SISMED","Cantidad","Diagnostico CIE-10","Valorizado"]
+      let item = `<th class="minText" scope="col"><center>${values[i]}</center></th>`
+      $(item).appendTo('#tr-table-4')
+     }
+
+
+
+     </script>
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/debugTrama.js"></script>
+    <script src="/js/trama-saludpol.js"></script>
+  
+</body>
+</html>

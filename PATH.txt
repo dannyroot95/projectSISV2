@@ -1,0 +1,3 @@
+\\DESKTOP-00SRSAV\Users\Administrador\Desktop\tramas
+
+descargar-archivo?name=${encodeURIComponent(zip)}

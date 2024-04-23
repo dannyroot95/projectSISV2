@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+  
+</head>
+<body>
+    
+    <h2>Estado de comprobantes</h2>
+    <p></p>
+    <h5>Busqueda avanzada : </h5>
+    <div class="input-group" style="width: 50%;">
+        <select class="form-select" id="dropdown_type_query">
+          <option value="1">N° de documento</option>
+          <option value="2">Razón social</option>
+        </select>
+        <label id="type_input"><input type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="i_advanced-search"></label>
+        <button class="btn btn-success" onclick="advancedSearch()" style="font-weight: bold;" type="button">Consultar</button>
+      </div>
+    <p></p>
+
+<div id="body">
+
+   <div class="table-responsive">
+    <table class="table table-hover table-bordered display" id="tb-data">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Serie</th>
+            <th scope="col">N° Documento</th>
+            <th scope="col">Razón social</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Sub-total</th>
+            <th scope="col">Total</th>
+            <th scope="col">Fecha de cobranza</th>
+            <th scope="col">Hora de cobranza</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+      </table>
+    </div>
+    </div>
+
+      <div class="loader" id="loader"></div>
+      <br><p></p>
+
+      <div class="modal fade" id="details" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="detail_num_doc"></h1>
+             
+            </div>
+            <div class="modal-body">
+
+         
+                  <div class="input-group">
+                    <span class="input-group-text">Número de serie</span>
+                    <input type="text" id="detail_serie" class="form-control" disabled style="background-color: white;">
+                  </div><p></p>
+
+                <div class="input-group">
+                    <span class="input-group-text">Razón Social</span>
+                    <input type="text" id="detail_rs" class="form-control" disabled style="background-color: white;">
+                  </div><p></p>
+
+                  <div class="input-group">
+                    <span class="input-group-text">Sub-total</span>
+                    <input type="text" id="detail_sub_total" class="form-control" disabled style="background-color: white;">
+                  </div><p></p>
+                  
+                  <div class="input-group">
+                    <span class="input-group-text">Total</span>
+                    <input type="text" id="detail_total" class="form-control" disabled style="background-color: white;">
+                  </div><p></p>
+                  
+                  <div class="input-group">
+                    <span class="input-group-text">Estado</span>
+                    <input type="text" id="detail_status" class="form-control" disabled style="background-color: white;font-weight: bold;">
+                    <span class="input-group-text">Cambiar estado</span>
+                    <select class="form-select" name="select_status" id="select_status" class="input_form">
+                    <option selected disabled>Seleccione una opción...</option>
+                  </select>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="closeModal()">Cancelar</button>
+              <a id="t_update"><button type="button" class="btn btn-success" onclick="updateStatus()">Actualizar</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/getData.js"></script>
+</body>
+</html>

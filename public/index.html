@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- Designined by CodingLab | www.youtube.com/codinglabyt -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> Herramientas - SIS </title>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Boxiocns CDN Link -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" href="image/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   </head>
+
+   
+ 
+<body style="background-color: #024977;">
+
+  <div id = "start">
+
+    <center>
+      <div class="login-container" style="margin-top: 5%;">
+        <img src="image/sislogo.jpg"  width="40%">
+
+        <div class="form__group">
+          <input type="text" placeholder="Ingrese su usuario..." class="form__input" id="user" required="" />
+        </div>
+
+        <div class="form__group" style="margin-top: 10px;">
+          <input  maxLength="8" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' type="password" placeholder="Contraseña" class="form__input" id="dni" required="" />
+        </div>
+      
+        <div class="form__group" style="margin-top: 10px;">
+            <a><div class="loaderSmall" id="loader"></div></a>
+            <button style="cursor: pointer;" onclick="login()" id="btn-login" class="btn-login">&nbsp;Acceder&nbsp;</button>
+        </div>
+      
+
+      </div>
+
+    </center>
+  
+
+  </div>
+  <script src="/js/data.js"></script>
+  <script src="/js/utils/constants.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

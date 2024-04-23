@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script src="/libraries/jspdf/jspdf.min.js"></script>
+    <script src="/libraries/jspdf/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    
+</head>
+<body id="g-body">
+    
+    <h2>Reporte de seguros SOAT</h2>
+    <br>
+  
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Tipo de filtro</label>
+          </div>
+          <select class="custom-select" id="selectFilters">
+            <option selected disabled value="0">Seleccione...</option>
+            <option value="1">Fecha de ingreso</option>
+            <option value="2">Fecha de egreso</option>
+            <option value="3">Fecha de alta</option>
+          </select>
+        <div class="input-group-prepend">
+          <span class="input-group-text">Fecha de inicio</span>
+        </div>
+        <input type="date" class="form-control" id="d-init">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Fecha final</span>
+          </div>
+          <input type="date" class="form-control" id="d-final">
+          <button class="btn btn-success" id="btn-query" onclick="search()" style="font-weight: bold;" type="button"><i class="bi bi-search"></i>Consultar</button>
+          <button class="btn btn-danger" id="btn-cancel" onclick="cancelFetch()" style="font-weight: bold;display: none;" type="button"><i class="bi bi-x-circle-fill"></i>Cancelar</button>
+          <button class="btn btn-dark" id="btn-export" onclick="exportToExcel()" style="display: none;"  type="button"><i class="bi bi-file-earmark-spreadsheet"></i>Exportar</button>
+          <button class="btn btn-primary" id="btn-print" onclick="printData()" style="display: none;" type="button"><i class="bi bi-printer-fill"></i>Imprimir</button>
+
+      </div>
+      <br>
+    
+  
+
+<div id="body">
+
+   <div class="table-responsive">
+    <table class="table table-hover table-bordered display" style="width:100%" id="tb-data">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Departamento</th>
+            <th scope="col">Provincia</th>
+            <th scope="col">Distrito</th>
+            <th scope="col">FUA</th>
+            <th scope="col">Número de cuenta</th>
+            <th scope="col">Historia clínica</th>
+            <th scope="col">Fecha de ingreso</th>
+            <th scope="col">Fecha de egreso</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+      </table>
+    </div>
+    <p></p>
+
+  
+
+    <div class="row">
+      <div class="column">
+        <div id='myChart'></div>
+      </div>
+      <div class="column">
+
+        <div class="col-2">
+            <h5>Total de atenciones :</h5><label id="total-atention"></label><br>
+            <h5>Atenciones con FUA :</h5><label id="yes-fua"></label><br>
+            <h5>Pago de atenciones con FUA :</h5><label id="yes-fua-pay"></label><br>
+            <h5>Atenciones sin FUA :</h5><label id="no-fua"></label><br>
+            <h5>Pago de atenciones sin FUA :</h5><label id="no-fua-pay"></label>
+            <p></p>
+            <h5>Se debería pagar :</h5><label id="net-pay"></label>
+        </div>
+    
+      </div>
+    </div>
+    
+    <br>
+
+    </div>
+
+
+    <div style="display: flex;align-items: center;justify-content: center;">
+      <div class="loader" id="loader"></div>
+    </div>
+
+      <br><p></p>
+
+      <div class="modal fade" id="details" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="detail_title"></h1>
+             
+            </div>
+            <div class="modal-body">
+
+         
+                  <div class="input-group">
+                    <span class="input-group-text">Número de cuenta</span>
+                    <input type="text" id="detail_serie" class="form-control" disabled style="background-color: white;">
+                  </div><p></p>
+
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="closeModal()">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/libraries/zingchart/zingchart.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/mReportSeguro.js"></script>
+</body>
+</html>

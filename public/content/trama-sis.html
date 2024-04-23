@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+</head>
+<body id="g-body">
+
+  <style>
+    .form-check-grid {
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+    
+  <h2>Trama SIS</h2>
+  <p></p>
+    
+    <div class="input-group mb-3" style="display: flex;width: 60%;">
+
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelectYearSend">Fecha inicial</label>
+      </div>
+
+      <input type="date" id="fechaini" class="form-control">
+
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelectProductionMonth">Fecha final</label>
+      </div>
+
+      <input type="date" id="fechafin" class="form-control">
+    
+
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelectYearSend2">Año de envío</label>
+      </div>
+
+      <select class="custom-select" id="inputGroupSelectYearSend2">
+      </select>
+
+      <div class="input-group-prepend">
+        <label class="input-group-text">Mes de envío</label>
+      </div>
+      <select class="custom-select" id="inputGroupSelectProductionMonth2">
+       
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+
+
+    </div>
+    </div>
+
+
+    <div style="display: flex;width: max-content;">
+
+      <button class="btn btn-outline-primary" id="btn-query" onclick="query()" ><i class="bi bi-search"></i>&nbsp;Consultar trama</button>&nbsp;
+      <button class="btn btn-outline-primary" id="btn-especific" onclick="showModalFuaEspecific()" ><i class="bi bi-columns-gap"></i>&nbsp;Fuas específicos</button>&nbsp;
+      <a  id="btn-logs" style="display: none;" ><button id="btn-logsx" class="btn btn-outline-dark" onclick="donwloadLog()"><i class="bi bi-file-medical"></i>&nbsp;Logs</button>&nbsp;</a>
+       <button class="btn btn-outline-success" onclick="postTrama(0)" id="btn-send-debug" ><i class="bi bi-box-fill"></i>&nbsp;Crear paquete trama</button>&nbsp;
+       <!-- 
+        <button class="btn btn-outline-light" style="background-color: #003f73;color: white;" onclick="openModalValidation()" id="btn-validate" ><i class="bi bi-arrow-down-up"></i>&nbsp;Comparativo SIGEPS</button>&nbsp; 
+       -->
+       <a id="btn-rc" style="display: none;" ><button id="btn-rcx" class="btn btn-outline-danger" onclick="jsonATE()"><i class="bi bi-bezier2"></i>&nbsp;RC</button>&nbsp;</a>
+       <button style="display: none;" id="btn-validate-afiliate" onclick="validateAfiliateTrama()" class="btn btn-outline-secondary"><i class="bi bi-person-check-fill"></i>&nbsp;Validar afiliados</button>
+       <a><div class="loaderSmall" id="loader"></div></a>
+    </div>
+ 
+
+    <p></p>
+
+    <label style="display:none;" id="errors"></label>
+    <label style="display:none;" id="duplex"></label>
+    <label style="display:none;" id="accountDuplex"></label>
+      
+  <div id="body">
+    <p></p>
+    <label style="font-weight: bolder;font-size: 22px;">Atenciones</label>
+    <div class="table-responsive">
+     <table class="table table-hover table-bordered display" id="tb-data">
+         <thead>
+           <tr id="tr-table">
+           </tr>
+         </thead>
+         <tbody id="tbody">
+         </tbody>
+       </table>
+     </div>
+
+    <br> 
+    <label style="font-weight: bolder;font-size: 22px;">Diagnosticos</label>
+    <div class="table-responsive">
+     <table class="table table-hover table-bordered display" id="tb-data-2">
+         <thead>
+           <tr id="tr-table-2">
+           </tr>
+         </thead>
+         <tbody id="tbody2">
+         </tbody>
+       </table>
+     </div>
+
+     <br> 
+     <label style="font-weight: bolder;font-size: 22px;">Insumos</label>
+     <div class="table-responsive">
+      <table class="table table-hover table-bordered display" id="tb-data-3">
+          <thead>
+            <tr id="tr-table-3">
+            </tr>
+          </thead>
+          <tbody id="tbody3">
+          </tbody>
+        </table>
+      </div>
+
+     <br> 
+     <label style="font-weight: bolder;font-size: 22px;">Medicamentos</label>
+     <div class="table-responsive">
+      <table class="table table-hover table-bordered display" id="tb-data-5">
+          <thead>
+            <tr id="tr-table-5">
+            </tr>
+          </thead>
+          <tbody id="tbody5">
+          </tbody>
+        </table>
+      </div>
+
+      <br> 
+     <label style="font-weight: bolder;font-size: 22px;">Procedimientos</label>
+     <div class="table-responsive">
+      <table class="table table-hover table-bordered display" id="tb-data-6">
+          <thead>
+            <tr id="tr-table-6">
+            </tr>
+          </thead>
+          <tbody id="tbody6">
+          </tbody>
+        </table>
+      </div>
+ 
+
+     <br> 
+    <label style="font-weight: bolder;font-size: 22px;">SMI</label>
+    <div class="table-responsive">
+     <table class="table table-hover table-bordered display" id="tb-data-4">
+         <thead>
+           <tr id="tr-table-4">
+           </tr>
+         </thead>
+         <tbody id="tbody4">
+         </tbody>
+       </table>
+     </div>
+
+     <br> 
+    <label style="font-weight: bolder;font-size: 22px;">Servicios adicionales</label>
+    <div class="table-responsive">
+     <table class="table table-hover table-bordered display" id="tb-data-7">
+         <thead>
+           <tr id="tr-table-7">
+           </tr>
+         </thead>
+         <tbody id="tbody7">
+         </tbody>
+       </table>
+     </div>
+
+     <br> 
+     <label style="font-weight: bolder;font-size: 22px;">Recien nacido</label>
+     <div class="table-responsive">
+      <table class="table table-hover table-bordered display" id="tb-data-8">
+          <thead>
+            <tr id="tr-table-8">
+            </tr>
+          </thead>
+          <tbody id="tbody8">
+          </tbody>
+        </table>
+      </div>
+
+     </div>
+
+<!---->
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalFuaEspecific" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">FUAS específicos
+
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-check-grid">
+          <div class="form-check">
+            <input class="form-check-input" onclick="showHideDiv('div-file-arfsis')" type="radio" id="rd1">
+            <label class="form-check-label">
+              Subir por archivo excel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </label>
+          </div>
+      
+          <div class="form-check">
+            <input class="form-check-input" onclick="showHideDiv('div-table-fua-especific')" type="radio" id="rd2">
+            <label class="form-check-label">
+              Digitar por FUA
+            </label>
+          </div>
+        </div>
+    
+        
+        <br>
+
+      <div id="div-file-arfsis" style="display: none;">
+        <div class="input-group mb-3">
+          <label style="background-color: #003f73;color: white;" class="input-group-text minText5" for="inputGroupFile01">Observaciones Arfsis</label>
+          <input type="file" class="form-control minText5" id="inputGroupFile01">
+        </div>
+      </div>
+
+      <div id="div-table-fua-especific" style="display: none;">
+        <div class="input-group mb-3">
+          <span class="input-group-text minText5" id="basic-addon1">Lote</span>
+          <select class="custom-select" id="inputGroupSelectLote">
+          </select> 
+          <span class="input-group-text minText5" id="basic-addon1">Fua Número</span>
+          <input id="fua-num-add" type="number" maxlength="16" class="form-control">
+          <button onclick="addToTableFua()" class="btn btn-outline-success minText5">+&nbsp;Agregar</button>&nbsp;
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered display" id="tb-data-especific">
+            <thead>
+              <tr>
+                <th class="minText" scope="col"><center>Lote</center></th>
+                <th class="minText" scope="col"><center>FUA Número</center></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbodyEspecific">
+            </tbody>
+          </table>
+          </div>
+
+      </div>
+        
+      <br>
+        
+        <div class="modal-footer">
+          <button onclick="fetchEspecificFua()" type="button" class="btn btn-primary"><i class="bi bi-search"></i>&nbsp;Consultar</button>
+          <button onclick="generatePackage()" type="button" class="btn btn-success"><i class="bi bi-box-seam-fill"></i>&nbsp;Generar paquete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---->
+
+<div class="modal fade" data-bs-backdrop="static" id="modalTramaResponse" tabindex="-1" aria-labelledby="modalTramaResponse" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="background-color: #1c1842;color: white;">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <center style="margin-top: 20px;"><h1><b>Trama enviada!</b></h1></center>
+        <br>
+        <h5><b>Código de respuesta :</b></h5>&nbsp;<label id="cod-resp"></label><p></p>
+        <h5><b>Mensaje :</b></h5>&nbsp;<label id="mes-resp"></label><p></p>
+        <h5><b>Paquete :</b></h5>&nbsp;<label id="pack-resp"></label><p></p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!---------------->
+
+<div class="modal fade" data-bs-backdrop="static" id="compareModal" tabindex="-1" aria-labelledby="modalTramaResponse" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <center style="margin-top: 20px;"><h2><b>
+          Comparación de producción de FUAS - SIGEPS &nbsp;&nbsp;
+          <p></p>
+          <div class="loaderSmall" id="loadCatalog"></div>
+          <button id="btn-catalog" style="display: none;" class="btn btn-success" onclick="exportToExcelCatalog()">Descargar</button>
+        </b></h2></center>
+        
+        <div class="input-group">
+          <label style="background-color: #007319;color: white;" class="input-group-text">Reporte SIGEPS.XLSX</label>
+          <input type="file" id="excelFileX" accept=".xlsx" class="form-control" aria-label="Upload">
+        </div>
+
+        <p></p>
+
+        <div class="input-group">
+          <label style="background-color: #003f73;color: white;" class="input-group-text">Archivo ATENCION.TXT</label>
+          <input type="file" id="txtFileX" accept=".txt" class="form-control" aria-label="Upload">
+          <button class="btn btn-outline-secondary" type="button" onclick="compareSigeps()"><i class="bi bi-gear-wide-connected"></i>&nbsp;Procesar Archivos</button>
+    
+        </div>
+
+        <br><br>
+
+        <center>
+        <div>
+          <button id="btn-down" style="display: none;" class="btn btn-outline-success" type="button" onclick="exportNotFound()"><i class="bi bi-gear-wide-connected"></i>&nbsp;Descargar</button>
+          <div class="loaderSmall" id="loader2"></div>
+        </div>
+      </center>
+        
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" style="background-color: #ffffff8f;" id="modalDetail" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="modalDetailLabel">Detalle de atención</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+   
+        <label class="minText5">Lote :</label>&nbsp;<label id="d-lote" class="minText5"></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label class="minText5">Cuenta :</label>&nbsp;<label id="d-account" class="minText5"></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label class="minText5">Nombres :</label>&nbsp;<label style="font-weight: 500;" id="d-name" class="minText5"></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label class="minText5">ID paciente :</label>&nbsp;<label id="d-idpatient" class="minText5"></label><p></p>
+    
+
+        <p></p>
+
+        <div>
+
+          <center>
+            <button onclick="showDiagnosys()" class="btn btn-outline-primary minText5"><i class="bi bi-prescription"></i>&nbsp;Diagnosticos</button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-outline-dark minText5"><i class="bi bi-prescription2"></i>&nbsp;Procedimientos</button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-outline-danger minText5"><i class="bi bi-capsule"></i>&nbsp;Medicamentos</button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-outline-success minText5"><i class="bi bi-bandaid-fill"></i>&nbsp;Insumos</button>
+            &nbsp;&nbsp;&nbsp;
+            <button id="btn-smi" onclick="showModalSMI()" class="btn btn-outline-warning minText5"><i class="bi bi-bandaid-fill" style="color: #1c1842;"></i>&nbsp;<label style="color: #1c1842;">SMI</label></button>
+          </center> 
+
+        </div>
+
+        <p></p>
+
+        <table class="table table-responsive table-bordered display" id="tb-data-d">
+          <thead>
+            <tr>
+              <th class="minText5"></th>
+              <th class="minText5">Disa</th>
+              <th class="minText5">Tipo</th>
+              <th class="minText5">NroFormato</th>
+              <th class="minText5">ID Siasis</th>
+              <th class="minText5">F.Afliacion</th>
+              <th class="minText5">F.Nacimiento</th>
+              <th class="minText5">DNI</th>
+              <th class="minText5">Nombres</th>
+              <th class="minText5">Código</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyD">
+          </tbody>
+        </table>
+
+        <center><div class="loaderSmall" id="loaderAfi"></div></center>
+
+        <!--inputs-->
+        <hr size="3px" color="#005580" />
+        
+
+        <div class="input-group mb-3">
+          <h6 style="margin-top: 4px;">Afiliación</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div class="input-group-prepend">
+            <span class="input-group-text minText5">Tipo de documento</span>
+            </div>
+            <select class="custom-select minText5" id="s-type-formated">
+              <option value="2">DNI (2)</option>
+              <option value="3">Carnet de extrajería (3)</option>
+            </select>
+          <span class="input-group-text minText5" id="basic-addon1">Número formato</span>
+          <input type="text" class="form-control minText5" id="web-formato">
+          <button id="btn-serach-w-service" onclick="searchWebService()" class="btn btn-success minText5"><i class="bi bi-server"></i>&nbsp;&nbsp;Buscar web service SIS</button>
+        </div>
+        <center><div class="loaderSmall" id="web-loader"></div>
+        </center>
+  
+        <center><b><label class="minText5" id="web-service-fullname"></label></b></center>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text minText5" id="basic-addon1">Disa</span>
+          <input type="text" class="form-control minText5" id="afi-disa">
+          <span class="input-group-text minText5" id="basic-addon1">Tipo</span>
+          <input type="text" class="form-control minText5" id="afi-type">
+          <span class="input-group-text minText5" id="basic-addon1">Formato Num</span>
+          <input type="text" class="form-control minText5" id="afi-num">
+        </div>
+
+        <div class="input-group mb-3">
+      
+        <span class="input-group-text minText5" id="basic-addon1">ID Siasis</span>
+        <input type="text" class="form-control minText5" id="afi-siasis">
+        <span class="input-group-text minText5" id="basic-addon1">Código</span>
+        <input type="text" class="form-control minText5" id="afi-code">
+        <span class="input-group-text minText5" id="basic-addon1">F.Nacimiento</span>
+        <input type="date" class="form-control minText5" id="afi-nacimiento">
+        <button onclick="updateAfiliation()" class="btn btn-primary minText5">Actualizar</button>
+
+      </div>
+        
+      <div class="input-group mb-3" style="display: none;">
+      
+        <span class="input-group-text minText5" id="basic-addon1">Tipo de documento</span>
+        <input type="text" class="form-control minText5" id="afi-type-doc">
+        <span class="input-group-text minText5" id="basic-addon1">Numero de doc</span>
+        <input type="text" class="form-control minText5" id="afi-num-doc">
+      </div>
+
+      <p></p>
+      <hr size="3px" color="#005580" />
+      <h6>Nombre de paciente</h6>
+      <p></p>
+
+
+      <div class="input-group mb-3">
+        <span class="input-group-text minText5" id="basic-addon1">A.Paterno</span>
+        <input type="text" class="form-control minText5" id="d-ape-p">
+        <span class="input-group-text minText5" id="basic-addon1">A.Materno</span>
+        <input type="text" class="form-control minText5" id="d-ape-m">
+        <span class="input-group-text minText5" id="basic-addon1">P.Nombre</span>
+        <input type="text" class="form-control minText5" id="d-name-1">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text minText5" id="basic-addon1">S.Nombre</span>
+        <input type="text" class="form-control minText5" id="d-name-2">
+        <span class="input-group-text minText5" id="basic-addon1">T.Nombre</span>
+        <input type="text" class="form-control minText5" id="d-name-3">
+        <button style="float: right;" type="button" onclick="updateFullNamePatient()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+       <p></p>
+       <hr size="2px" color="black" />
+       <h6>Digitador</h6>
+       <p></p>
+       
+       <div class="input-group mb-3">
+        <span class="input-group-text minText5" id="basic-addon1">Tipo de documento digitador</span>
+        <input type="text" class="form-control minText5" id="afi-type-dig">
+        <span class="input-group-text minText5" id="basic-addon1">N° de documento digitador</span>
+        <input type="text" class="form-control minText5" id="afi-num-dig">
+        <button style="float: right;" type="button" onclick="updateDNIDigitador()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>Cod.Atención</h6>
+      <p></p>
+            
+      <div class="input-group mb-3" style="width: 50%;">
+        <span class="input-group-text minText5" id="basic-addon1">Prestación principal de la atención</span>
+        <input type="number" maxlength="3" class="form-control minText5" id="fua-id-ate">
+        <button style="float: right;" type="button" onclick="updateAtePrincipal()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>Tipo de Atención</h6>
+      <p></p>
+
+      <div class="input-group mb-3" style="width: 50%;">
+        <span class="input-group-text minText5" id="basic-addon1">Seleccione el tipo de atención</span>
+        
+        <select class="custom-select minText5" id="inputGroupSelectTypeAte">
+          <option value="0">Sin tipo</option>
+          <option value="1">Ambulatotio</option>
+          <option value="2">Referencia</option>
+          <option value="3">Emergencia</option>
+        </select>
+
+        <button style="float: right;" type="button" onclick="updateTypeAte()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>DNI de paciente</h6>
+      <p></p>
+
+      <div class="input-group mb-3" style="width: 70%;">
+        <span class="input-group-text minText5" id="basic-addon1">Tipo de documento</span>
+        
+        <select class="custom-select minText5" id="inputGroupSelectTypeDni">
+          <option value="1">DNI</option>
+          <option value="2">Carnet Extranjeria</option>
+          <option value="3">Pasaporte</option>
+          <option value="4">Documento de Identidad extranjero</option>
+          <option value="5">Código recién Nacido</option>
+          <option value="6">Código Temporal para FFAA y PNP</option>
+          <option value="7">C.I.U</option>
+          <option value="8">Madre: TipoDoc+ DNI+N°Hijo</option>
+          <option value="9">Madre: Autogenerado+N°Hijo</option>
+          <option value="10">Sin registro madre/tutor</option>
+        </select>
+        <input type="number" maxlength="10" class="form-control minText5" id="fua-patient-dni">
+        <button style="float: right;" type="button" onclick="updateDniPatient()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>Fecha de nacimiento del paciente</h6>
+      <p></p>
+
+      <div class="input-group mb-3" style="width: 50%;">
+        <span class="input-group-text minText5" id="basic-addon1">Fecha de nacimiento</span>
+        <input type="date" maxlength="3" class="form-control minText5" id="fua-date-birth">
+        <button style="float: right;" type="button" onclick="updateDateBirthday()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>Sexo del paciente</h6>
+      <p></p>
+
+
+      <div class="input-group mb-3" style="width: 70%;">
+        <span class="input-group-text minText5" id="basic-addon1">Sexo</span>
+        
+        <select class="custom-select minText5" id="inputGroupSelectSex">
+          <option value="1">Masculino</option>
+          <option value="2">Femenino</option>
+        </select>
+        <button style="float: right;" type="button" onclick="updateSexPatient()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>Fecha de parto</h6>
+      <p></p>
+
+      <div class="input-group mb-3" style="width: 80%;">
+        <div class="input-group-text">
+          <input onclick="uncheckOther(this)" id="checkbox1" class="form-check-input mt-0" type="checkbox" value="1">
+        </div>
+        <input type="text" class="form-control minText5" disabled style="color: black;" value="Gestante">
+        <div class="input-group-text">
+          <input onclick="uncheckOther(this)" id="checkbox2" class="form-check-input mt-0" type="checkbox" value="2">
+        </div>
+        <input type="text" class="form-control minText5" disabled style="color: black;" value="Puerpera">
+        <span class="input-group-text minText5" id="basic-addon1">Fecha</span>
+        <input type="date" class="form-control minText5" id="fua-date-pregnancy">
+        <button style="float: right;" type="button" onclick="updateDatePregnancy()" class="btn btn-primary minText5">Actualizar</button>
+        <button style="float: right;" type="button" onclick="updateNullDatePregnancy()" class="btn btn-danger minText5">Sin fecha de parto</button>
+      </div>
+
+      
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>IPRESS de Referencia</h6>
+      <p></p>
+
+
+      <div class="input-group mb-3" style="width: 50%;">
+        <span class="input-group-text minText5" id="basic-addon1">Ipress</span>
+        <input type="text" class="form-control minText5" id="fua-num-ipress">
+        <button style="float: right;" type="button" onclick="updateNumIpress()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+       
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>N° de Hoja de Referencia</h6>
+      <p></p>
+
+      <div class="input-group mb-3" style="width: 50%;">
+        <span class="input-group-text minText5" id="basic-addon1">N° hoja</span>
+        <input type="text" class="form-control minText5" id="fua-num-paper-reference">
+        <button style="float: right;" type="button" onclick="updateNumPaperReference()" class="btn btn-primary minText5">Actualizar</button>
+      </div>
+
+
+      <p></p>
+      <hr size="2px" color="black" />
+      <h6>Médico</h6>
+      <p></p>
+
+
+      <div class="input-group mb-3" style="margin-top: 10px;">
+     
+       <span class="input-group-text minText5" >Tipo de doc</span>
+       <input disabled id="type-dni-medic" type="number" style="background-color: white;color: black;" 
+       class="form-control minText5" >
+
+       <span class="input-group-text minText5" >Número.doc</span>
+       <input id="dni-medic" disabled type="number" style="background-color: white;color: black;" 
+       class="form-control minText5" >
+       <button id="btn-search-medic" onclick="openModalAddMedic()" class="btn btn-primary minText5"><i class="bi bi-search"></i>&nbsp;Buscar</button>  
+     </div>
+
+     <p></p>
+      <hr size="2px" color="black" />
+      <h6>Fecha ingreso - Egreso/Alta</h6>
+      <p></p>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text minText5" id="basic-addon1">Fecha de ingreso</span>
+        </div>
+        <input type="date" id="no-ate-in-date" class="form-control minText5">
+       
+        <div class="input-group-prepend">
+          <span class="input-group-text minText5" id="basic-addon1">Hora de ingreso</span>
+        </div>
+        <input type="time" id="no-ate-in-hour" class="form-control minText5">
+      </div>
+
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text minText5" id="basic-addon1">Fecha de egreso</span>
+        </div>
+        <input type="date" id="no-ate-out-date" class="form-control minText5">
+        <div class="input-group-prepend">
+          <span class="input-group-text minText5" id="basic-addon1"><b>Hora de egreso</b></span>
+        </div>
+        <input type="time" id="no-ate-out-hour" class="form-control minText5">
+        <button onclick="updateDateAtentionSaludpol()" class="btn btn-success minText5">Actualizar</button>
+        <button class="btn btn-danger minText5">Sin fecha de alta</button>
+      </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary minText5" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---->
+
+<div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="modalDiagnosys" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border border-dark rounded">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Detalle de diagnosticos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <!---->
+        
+        <center><div class="loaderSmall" id="diag-loader"></div></center>
+        <table class="table table-responsive table-bordered display">
+          <thead>
+            <tr>
+              <th class="minText5">#</th>
+              <th class="minText5">Dx Ingreso</th>
+              <th class="minText5">Dx Egreso</th>
+              <th class="minText5">Código</th>
+              <th class="minText5">Descripción</th>
+              <th class="minText5"></th>
+            </tr>
+          </thead>
+          <tbody id="tbodyDiag">
+          </tbody>
+        </table>
+
+      </div>
+          
+    </div>
+  </div>
+</div>
+
+
+<!---->
+
+
+<!---->
+
+<div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="modalSMI" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border border-dark rounded">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Servicio materno infantil</h1>
+        &nbsp;
+        <label>-</label>
+        &nbsp;
+        <h1 id="smi-account" class="modal-title fs-5"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <!---->
+
+        <div class="input-group mb-3" id="d-smi-weight-tail">
+          <span class="input-group-text minText5">Peso</span>
+          <input type="number" id="i-weight" class="form-control minText5">
+          <span class="input-group-text minText5">Talla</span>
+          <input type="number" id="i-tail" class="form-control minText5">
+          <span class="input-group-text minText5">IMC</span>
+          <input disabled style="color: black;" type="number" id="i-imc" class="form-control minText5">
+          <button onclick="deleteSMI(1)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-pa">
+          <span class="input-group-text minText5">Presión arterial</span>
+          <input type="number" id="i-p-1" class="form-control minText5">
+          <span class="input-group-text minText5">/</span>
+          <input type="number" id="i-p-2" class="form-control minText5">
+          <button onclick="deleteSMI(2)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+        
+        <div class="input-group mb-3" id="d-smi-age">
+          <span class="input-group-text minText5">Edad gestacional (semanas)</span>
+          <input type="number" id="i-age-gest" class="form-control minText5">
+          <button onclick="deleteSMI(3)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-age">
+          <span class="input-group-text minText5">Edad del recién nacido (semanas)</span>
+          <input type="number" id="i-age-rn" class="form-control minText5">
+          <button onclick="deleteSMI(6)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-apgar">
+          <span class="input-group-text minText5">APGAR(305)</span>
+          <input type="number" id="i-apgar305" class="form-control minText5">
+          <span class="input-group-text minText5">APGAR(306)</span>
+          <input type="number" id="i-apgar306" class="form-control minText5">
+          <button onclick="deleteSMI(4)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-bcg-hb">
+          <span class="input-group-text minText5">Vacuna BCG</span>
+          <input type="number" id="i-v-bcg" class="form-control minText5">
+          <span class="input-group-text minText5">Vacuna anti hepatitis B</span>
+          <input type="number" id="i-v-hb" class="form-control minText5">
+          <button onclick="deleteSMI(5)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="modal-footer">
+          <button onclick="updateInsertSMI()" class="btn btn-success minText5"><i class="bi bi-box-arrow-in-down"></i>&nbsp;Actualizar</button>
+          <button onclick="deleteSMI(0)" class="btn btn-danger minText5"><i class="bi bi-x-circle"></i>&nbsp;Eliminar todo</button>
+        </div>
+
+      </div>
+          
+    </div>
+  </div>
+</div>
+
+<!--TRAMA SEND-->
+
+<div class="modal fade" id="modalDownload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <center><h1 class="modal-title fs-5" id="staticBackdropLabel">Paquete generado!</h1></center>
+      </div>
+      <div class="modal-body">
+        <center>
+          <label>Nombre del paquete :</label>&nbsp;&nbsp;<label id="nameZip"></label>
+          <p></p>
+          <a href="http://localhost:8080/descargar-archivo" download>
+            <button onclick="downloadZip()" class="btn btn-success">&nbsp;<i class="bi bi-file-zip-fill"></i>&nbsp;Descargar ZIP</button>
+          </a>
+        </center>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---->
+
+    
+     <script>
+
+      let actualYear = new Date().getFullYear()
+      let actualMonth = new Date().getMonth()+1
+
+      document.getElementById("inputGroupSelectYearSend2").value = actualYear
+      document.getElementById("inputGroupSelectProductionMonth2").value = parseInt(actualMonth)
+
+      
+      let añoPad = parseInt(actualYear.toString().slice(-2))
+      let añoPadAnt = añoPad - 1
+      let options = `
+          <option value="${añoPad}">${añoPad}</option>
+          <option value="${añoPadAnt}">${añoPadAnt}</option>
+      `
+      $(options).appendTo('#inputGroupSelectLote')
+      
+   
+     for(let i = 1 ; i<= 88 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logATE" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table')
+      }
+      $(item).appendTo('#tr-table')
+     }
+
+     for(let i = 1 ; i<= 5 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logDIA" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table-2')
+      }
+      $(item).appendTo('#tr-table-2')
+     }
+
+     for(let i = 1 ; i<= 5 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logINS" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table-3')
+      }
+      $(item).appendTo('#tr-table-3')
+     }
+
+     for(let i = 1 ; i<= 5 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logMED" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table-5')
+      }
+      $(item).appendTo('#tr-table-5')
+     }
+
+     for(let i = 1 ; i<= 7 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logPRO" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table-6')
+      }
+      $(item).appendTo('#tr-table-6')
+     }
+
+     for(let i = 1 ; i<= 3 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logSMI" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table-4')
+      }
+      $(item).appendTo('#tr-table-4')
+     }
+
+     for(let i = 1 ; i<= 2 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logSER" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table-7')
+      }
+      $(item).appendTo('#tr-table-7')
+     }
+
+     for(let i = 1 ; i<= 14 ; i++ ){
+      let item = `<th class="minText" scope="col"><center>${i}</center></th>`
+      if(i == 1){
+        let x = `<th id="logRN" class="minText" scope="col"><center>Log</center></th>`
+        $(x).appendTo('#tr-table-8')
+      }
+      $(item).appendTo('#tr-table-8')
+     }
+
+     </script>
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/debugTrama.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/trama-sis.js"></script>
+    <script src="/js/trama-sis-especificos.js"></script>
+  
+</body>
+</html>

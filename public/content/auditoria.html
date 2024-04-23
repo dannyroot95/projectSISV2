@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>
+
+    <style>
+      .form-control:disabled {
+    background-color: #ffffff;
+    opacity: 1;
+}
+    </style>
+
+</head>
+<body>
+    
+    <h2>Auditoria</h2>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input minText" type="checkbox" value="" id="chk-date" checked disabled>
+        <label style="color: black;" class="form-check-label minText" for="chk-date">Fechas</label>
+      </div>
+      
+      <div class="form-check form-check-inline">
+        <input class="form-check-input minText" type="checkbox" value="" id="chk-user">
+        <label class="form-check-label minText" for="chk-user">Usuario</label>
+      </div>
+
+      <p></p>
+
+      <div class="input-group mb-3" style="display: flex;width: 60%;">
+        <span class="input-group-text minText5" id="basic-addon1">Fecha de inicio</span>
+        <input type="date" class="form-control minText5" id="date-ini">
+        <span class="input-group-text minText5" id="basic-addon1">Fecha final</span>
+        <input type="date" class="form-control minText5" id="date-fin">
+        <button onclick="getAuditByDate()" class="btn btn-outline-primary minText5"><i class="bi bi-person-bounding-box"></i>&nbsp;Auditar</button>
+        &nbsp;
+        <a><div class="loaderSmall" id="loader"></div></a>
+        &nbsp;
+    </div>
+
+    <div class="input-group mb-3" id="s-users" style="display: none;">
+        <label class="input-group-text minText">Usuario</label>
+        <input type="text" class="form-control minText" id="search-users" placeholder="Buscar usuario">
+        <select class="form-select minText" id="select-users">
+            <!-- Aquí van las opciones -->
+        </select>
+    </div>
+    
+    <br>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered display" id="tb-data">
+            <thead>
+              <tr>
+                <th class="minText5" id="numRow" scope="col">#</th>
+                <th class="minText5" scope="col"></th>
+                <th class="minText5" scope="col">Fecha</th>
+                <th class="minText5" scope="col">Hora</th>
+                <th class="minText5" scope="col">Acción</th>
+                <th class="minText5" scope="col">PC</th>
+                <th class="minText5" scope="col">Tabla</th>
+                <th class="minText5" scope="col">Usuario</th>
+                <th class="minText5" scope="col">Nombres</th>
+                <th class="minText5" scope="col">Cuenta</th>
+                <th class="minText5" scope="col">FUA</th>
+                <th class="minText5" scope="col">Servicio</th>
+                <th class="minText5" scope="col">Observación</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+          </table>
+        </div>
+
+        <!--modal-->
+
+        <div class="modal fade" id="modalDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div  class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5">Detalle de cuenta</h1>
+                &nbsp;
+                <h1 class="modal-title fs-5" id="detail-account"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+               
+                    <center>
+                        <a><div class="loaderSmall" id="loader2"></div></a>
+                        <img id="img" style="display: none;" src="/image/account.png" width="500" height="280">
+                    </center>
+
+                    <div class="table-responsive" id="div-table-detail" style="display: none;">
+                        <table class="table table-hover table-bordered display" id="tb-data2">
+                            <thead>
+                              <tr>
+                                <th class="minText5" scope="col">#</th>
+                                <th class="minText5" id="detailX" scope="col">Código</th>
+                                <th class="minText5" scope="col">CPT</th>
+                                <th class="minText5" scope="col">Cantidad</th>
+                                <th class="minText5" scope="col">Precio.U</th>
+                                <th class="minText5" scope="col">Precio.T</th>
+                                <th class="minText5" scope="col">Fecha de creacion</th>
+                                <th class="minText5" scope="col">Fecha de despacho</th>
+                                <th class="minText5" scope="col">Fecha de digitacion CPT</th>
+                                <th class="minText5" scope="col">Usuario</th>
+                                <th class="minText5" scope="col">Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody id="tbody2">
+                            </tbody>
+                          </table>
+                        </div>
+
+                </div>
+          
+            </div>
+            </div>
+        </div>
+
+        <!---->
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/audit.js"></script>
+</body>
+</html>

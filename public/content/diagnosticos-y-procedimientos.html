@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>
+  
+    <style>
+      .form-control:disabled {
+    background-color: #ffffff;
+    opacity: 1;
+}
+    </style>
+
+</head>
+<body>
+    
+    <h2>Diagnosticos y procedimientos</h2>
+    <p></p>
+    <div class="input-group mb-3" style="width: 60%;">
+      
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="anio">Año</label>
+        </div>
+        <select class="custom-select" id="anio">
+          <option value="2020">2020</option>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+          <option value="2023" selected>2023</option>
+        </select>
+      
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="mes">Mes</label>
+        </div>
+        <select class="custom-select" id="mes">
+          <option selected value="01">Enero</option>
+          <option value="02">Febrero</option>
+          <option value="03">Marzo</option>
+          <option value="04">Abril</option>
+          <option value="05">Mayo</option>
+          <option value="06">Junio</option>
+          <option value="07">Julio</option>
+          <option value="08">Agosto</option>
+          <option value="09">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="mes">Modalidad</label>
+        </div>
+        <select class="custom-select" id="modalidad">
+          <option selected value="1">Todos</option>
+           <option value="2">Código de servicio</option>
+           <option value="3">Nombre de servicio</option>
+        </select>
+
+        <input style="display: none;" id="code" type="tel" maxLength="8" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" placeholder="Ingrese el código..." aria-describedby="basic-addon1">
+        <input style="display: none;" id="name" type="text" class="form-control" placeholder="Ingrese el nombre..." aria-describedby="basic-addon1">
+
+
+        <button class="btn btn-primary" id="btn-search" onclick="query()">Buscar</button>
+        <button class="btn btn-success" style="display: none;" id="btn-xls" onclick="exportToExcel()"><i class='bx bxs-file-doc'></i>&nbsp;Exportar</button>
+        <a><div class="loaderSmall" id="loader"></div></a>
+      </div>
+    <p></p>
+
+<div id="body">
+
+   <div class="table-responsive">
+    <table class="table table-hover table-bordered display" id="tb-data">
+        <thead>
+          <tr id="tr-table">
+            <th class="minText" scope="col">Historia</th>
+            <th class="minText" scope="col">N° Cuenta</th>
+            <th class="minText" scope="col">Nombres y Apellidos</th>
+            <th class="minText" scope="col">Sexo</th>
+            <th class="minText" scope="col">Edad</th>
+            <th class="minText" scope="col">Departamento</th>
+            <th class="minText" scope="col">Provincia</th>
+            <th class="minText" scope="col">Distrito</th>
+            <th class="minText" scope="col">Cod.Seguro</th>
+            <th class="minText" scope="col">Seguro</th>
+            <th class="minText" scope="col">Fecha de solicitud</th>
+            <th class="minText" scope="col">Hora de inicio</th>
+            <th class="minText" scope="col">Fecha de apertura</th>
+            <th class="minText" scope="col">Hora de ingreso</th>
+            <th class="minText" scope="col">Fecha de egreso</th>
+            <th class="minText" scope="col">Hora de egreso</th>
+            <th class="minText" scope="col">Teléfono</th>
+            <th class="minText" scope="col">Domicilio</th>
+            <th class="minText" scope="col">Médico</th>
+            <th class="minText" scope="col">Origen</th>
+            <th class="minText" scope="col">N° de Origen</th>
+            <th class="minText" scope="col">Diagnostico de referencia</th>
+            <th class="minText" scope="col">Digitador</th>
+            <th class="minText" scope="col">Fecha de digitación</th>
+            <th class="minText" scope="col">ID Atención</th>
+            <th class="minText" scope="col">ID Cita</th>
+            <th class="minText" scope="col">Servicio</th>
+            <th class="minText" scope="col">Código</th>
+            <th style="color: blue;" class="minText" scope="col">D1</th>
+            <th style="color: blue;" class="minText" scope="col">D2</th>
+            <th style="color: blue;" class="minText" scope="col">D3</th>
+            <th style="color: blue;" class="minText" scope="col">D4</th>
+            <th style="color: blue;" class="minText" scope="col">D5</th>
+            <th style="color: blue;" class="minText" scope="col">D6</th>
+            <th style="color: rgb(0, 133, 18);" class="minText" scope="col">P1</th>
+            <th style="color: rgb(0, 133, 18);" class="minText" scope="col">P2</th>
+            <th style="color: rgb(0, 133, 18);" class="minText" scope="col">P3</th>
+            <th style="color: rgb(0, 133, 18);" class="minText" scope="col">P4</th>
+            <th style="color: rgb(0, 133, 18);" class="minText" scope="col">P5</th>
+            <th style="color: rgb(0, 133, 18);" class="minText" scope="col">P6</th>
+            <th style="color: rgb(0, 133, 18);" class="minText" scope="col">P7</th>
+
+          </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div></div></div>
+
+      <!--modal-->
+
+      <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="d-title">Detalle</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              
+              <div id="content-modal"></div>
+
+            </div>
+            <div class="modal-footer">
+              <button style="visibility: hidden;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+        <!--modal-->
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/diagAndProcedure.js"></script>
+</body>
+</html>

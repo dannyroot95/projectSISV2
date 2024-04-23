@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>
+
+  
+</head>
+<body>
+    
+    <h2>Producción</h2>
+    <p></p>
+    <div class="input-group mb-3" style="width: 80%;">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Fecha de inicio</span>
+      </div>
+      <input type="date" class="form-control" id="d-init">
+      <div class="input-group-prepend">
+          <span class="input-group-text">Fecha final</span>
+        </div>
+        <input type="date" class="form-control" id="d-final">
+
+        <div class="input-group-prepend">
+          <label class="input-group-text">Fuente de financiamiento</label>
+        </div>
+        <select class="custom-select" id="inputGroupSelectFinance">
+        </select>
+
+        <button class="btn btn-primary" id="btn-search" onclick="search()">Buscar</button>
+        <button class="btn btn-danger" style="display: none;" id="btn-cancel" onclick="cancel()">Cancelar</button>
+        <button class="btn btn-success" style="display: none;" id="btn-xls" onclick="exportToExcel()"><i class='bx bxs-file-doc'></i>&nbsp;Exportar</button>
+        <a><div class="loaderSmall" id="loader"></div></a>
+      </div>
+    <p></p>
+
+<div id="body">
+
+   <div class="table-responsive">
+    <table class="table table-hover table-bordered display" id="tb-data">
+        <thead>
+          <tr>
+            <th class="minText" scope="col"><center>#</center></th>
+            <th class="minText" scope="col"><center>Cuenta</center></th>
+            <th class="minText" scope="col"><center>Nro formato</center></th>
+            <th class="minText" scope="col"><center>F.atención</center></th>
+            <th class="minText" scope="col"><center>Beneficiario</center></th>
+            <th class="minText" scope="col"><center>Servicio</center></th>
+            <th class="minText" scope="col"><center>Médico</center></th>
+            <th class="minText" scope="col"><center>Hist.clínica</center></th>
+            <th class="minText" scope="col"><center>Digitador</center></th>
+            <th class="minText" scope="col"><center>Mes</center></th>
+            <th class="minText" scope="col"><center>Periodo</center></th>
+            <th class="minText" scope="col"><center>Nombre servicio</center></th>
+            <th class="minText" scope="col"><center>Usuario</center></th>
+            <th class="minText" scope="col"><center>Nombre digitador</center></th>
+            <th class="minText" scope="col"><center>Valorizado</center></th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+      </table>
+    </div>
+    </div>
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/production.js"></script>
+</body>
+</html>

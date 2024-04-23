@@ -1,0 +1,290 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+  
+    <style>
+      .form-control:disabled {
+    background-color: #ffffff;
+    opacity: 1;
+}
+    </style>
+
+</head>
+<body>
+    
+    <h2>Afiliados</h2>
+
+    <p style="font-weight: 500;font-size: 15px;">
+      *Cantidad de caracteres para DNI : <label style="color: red;">8</label> <br>
+      *Cantidad de caracteres para CARNET DE EXTRANJERÍA : <label style="color: red;">9</label></p>
+
+
+    <p></p>
+
+        <div class="input-group mb-3" style="width: 90%;">
+          
+          <div class="input-group-prepend">
+            <span class="input-group-text">Disa</span>
+            </div>
+            <input value="250" type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="disa">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">Tipo formato</span>
+            </div>
+            <select class="custom-select" id="s-type-formated">
+              <option value="2">DNI (2)</option>
+              <option value="3">Carnet de extrajería (3)</option>
+              <option value="E">Temporal (E)</option>
+            </select>
+            
+            <div class="input-group-prepend">
+            <span class="input-group-text">N° de formato de afiliación</span>
+            </div>
+            <input type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="nro-formato">
+            <button class="btn btn-success" id="btn-search" onclick="search()"><i class='bx bx-search-alt-2' ></i>&nbsp;Buscar en galenos</button>
+            <button class="btn btn-primary" id="btn-search-web" onclick="searchWebService()"><i class="bi bi-globe"></i>&nbsp;Buscar en SIS</button>
+            <button style="border-color: #005580;color: #005580;" class="btn btn-light" id="btn-search-arfsis" onclick="searchArfsis()"><i class="bi bi-bezier2"></i>&nbsp;Buscar en Arfsis</button>
+            <a><div class="loaderSmall" id="loader"></div></a>
+        </div>
+
+    <p></p><br>
+
+
+<div id="body">
+
+   <center>
+   <div class="table-responsive" style="width: 90%;">
+    <table class="table table-hover table-bordered display" id="tb-data">
+      <thead>
+        <tr>
+          <th class="minText5" scope="col"><center></center></th>
+          <th class="minText5" scope="col"><center>#</center></th>
+          <th class="minText5" scope="col"><center>ID Siasis</center></th>
+          <th class="minText5" scope="col"><center>Disa</center></th>
+          <th class="minText5" scope="col"><center>Tipo</center></th>
+          <th class="minText5" scope="col"><center>Formato</center></th>
+          <th class="minText5" scope="col"><center>Nombres</center></th>
+          <th class="minText5" scope="col"><center>Tipo documento</center></th>
+          <th class="minText5" scope="col"><center>N° DNI</center></th>
+          <th class="minText5" scope="col"><center>Correlativo</center></th>
+          <th class="minText5" scope="col"><center>Establecimiento</center></th>
+          <th class="minText5" scope="col"><center>Fecha de alifiación</center></th>
+          <th class="minText5" scope="col"><center>Fecha de nacimiento</center></th>
+          <th class="minText5" scope="col"><center>Género</center></th>
+          <th class="minText5" scope="col"><center>IDistrito</center></th>
+          <th class="minText5" scope="col"><center>Estado</center></th>
+          <th class="minText5" scope="col"><center>Fecha de baja</center></th>
+          <th class="minText5" scope="col"><center>Motivo de baja</center></th>
+        </tr>
+      </thead>
+        <tbody id="tbody">
+        </tbody>
+      </table>
+    </div></center>
+    </div>
+
+      <!--modal-->
+
+      <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-l">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="d-title">Detalle de afiliado</h1>
+            </div>
+            <div class="modal-body">
+              
+              <div id="content-modal"></div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+        <!--modal-->
+
+
+        <!--modal-->
+
+      <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addModal" style="margin-top: -25px;" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="d-title">Datos de afiliado</h1>
+              <button id="closeBtnModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <div class="input-group mb-3" style="display: flex;justify-content: center;align-items: center;">
+                <label style="font-weight: bold;">ESTADO :</label>&nbsp;<label id="status"></label>&nbsp;&nbsp;&nbsp;
+                <label style="font-weight: bold;" id="typeLocalHealth"></label>&nbsp;
+                <label style="font-weight: bold;">-</label>&nbsp;
+                <label style="font-weight: bold;" id="eessCode"></label>&nbsp;
+                <label style="font-weight: bold;">-</label>&nbsp;
+                <label style="font-weight: bold;" id="descriptionCode"></label>
+              </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">ID afiliación siasis</span>
+                    </div>
+                    <input disabled type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="idSiasis">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Tipo de tabla</span>
+                      </div>
+                      <input disabled style="text-transform: uppercase;" type="text" maxlength="1" class="form-control" id="idTypeTable">
+
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">ID afiliación disa</span>
+                    </div>
+                    <input disabled maxlength="3" type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="idDisa">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Tipo de formato de afiliación</span>
+                      </div>
+                      <input disabled style="text-transform: uppercase;" type="text" maxlength="1" class="form-control" id="idTypeFormatAffiliate">
+
+                </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">N° de formato de afiliación</span>
+                    </div>
+                    <input disabled type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="nroFormatAffi">
+                
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Correlativo</span>
+                      </div>
+                      <input disabled maxlength="1" type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="correlative">
+                
+                </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Tipo de documento de identidad</label>
+                    </div>
+                    <select disabled class="custom-select" id="inputGroupSelectTypeDoc">
+                      <option disabled selected>Selecciona...</option>
+                      <option value="1">DNI</option>
+                      <option value="3">Carnet de extrajería</option>
+                      <option value="2">Otro</option>
+                    </select>
+
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelectSex">Género</label>
+                      </div>
+                      <select disabled class="custom-select" id="inputGroupSelectSex">
+                        <option disabled selected>Selecciona...</option>
+                        <option value="1">MASCULINO</option>
+                        <option value="0">FEMENINO</option>
+                      </select>
+
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">Código de establecimiento</span>
+                    </div>
+                    <input disabled type="text" class="form-control" id="estCode">
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">Fecha de afiliación</span>
+                    </div>
+                    <input disabled type="date" class="form-control" id="dateAffiliation">
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">Apellido paterno</span>
+                    </div>
+                    <input disabled oninput="deleteSymbols(event)" style="text-transform: uppercase;" type="text" class="form-control" id="aPaterno">
+
+                    
+                    <div class="input-group-prepend" id="d-aMaterno">
+                        <span class="input-group-text" >Apellido materno</span>
+                      </div>
+                      <input disabled oninput="deleteSymbols(event)" style="text-transform: uppercase;" type="text" class="form-control" id="aMaterno">
+
+                  </div>
+
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">Primer nombre</span>
+                    </div>
+                    <input disabled oninput="deleteSymbols(event)" style="text-transform: uppercase;" type="text" class="form-control" id="aPNombre">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Segundo nombre</span>
+                      </div>
+                      <input disabled oninput="deleteSymbols(event)" style="text-transform: uppercase;" type="text" class="form-control" id="aSNombre">
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">Fecha de nacimiento</span>
+                    </div>
+                    <input disabled type="date" class="form-control" id="dateBirth">
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">ID distrito domicilio</span>
+                    </div>
+                    <input disabled type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="idDistrito">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">N° de documento</span>
+                      </div>
+                      <input disabled type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;' class="form-control" id="nDoc">
+                  <div>
+
+                
+                    <br>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Cuenta</span>
+                      </div>
+                      <input maxlength="7" type="tel" onKeypress='if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;'  class="form-control" id="updateInAccount">
+                      <button onclick="updateSiasisAte()" id="btnUpdateToAccount" class="btn btn-success"><i class="bi bi-person-badge-fill"></i>&nbsp;Actualizar en cuenta</button>
+                    </div>
+                    <label style="color: red;margin-top: -10px;">*La ventana de <b>MODIFICAR</b>,&nbsp;<b>ALTA</b>,&nbsp;<b>IMP.FUA</b>&nbsp;debe estar cerrada en <b>SISGALENPLUS</b></label>
+
+                  </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" onclick="updateAfiliateToGalenos()" id="btnUpdateAfiliate" style="background-color: #005580;border-color: #005580;" class="btn btn-primary"><i class="bi bi-arrow-clockwise"></i>&nbsp;Actualizar afiliación</button>
+              <button type="button" id="btnAddGalenos" onclick="addToSisGalenPlus()" class="btn btn-danger"><i class="bi bi-server"></i>&nbsp;Agregar a SisGalenPlus</button>
+              <a><div class="loaderSmall" id="loaderAddGalenos"></div></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+        <!--modal-->
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/affiliates.js"></script>
+</body>
+</html>
