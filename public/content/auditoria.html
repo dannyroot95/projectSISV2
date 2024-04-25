@@ -36,9 +36,15 @@
         <label class="form-check-label minText" for="chk-user">Usuario</label>
       </div>
 
+      <div class="form-check form-check-inline">
+        <input class="form-check-input minText" type="checkbox" value="" id="chk-account">
+        <label class="form-check-label minText">Cuenta</label>
+      </div>
+
+
       <p></p>
 
-      <div class="input-group mb-3" style="display: flex;width: 60%;">
+      <div class="input-group mb-3" id="s-dates" style="display: flex;width: 60%;">
         <span class="input-group-text minText5" id="basic-addon1">Fecha de inicio</span>
         <input type="date" class="form-control minText5" id="date-ini">
         <span class="input-group-text minText5" id="basic-addon1">Fecha final</span>
@@ -56,6 +62,14 @@
             <!-- Aquí van las opciones -->
         </select>
     </div>
+
+    <div class="input-group mb-3" id="s-account" style="display: none;">
+      <label class="input-group-text minText">Cuenta</label>
+      <input type="number" maxlength="8" class="form-control minText" id="in-account">
+      <button onclick="getAuditByAccount()" class="btn btn-outline-primary minText">
+        <i class="bi bi-search"></i>&nbsp;Auditar</button>
+     </div>
+  
     
     <br>
 

@@ -2556,6 +2556,18 @@ router.get('/descargar-archivo', (req, res) => {
   });
 });
 
+router.get("/audit-by-acccount/:a", function (req, res, next) {
+ 
+  let idCuentaAtencion = req.params.a
+  sql.getAuditByAccount(idCuentaAtencion).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
 module.exports = router;
 
 

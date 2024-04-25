@@ -2273,6 +2273,19 @@ async function getDetailAudit(account,user) {
   }
 }
 
+async function getAuditByAccount(account) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('CUENTA',account)
+    .execute(`AUDITORIA_POR_CUENTA`) 
+    return res.recordsets
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+
 async function deleteSMIAll(x) {
   const account = parseInt(x) 
   try {
@@ -2495,5 +2508,6 @@ module.exports = {
   getTramaRNEspecific:getTramaRNEspecific,
   getTramaSEREspecific:getTramaSEREspecific,
   getTramaSMIEspecific:getTramaSMIEspecific,
-  updatePaperNumReference:updatePaperNumReference
+  updatePaperNumReference:updatePaperNumReference,
+  getAuditByAccount:getAuditByAccount
 };

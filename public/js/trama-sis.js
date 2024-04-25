@@ -27,6 +27,7 @@ var typeMedicUser = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14
 let onlySMI = ['050','054','055','017', '019', '020', '911', '021', '022', '024', '053', '056', '057', '058', '059', '060', '061', '062', '063', '064', '069', '070', '071', '074', '075', '200', '900', '901', 'S01', '904', '906', '065', '066', '067', '068', '111', '065', '067', '068'];
 var jsonAPISMI = []
 var jsonArfsisObs = []
+var pacientesAtendidos = {}
 
 yearLater()
 createDatatable()
@@ -355,6 +356,7 @@ function query(){
     log = ""
     errors = []
     duplexAccount = []
+    pacientesAtendidos = {}
     document.getElementById("errors").style = "display:none;"
     document.getElementById("duplex").style = "display:none;"
     document.getElementById("accountDuplex").style = "display:none;"
@@ -408,6 +410,7 @@ function queryEspecific(){
   log = ""
   errors = []
   duplexAccount = []
+  pacientesAtendidos = {}
   document.getElementById("errors").style = "display:none;"
   document.getElementById("duplex").style = "display:none;"
   document.getElementById("accountDuplex").style = "display:none;"
@@ -1069,7 +1072,7 @@ function disabledButtons(){
 loader.style = "display:block;"
 document.getElementById("btn-logs").disabled = true
 document.getElementById("btn-logsx").disabled = true
-document.getElementById("btn-validate-afiliate").disabled = true
+document.getElementById("btn-trama-report").disabled = true
 document.getElementById("btn-rc").disabled = true
 document.getElementById("btn-rcx").disabled = true
 document.getElementById("btn-query").disabled = true
@@ -1081,14 +1084,14 @@ function enableButtons(){
 loader.style = "display:none;"
 document.getElementById("btn-logs").disabled = false
 document.getElementById("btn-logsx").disabled = false
-document.getElementById("btn-validate-afiliate").disabled = false
+document.getElementById("btn-trama-report").disabled = false
 document.getElementById("btn-rc").disabled = false
 document.getElementById("btn-rc").style = "display:block;"
 document.getElementById("btn-rcx").disabled = false
 document.getElementById("btn-query").disabled = false
 document.getElementById("btn-send-debug").disabled = false
 document.getElementById("btn-logs").style = "display:block;"
-document.getElementById("btn-validate-afiliate").style = "display:block;"
+document.getElementById("btn-trama-report").style = "display:block;"
 document.getElementById("btn-especific").disabled = false
 }
 
@@ -1100,8 +1103,8 @@ function enableButtonsError(){
   document.getElementById("btn-logs").style = "display:none;"
   document.getElementById("btn-logs").disabled = false
   document.getElementById("btn-logsx").disabled = false
-  document.getElementById("btn-validate-afiliate").style = "display:none;"
-  document.getElementById("btn-validate-afiliate").disabled = false
+  document.getElementById("btn-trama-report").style = "display:none;"
+  document.getElementById("btn-trama-report").disabled = false
   document.getElementById("btn-query").disabled = false
   document.getElementById("btn-send-debug").disabled = false
   document.getElementById("btn-especific").disabled = false
@@ -3877,6 +3880,9 @@ setTimeout(() => {
 }
 
 function jsonATE(){
+
+  rcData = []
+
   Swal.fire({
     title: 'Ejecutando reglas de consistencia y validación!',
     timer: 8000,
@@ -4225,6 +4231,7 @@ function jsonATE(){
           verificarRegla14(datos)
           verificarRegla53(datos)
           verificarReglaDeValidacionInterna1(datos)
+          verificarRegla57(datos)
       });
   
       if(rcData.length == 0){
@@ -4623,6 +4630,41 @@ function verificarRegla53(data) {
   }
 }
 
+function verificarRegla57(data) {
+  const cuenta = data.cuenta_1;
+  const numFormatoAfiliado = data.numFormatoAfiliado_18;
+  const tipoSservicio = data.tipoServicio_88
+  const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
+  const fuav2 = data.fua_4;
+  const fechaAtencion = data.fechaAtencion_39.split(" ")[0]; // Tomar solo la fecha, sin la hora
+  const digitador = data.usuarioDigitador_87;
+  const affi = data.numFormatoAfiliado_18
+
+  // Verificar si el número de formato de afiliado no está vacío
+  if (numFormatoAfiliado) {
+      const key = numFormatoAfiliado + "-" + fechaAtencion;
+      // Si ya existe el paciente en la lista, agregar el FUA a su lista correspondiente
+      if (pacientesAtendidos[key]) {
+          pacientesAtendidos[key].push(fuav2);
+          // Verificar si tiene más de una atención en el mismo día
+          if (pacientesAtendidos[key].length > 1) {
+              rcData.push({
+                'Cuenta': cuenta,
+                'Servicio':tipoSservicio,
+                'Tipo': 'RC',
+                'Número': '57',
+                'FUA':fua,
+                'Digitador': digitador,
+                'Descripcion': `No cumple con la regla de consistencia 57. El paciente tiene más de una atención en un mismo día. -> Fuas afectados : ${pacientesAtendidos[key].join(', ')}`
+            });
+          }
+      } else {
+          // Si es la primera vez que se encuentra este paciente, agregarlo a la lista
+          pacientesAtendidos[key] = [fuav2];
+      }
+  }
+}
+
 function verificarReglaDeValidacionInterna1(data){
 
   const cuenta = data.cuenta_1;
@@ -4648,11 +4690,11 @@ function verificarReglaDeValidacionInterna1(data){
         'Descripcion': `No cumple con la regla de validacion interna 01. Falta procedimiento 90937 y 99203`
     });
     }
-
-
   }
-
 }
+
+
+
 
 function validateAfiliateTrama(){
   Swal.fire({

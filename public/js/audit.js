@@ -7,11 +7,28 @@ createDatatable()
 createDatatable2()
 
 let checkbox = document.getElementById("chk-user");
+let checkboxAccount = document.getElementById("chk-account");
 checkbox.addEventListener("change", function() {
     if (checkbox.checked) {
+        checkboxAccount.checked = false
         document.getElementById("s-users").style = "display: flex;width: 60%;"
+        document.getElementById("s-dates").style = "display: flex;width: 60%;"
+        document.getElementById("s-account").style = "display: none;"
     } else {
         document.getElementById("s-users").style = "display:none;"
+        document.getElementById("s-account").style = "display:none;"
+        document.getElementById("s-dates").style = "display: flex;width: 60%;"
+    }
+});
+checkboxAccount.addEventListener("change", function() {
+    if (checkboxAccount.checked) {
+        checkbox.checked = false
+        document.getElementById("s-account").style = "display: flex;width: 30%;"
+        document.getElementById("s-users").style = "display: none;"
+        document.getElementById("s-dates").style = "display: none"
+    } else {
+        document.getElementById("s-dates").style = "display: flex;width: 60%;"
+        document.getElementById("s-account").style = "display: none;"
     }
 });
 
@@ -127,6 +144,22 @@ function getAuditByDate(){
 
 }
 
+function getAuditByAccount(){
+
+    let account = document.getElementById("in-account").value   
+
+    if(account != ""){
+        fetchByAccount(account)
+    }else{
+        Swal.fire(
+            'Oops!',
+            'Complete los campos!',
+            'info'
+          )
+    }
+
+}
+
 function fetchByDate(d1,d2){
     loader.style = "display:block;"
 
@@ -184,6 +217,28 @@ function fetchByDateAndUser(d1,d2,id){
            'Content-Type': 'application/json'
         },body: JSON.stringify(values)
     })
+      .then(response => response.json())
+      .then(data => {
+        if(data.length > 0){
+            insertData(data)
+        }else{
+            loader.style = "display:none;"
+            Swal.fire(
+                'Oops!',
+                'No se encontraron datos!',
+                'info'
+              )
+        }
+      }).catch(err => {
+          console.log(err)
+          loader.style = "display:none;"
+      }); 
+}
+
+function fetchByAccount(account){
+    loader.style = "display:block;"
+
+    fetch(`${url}/audit-by-acccount/${account}`)
       .then(response => response.json())
       .then(data => {
         if(data.length > 0){

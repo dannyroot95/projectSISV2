@@ -4616,8 +4616,20 @@ function printResum(){
 
   var tableAte = $('#tb-data-1').DataTable();
   var length = tableAte.rows().count();
+  const cells = table.querySelectorAll("td");
+  // Cambiar el tamaño de fuente de las celdas
 
-  html2canvas(table).then(canvas => {
+  if(length < 100){
+    cells.forEach(cell => {
+      cell.style.fontSize = "12px"; 
+    });
+  }else{
+    cells.forEach(cell => {
+      cell.style.fontSize = "11px";
+    });
+  }
+
+  html2canvas(table, { scale: 3 }).then(canvas => {
     const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
     // Agregar la imagen de la tabla al PDF
 
