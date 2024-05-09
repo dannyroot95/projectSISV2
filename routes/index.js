@@ -3,6 +3,14 @@ var express = require('express');
 var router = express.Router();
 const sql = require("../dboperation");
 const path = require('path');
+const puppeteer = require('puppeteer');
+
+var browser
+var page 
+
+var tableData = []
+var productionData = []
+var observedData = []
 /* GET home page. */
 
 
@@ -2567,6 +2575,306 @@ router.get("/audit-by-acccount/:a", function (req, res, next) {
     }
   });
 });
+
+router.post("/get-audit-recipes", function (req, res,next) {
+
+  let data = req.body
+  let f1 = data.date1+' 00:00'
+  let f2 = data.date2+' 23:59'
+
+  sql.getAuditRecipe(f1,f2).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.post("/get-audit-lab", function (req, res,next) {
+
+  let data = req.body
+  let f1 = data.date1+' 00:00'
+  let f2 = data.date2+' 23:59'
+
+  sql.getAuditLab(f1,f2).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.post("/get-audit-img", function (req, res,next) {
+
+  let data = req.body
+  let f1 = data.date1+' 00:00'
+  let f2 = data.date2+' 23:59'
+
+  sql.getAuditImg(f1,f2).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.post("/get-detail-recipe", function (req, res,next) {
+
+  let data = req.body
+  let id = data.idReceta
+  let t = data.tipo
+  sql.getAuditRecipeDetail(id,t).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.get("/get-list-trama-saludpol", function (req, res,next) {
+
+  (async () => {
+    const isLoggedIn = await getListChargeTrama();
+  
+    if (isLoggedIn) {
+      res.json(tableData);
+
+    } else {
+      res.json({error:"fallido"})
+    }
+  })();
+
+});
+
+router.get("/get-list-trama-saludpol-production", function (req, res,next) {
+
+  (async () => {
+    const isLoggedIn = await getListProductionTrama();
+  
+    if (isLoggedIn) {
+      res.json(productionData);
+
+    } else {
+      res.json({error:"fallido"})
+    }
+  })();
+
+});
+
+router.post("/get-observed-trama", async function (req, res, next) {
+  try {
+    let link = req.body.link;
+    const isLoggedIn = await getObservedTrama(link);
+  
+    if (isLoggedIn) {
+      res.json(observedData);
+    } else {
+      res.json({ error: "fallido" });
+    }
+  } catch (error) {
+    console.error('Error en /get-observed-trama:', error);
+    res.json({ error: "fallido" });
+  }
+});
+
+
+async function loginSaludPol(username, password){
+   browser = await puppeteer.launch(); // Headless:false para ver la interfaz gráfica
+   page = await browser.newPage(); 
+
+  try {
+    await page.goto('https://app-gtips.saludpol.gob.pe:38071/app-gtips/login');
+
+    await page.waitForSelector('input[name="username"]');
+    await page.type('input[name="username"]', username);
+
+    await page.waitForSelector('input[name="password"]');
+    await page.type('input[name="password"]', password);
+
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle0' }), // Esperar a que la página cargue completamente
+      page.click('input[type="submit"]')
+    ]);
+
+    const isLoggedIn = await page.evaluate(() => {
+      return document.querySelector('.login-box') === null; // Comprueba si la clase .login-box ya no está presente
+    });
+
+    return isLoggedIn;
+
+  } catch (error) {
+    console.error('Error durante el inicio de sesión:', error);
+    return false; // Devuelve false si hay un error durante el inicio de sesión
+  }
+}
+
+async function getListChargeTrama() {
+
+  try {
+       // Verificar si el inicio de sesión fue exitoso
+    const isLoggedIn = await page.evaluate(() => {
+      return document.querySelector('.login-box') === null; // Comprueba si la clase .login-box ya no está presente
+    });
+  
+    const navigationPromise = page.waitForNavigation({ waitUntil: 'networkidle0' }); // Esperar a que la página se cargue completamente
+    await page.goto('https://app-gtips.saludpol.gob.pe:38071/app-gtips/cargas/listar');
+    await navigationPromise;
+  
+    await page.waitForSelector('#tablaCargas');
+  
+    tableData = []  
+    tableData = await page.evaluate(() => {
+      const tableRows = Array.from(document.querySelectorAll('#tablaCargas tbody tr'));
+      return tableRows.map(row => {
+        const columns = row.querySelectorAll('td');
+        let link = '';
+        row.querySelectorAll('a').forEach(anchor => {
+          const href = anchor.getAttribute('href');
+          if (href.includes('verobservaciones') || href.includes('ver') || href.includes('excel_carga')) {
+            link += `${anchor.innerText.trim()} |${href}`;
+          }
+        });
+        const data = Array.from(columns).map(column => column.innerText);
+        if (link) {
+          data[data.length - 1] = link.trim();
+        } else {
+          data[data.length - 2] = data[data.length - 1]; // Reemplazar el penúltimo con el último si no hay enlace presente
+        }
+        return data;
+      });
+    });
+
+    console.log(tableData);
+
+    return isLoggedIn;
+
+  } catch (error) {
+    console.error('Error al obtener datos:', error);
+    return false; // Devuelve false si hay un error durante el inicio de sesión
+  } /*finally {
+    await browser.close();
+  }*/
+}
+
+async function getListProductionTrama() {
+
+  try {
+    // Verificar si el inicio de sesión fue exitoso
+    const isLoggedIn = await page.evaluate(() => {
+      return document.querySelector('.login-box') === null; // Comprueba si la clase .login-box ya no está presente
+    });
+
+    const navigationPromise = page.waitForNavigation({ waitUntil: 'networkidle0' }); // Esperar a que la página se cargue completamente
+    await page.goto('https://app-gtips.saludpol.gob.pe:38071/app-gtips/mesesproducciones/listar');
+    await navigationPromise;
+
+    // Esperar a que aparezca la segunda tabla después de iniciar sesión
+    await page.waitForSelector('#tablamesesproducciones');
+
+    // Obtener datos de la segunda tabla
+    productionData = []
+    productionData = await page.evaluate(() => {
+      const tableRows = Array.from(document.querySelectorAll('#tablamesesproducciones tbody tr'));
+      return tableRows.map(row => {
+        const columns = row.querySelectorAll('td');
+        // Convertir las columnas a un array y eliminar la última columna
+        const rowData = Array.from(columns).map(column => column.innerText);
+        rowData.pop(); // Eliminar la última columna
+        return rowData;
+      });
+    });
+
+    console.log('Datos de la segunda tabla:', productionData);
+
+    return isLoggedIn;
+  } catch (error) {
+    console.error('Producción:', error);
+    return false; // Devuelve false si hay un error durante el inicio de sesión
+  }
+}
+
+async function getObservedTrama(link) {
+  try {
+    // Ir a la página
+    const isLoggedIn = await page.evaluate(() => {
+      return document.querySelector('.login-box') === null; // Comprueba si la clase .login-box ya no está presente
+    });
+
+    const navigationPromise = page.waitForNavigation({ waitUntil: 'networkidle0' }); // Esperar a que la página se cargue completamente
+    await page.goto(link);
+    await navigationPromise;
+
+    // Esperar a que aparezca la tabla
+    await page.waitForSelector('.my_datatable');
+
+    // Obtener datos de la tabla
+    observedData = await page.evaluate(() => {
+      const rows = Array.from(document.querySelectorAll('.my_datatable tbody tr'));
+      return rows.map(row => {
+        const columns = row.querySelectorAll('td');
+        const rowData = Array.from(columns).map(column => {
+          if (column.querySelector('a')) {
+            return {
+              text: column.innerText.trim(),
+              href: column.querySelector('a').getAttribute('href')
+            };
+          } else {
+            return column.innerText.trim();
+          }
+        });
+        return rowData;
+      });
+    });
+
+    console.log('Datos de la tabla:', observedData);
+    return isLoggedIn;
+  } catch (error) {
+    console.error('Error observacion:', error);
+    return false;
+  }
+}
+
+async function downloadFile(url) {
+
+  try {
+    // Ir a la URL de descarga
+    await page.goto(url);
+
+    // Esperar un momento para asegurarse de que la descarga se complete
+    await page.waitForTimeout(5000);
+
+    console.log('Descarga completada.');
+  } catch (error) {
+    console.error('Error durante la descarga:', error);
+  } 
+
+}
+
+const executeLogin = async () => {
+  try {
+      const username = 'convenioshospitalsantarosa@gmail.com';
+      const password = '29722788';
+      const loginSuccess = await loginSaludPol(username, password);
+
+      if (loginSuccess) {
+          console.log('logeado');
+      } else {
+          console.log('fallido');
+      }
+  } catch (error) {
+      console.error('Error:', error);
+  }
+};
+
+// Ejecutar la función por primera vez
+executeLogin();
+// Programar la ejecución cada 15 minutos
+setInterval(executeLogin, 10 * 60 * 1000);
+
 
 module.exports = router;
 

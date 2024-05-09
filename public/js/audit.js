@@ -3,18 +3,38 @@ let allData = []
 let allData2 = []
 let loader = document.getElementById("loader")
 let load = document.getElementById("loader2")
+let loader2 = document.getElementById("loader3")
+let loader4 = document.getElementById("loader4")
 createDatatable()
 createDatatable2()
+createDatatable3()
 
 let checkbox = document.getElementById("chk-user");
 let checkboxAccount = document.getElementById("chk-account");
+let checkboxRecipes = document.getElementById("chk-recipes");
+let checkboxLab = document.getElementById("chk-lab");
+let checkboxImg = document.getElementById("chk-img");
 checkbox.addEventListener("change", function() {
     if (checkbox.checked) {
+
         checkboxAccount.checked = false
+        checkboxRecipes.checked = false
+        checkboxImg.checked = false
+        checkboxLab.checked = false
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:block;"
+        document.getElementById("tb-resposive3").style = "display:none;"
         document.getElementById("s-users").style = "display: flex;width: 60%;"
         document.getElementById("s-dates").style = "display: flex;width: 60%;"
         document.getElementById("s-account").style = "display: none;"
     } else {
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:block;"
+        document.getElementById("tb-resposive3").style = "display:none;"
         document.getElementById("s-users").style = "display:none;"
         document.getElementById("s-account").style = "display:none;"
         document.getElementById("s-dates").style = "display: flex;width: 60%;"
@@ -23,12 +43,100 @@ checkbox.addEventListener("change", function() {
 checkboxAccount.addEventListener("change", function() {
     if (checkboxAccount.checked) {
         checkbox.checked = false
+        checkboxRecipes.checked = false
+        checkboxImg.checked = false
+        checkboxLab.checked = false
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:block;"
+        document.getElementById("tb-resposive3").style = "display:none;"
         document.getElementById("s-account").style = "display: flex;width: 30%;"
         document.getElementById("s-users").style = "display: none;"
         document.getElementById("s-dates").style = "display: none"
     } else {
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:block;"
+        document.getElementById("tb-resposive3").style = "display:none;"
         document.getElementById("s-dates").style = "display: flex;width: 60%;"
         document.getElementById("s-account").style = "display: none;"
+    }
+});
+checkboxRecipes.addEventListener("change", function() {
+    if (checkboxRecipes.checked) {
+        checkbox.checked = false
+        checkboxAccount.checked = false
+        checkboxImg.checked = false
+        checkboxLab.checked = false
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:none;"
+        document.getElementById("tb-resposive3").style = "display:block;"
+        document.getElementById("s-users").style = "display: none;"
+        document.getElementById("s-dates").style = "display: none;"
+        document.getElementById("s-account").style = "display: none;"
+    } else {
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:block;"
+        document.getElementById("tb-resposive3").style = "display:none;"
+        document.getElementById("s-users").style = "display:none;"
+        document.getElementById("s-account").style = "display:none;"
+        document.getElementById("s-dates").style = "display: flex;width: 60%;"
+    }
+});
+checkboxLab.addEventListener("change", function() {
+    if (checkboxLab.checked) {
+        checkbox.checked = false
+        checkboxAccount.checked = false
+        checkboxRecipes.checked = false
+        checkboxImg.checked = false
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:none;"
+        document.getElementById("tb-resposive3").style = "display:block;"
+        document.getElementById("s-users").style = "display: none;"
+        document.getElementById("s-dates").style = "display: none;"
+        document.getElementById("s-account").style = "display: none;"
+    } else {
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive3").style = "display:none;"
+        document.getElementById("tb-resposive").style = "display:block;"
+        document.getElementById("s-users").style = "display:none;"
+        document.getElementById("s-account").style = "display:none;"
+        document.getElementById("s-dates").style = "display: flex;width: 60%;"
+    }
+});
+checkboxImg.addEventListener("change", function() {
+    if (checkboxImg.checked) {
+        checkbox.checked = false
+        checkboxAccount.checked = false
+        checkboxRecipes.checked = false
+        checkboxLab.checked = false
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:none;"
+        document.getElementById("tb-resposive3").style = "display: block;"
+        document.getElementById("s-users").style = "display: none;"
+        document.getElementById("s-dates").style = "display: none;"
+        document.getElementById("s-account").style = "display: none;"
+    } else {
+        setTimeout(function() {
+            document.getElementById("it").click();
+          }, 500);
+        document.getElementById("tb-resposive").style = "display:block;"
+        document.getElementById("tb-resposive3").style = "display:none;"
+        document.getElementById("s-users").style = "display:none;"
+        document.getElementById("s-account").style = "display:none;"
+        document.getElementById("s-dates").style = "display: flex;width: 60%;"
     }
 });
 
@@ -108,6 +216,39 @@ function createDatatable2(){
       var table = $('#tb-data2').DataTable();
       $('#container').css( 'display', 'block' );
       table.columns.adjust().draw();
+}
+
+function createDatatable3(){
+
+    $('#tb-data3').DataTable({
+        language: {
+              "decimal": "",
+              "emptyTable": "No hay información",
+              "info": "Mostrando _START_ a _END_ de _TOTAL_ datos",
+              "infoEmpty": "<b>Mostrando 0 to 0 of 0 datos</b>",
+              "infoFiltered": "(Filtrado de _MAX_ total datos)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_ datos",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar en la lista:",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+              }
+       },scrollY: '50vh',scrollX: true, sScrollXInner: "100%",
+       scrollCollapse: true,
+      });
+  
+      var table = $('#tb-data3').DataTable();
+      $('#container').css( 'display', 'block' );
+      table.columns.adjust().draw();
+      document.getElementById("it").click();
+
 }
 
 
@@ -257,6 +398,48 @@ function fetchByAccount(account){
       }); 
 }
 
+function fetchBy_X(d1,d2){
+    loader2.style = "display:block;"
+
+    let values = {
+        date1 : d1,
+        date2 : d2
+    }
+
+    fetch(`${url}/${typeAudit()}`,{
+        method: 'POST',
+        headers: {
+           'Content-Type': 'application/json'
+        },body: JSON.stringify(values)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if(data.length > 0){
+            if(data.length > 25000){
+                loader2.style = "display:none;"
+                Swal.fire(
+                    'Oops!',
+                    'Memoria insuficiente!, Debe eligir un rango de fecha menor',
+                    'info'
+                  )
+            }else{
+                insertDatax(data)
+            }
+            
+        }else{
+            loader2.style = "display:none;"
+            Swal.fire(
+                'Oops!',
+                'No se encontraron datos!',
+                'info'
+              )
+        }
+      }).catch(err => {
+          console.log(err)
+          loader2.style = "display:none;"
+      }); 
+}
+
 function insertData(data){
     let ctx = 0
     document.getElementById("tbody").innerHTML = ""
@@ -356,6 +539,97 @@ function insertData(data){
       len.innerHTML = len.innerHTML+`&nbsp;&nbsp;<button onclick="downloadExcel();" class="btn btn-success minText5"><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Descargar</button>
       `
 
+}
+
+
+function insertDatax(data){
+    let ctx = 0
+    document.getElementById("tbody3").innerHTML = ""
+    $('#tb-data3').DataTable().destroy()
+    allData = []
+    $("#tbody3").html(data.map((d) => {
+
+        let estado = ""
+        let cuenta = d.cuenta
+        let financiamiento = d.financiamiento
+        ctx++
+
+        if(d.estado == "DESPACHADO"){
+            estado = `<b style="color:#006E11;">DESPACHADO</b>`
+        }else if(d.estado == "CON BOLETA"){
+            estado = `<b style="color:#900C3F;">CON BOLETA</b>`
+        }else if(d.estado == "REGISTRADO"){
+            estado = `<b style="color:#EE7701;">REGISTRADO</b>`
+        }else if(d.estado == "ATENDIDO"){
+            estado = `<b style="color:#34AB00;">ATENDIDO</b>`
+        }else if(d.estado == "PENDIENTE PAGO"){
+            estado = `<b style="color:#C89800;">PENDIENTE DE PAGO</b>`
+        }else if(d.estado == "PAGADO"){
+            estado = `<b style="color:#006F1B;">PAGADO</b>`
+        }else if(d.estado == "DEVOLVER"){
+            estado = `<b style="color:#A12E00;">POR DEVOLVER</b>`
+        }else if(d.estado == "DEVUELTO"){
+            estado = `<b style="color:#9D007C;">DEVUELTO</b>`
+        }else if(d.estado == "AUTORIZ AUTOMÁTICA"){
+            estado = `<b style="color:#006580;">AUTORIZADO</b>`
+        }else if(d.estado == "REEMBOLSO PARCIAL"){
+            estado = `<b style="color:#0006CC;">REEMBOLSADO</b>`
+        }else if(d.estado == "CON PREVENTA"){
+            estado = `<b style="color:#579B00;">PRE-VENDIDO</b>`
+        }else{
+            estado = `<b style="color:#D40000;">ANULADO</b>`
+        }
+
+        if(cuenta == "0"){
+            cuenta = `<b style="color:#D40000;">SIN CUENTA</b>`
+        }
+
+        if(financiamiento == "MINSA-HOSPITALIZADO"){
+            financiamiento = "MINSA"
+        }else if(financiamiento == "EJERCITO PERUANO"){
+            financiamiento = "EJÉRCITO"
+        }else if(financiamiento == "ESTRATEGIAS SANITARIAS"){
+            financiamiento = "ESTRATEGIAS"
+        }else if(financiamiento == "PNP POLICIA"){
+            financiamiento = "PNP"
+        }
+
+
+        allData.push({
+            'Receta':d.id,
+            'Cuenta':cuenta,
+            'Fecha':d.fechaReceta,
+            'Hora':d.horaReceta,
+            'Servicio':d.servicio,
+            'Financiamiento' :financiamiento,
+            'Paciente':d.paciente,
+            'Estado':estado
+        })
+
+              return `
+              <tr style="cursor: pointer;">
+              <td class="minText5"><button onclick="showItems('${d.id}','${d.tipo}')"
+              class="btn btn-outline-success minText5"><i class="bi bi-diagram-3-fill"></i>
+              &nbsp;<label style="font-weight: bold;color:red;">${d.ctx}</label>&nbsp;
+              <label style="font-weight: bold;">Items</label></button></td>
+              <td class="minText5">${d.id}</td>
+              <td class="minText5">${cuenta}</td>
+              <td class="minText5">${d.fechaReceta}</td>
+              <td class="minText5">${d.horaReceta}</td>
+              <td class="minText5">${d.servicio}</td>
+              <td class="minText5">${financiamiento}</td>
+              <td class="minText5">${d.paciente}</td>
+              <td class="minText5">${estado}</td>
+              </tr>`;
+          })
+          .join("")
+      );
+      loader2.style = "display:none;"
+      createDatatable3()
+      
+      var lenx = document.getElementById("tb-data3_length")
+      lenx.innerHTML = lenx.innerHTML+`&nbsp;&nbsp;<button onclick="downloadExcel();" class="btn btn-success minText5"><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Descargar</button>
+      `
 }
 
 function downloadExcel(){
@@ -499,6 +773,120 @@ function insertDataDetailAudit(data){
       setTimeout(function() {
         document.getElementById("detailX").click();
       }, 500);
+
+}
+
+
+function getAudit_X(){
+
+    let date1 = document.getElementById("date-ini-2").value   
+    let date2 = document.getElementById("date-fin-2").value
+
+    let dateObj1 = new Date(date1);
+    let dateObj2 = new Date(date2);
+
+    if(date1 != "" && date2 != ""){
+        if(dateObj1 <= dateObj2) {
+            
+            fetchBy_X(date1,date2)
+
+        }else{
+            Swal.fire(
+                'Oops!',
+                'La fecha de inicio debe ser menor que la fecha final!',
+                'info'
+              )
+        }
+    }else{
+        Swal.fire(
+            'Oops!',
+            'Complete los campos!',
+            'info'
+          )
+    }
+
+}
+
+function typeAudit(){
+
+    let x = ""
+
+    if(checkboxRecipes.checked == true){
+        x = 'get-audit-recipes'
+    }else if(checkboxLab.checked == true){
+        x = 'get-audit-lab'
+    }else{
+        x = 'get-audit-img'
+    }
+
+    return x
+
+}
+
+function showItems(idReceta,tipo){
+    $('#itemsModal').modal('show')
+    fetchDetailRecipe(idReceta,tipo)
+}
+
+function fetchDetailRecipe(idReceta,tipo){
+
+    loader4.style = "display:block;"
+    document.getElementById("tbodyDetail").innerHTML = ""
+
+    let values = {
+        idReceta : idReceta,
+        tipo : tipo
+    }
+
+    fetch(`${url}/get-detail-recipe`,{
+        method: 'POST',
+        headers: {
+           'Content-Type': 'application/json'
+        },body: JSON.stringify(values)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if(data.length > 0){
+           loader4.style = "display:none;"
+           insertDataDetailRecipe(data)
+      }else{
+        Swal.fire(
+            'Oops!',
+            'No se encontraron items!',
+            'info'
+          )
+          loader4.style = "display:none;" 
+      }
+    }).catch(err => {
+        loader4.style = "display:none;"
+        Swal.fire(
+            'Oops!',
+            'Error 404!',
+            'error'
+          )
+        console.log(err)
+    }); 
+
+}
+
+function insertDataDetailRecipe(data){
+    let ctx = 0
+    $('#tb-data-detail').DataTable().destroy()
+    $("#tbodyDetail").html(data.map((d) => {
+
+        ctx++
+
+              return `
+              <tr style="cursor: pointer;">
+              <td class="minText5">${ctx}</td>
+              <td class="minText5">${d.codigo}</td>
+              <td class="minText5">${d.nombre}</td>
+              <td class="minText5">${d.cantidad}</td>
+              <td class="minText5">${d.total}</td>
+              </tr>`;
+          })
+          .join("")
+      );
 
 }
 

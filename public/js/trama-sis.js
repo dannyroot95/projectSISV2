@@ -4209,11 +4209,13 @@ function jsonATE(){
           const fua = datos.disa_2+"-"+datos.lote_3+'-'+datos.fua_4
           const servicio = datos.tipoServicio_88
           const digitador = datos.usuarioDigitador_87
+          const prestacion = "|"+datos.servicio_42+"|"
           // Verificar regla 12
           if (!verificarRegla12(datos)) {
               rcData.push({
                   'Cuenta': cuenta,
                   'Servicio':servicio,
+                  'Prestacion':prestacion,
                   'Tipo':'RC',
                   'Número':'12',
                   'FUA':fua,
@@ -4230,8 +4232,9 @@ function jsonATE(){
           verificarRegla47(datos)
           verificarRegla14(datos)
           verificarRegla53(datos)
-          verificarReglaDeValidacionInterna1(datos)
           verificarRegla57(datos)
+          verificarReglaDeValidacionInterna1(datos)
+          verificarReglaDeValidacionInterna2(datos)
       });
   
       if(rcData.length == 0){
@@ -4267,6 +4270,7 @@ function jsonATE(){
         const insumos = data.insumos;
         const servicio = data.tipoServicio_88
         const digitador = data.usuarioDigitador_87
+        const prestacion = "|"+data.servicio_42+"|"
 
         if (!insumos || insumos.length === 0) {
             //console.log(`Cuenta ${cuenta}: No hay insumos registrados.`);
@@ -4278,6 +4282,7 @@ function jsonATE(){
               rcData.push({
                 'Cuenta': cuenta,
                 'Servicio':servicio,
+                'Prestacion':prestacion,
                 'Tipo':'RC',
                 'Número':'80',
                 'FUA':fua,
@@ -4299,6 +4304,7 @@ function verificarValidacion19(data) {
   const digitador = data.usuarioDigitador_87
   let rv19 = 0;
   let descripcion = `No cumple con la regla de validación 19. `;
+  const prestacion = "|"+data.servicio_42+"|"
 
   if (servicio == "050") {
       const proc86901= procedimientos.find(proc => proc.codigoCpt_2 === "86901");
@@ -4334,6 +4340,7 @@ function verificarValidacion19(data) {
           rcData.push({
               'Cuenta': cuenta,
               'Servicio':tipoSservicio,
+              'Prestacion':prestacion,
               'Tipo': 'RV',
               'Número': '19',
               'FUA':fua,
@@ -4350,7 +4357,7 @@ function verificarRegla59(data) {
   const fua = data.disa_2+"-"+data.lote_3+"-"+data.fua_4
   const tipoSservicio = data.tipoServicio_88
   const digitador = data.usuarioDigitador_87
-
+  const prestacion = "|"+data.servicio_42+"|"
   const fechaIngresoParts = (data.fechaIngresoHospitalizacion_46).split("/");
   const fechaAltaParts = (data.fechaAltaHospitalizacion_47).split("/");
 
@@ -4377,6 +4384,7 @@ function verificarRegla59(data) {
           rcData.push({
               'Cuenta': cuenta,
               'Servicio':tipoSservicio,
+              'Prestacion':prestacion,
               'Tipo': 'RC',
               'Número': '59',
               'FUA':fua,
@@ -4390,6 +4398,7 @@ function verificarRegla59(data) {
       rcData.push({
           'Cuenta': cuenta,
           'Servicio':tipoSservicio,
+          'Prestacion':prestacion,
           'Tipo': 'RC',
           'Número': '59',
           'FUA':fua,
@@ -4404,6 +4413,7 @@ function verificarRegla59(data) {
       rcData.push({
           'Cuenta': cuenta,
           'Servicio':tipoSservicio,
+          'Prestacion':prestacion,
           'Tipo': 'RC',
           'Número': '59',
           'FUA':fua,
@@ -4418,6 +4428,7 @@ function verificarRegla59(data) {
       rcData.push({
           'Cuenta': cuenta,
           'Servicio':tipoSservicio,
+          'Prestacion':prestacion,
           'Tipo': 'RC',
           'Número': '59',
           'FUA':fua,
@@ -4435,7 +4446,7 @@ function verificarRegla79(data) {
   const fua = data.disa_2+"-"+data.lote_3+"-"+data.fua_4
   const tipoSservicio = data.tipoServicio_88
   const digitador = data.usuarioDigitador_87
-
+  const prestacion = "|"+data.servicio_42+"|"
   // Verificar el servicio y el tipo de personal de salud según las condiciones de la regla
   switch (servicio) {
       case "056":
@@ -4443,6 +4454,7 @@ function verificarRegla79(data) {
               rcData.push({
                   'Cuenta': cuenta,
                   'Servicio':tipoSservicio,
+                  'Prestacion':prestacion,
                   'Tipo': 'RC',
                   'Número': '79',
                   'FUA':fua,
@@ -4456,6 +4468,7 @@ function verificarRegla79(data) {
               rcData.push({
                   'Cuenta': cuenta,
                   'Servicio':tipoSservicio,
+                  'Prestacion':prestacion,
                   'Tipo': 'RC',
                   'Número': '79',
                   'FUA':fua,
@@ -4474,6 +4487,7 @@ function verificarRegla79(data) {
               rcData.push({
                   'Cuenta': cuenta,
                   'Servicio':tipoSservicio,
+                  'Prestacion':prestacion,
                   'Tipo': 'RC',
                   'Número': '79',
                   'FUA':fua,
@@ -4487,6 +4501,7 @@ function verificarRegla79(data) {
               rcData.push({
                   'Cuenta': cuenta,
                   'Servicio':tipoSservicio,
+                  'Prestacion':prestacion,
                   'Tipo': 'RC',
                   'Número': '79',
                   'FUA':fua,
@@ -4507,6 +4522,7 @@ function verificarRegla47(data) {
   const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
   const tipoSservicio = data.tipoServicio_88
   const digitador = data.usuarioDigitador_87
+  const prestacion = "|"+data.servicio_42+"|"
 
   if (servicio === "055") {
     const tiene5914 = procedimientos.some(proc => proc.codigoCpt_2 === "59514");
@@ -4516,6 +4532,7 @@ function verificarRegla47(data) {
       rcData.push({
         'Cuenta': cuenta,
         'Servicio':tipoSservicio,
+        'Prestacion':prestacion,
         'Tipo': 'RC',
         'Número': '47',
         'FUA':fua,
@@ -4528,6 +4545,7 @@ function verificarRegla47(data) {
       rcData.push({
         'Cuenta': cuenta,
         'Servicio':tipoSservicio,
+        'Prestacion':prestacion,
         'Tipo': 'RC',
         'Número': '47',
         'FUA':fua,
@@ -4565,12 +4583,13 @@ function verificarRegla14(data) {
   const tipoSservicio = data.tipoServicio_88
   const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
   const digitador = data.usuarioDigitador_87
-
+  const prestacion = "|"+data.servicio_42+"|"
 
   if (servicio === "050" && smi.length === 0) {
       rcData.push({
         'Cuenta': cuenta,
         'Servicio':tipoSservicio,
+        'Prestacion':prestacion,
         'Tipo': 'RC',
         'Número': '14',
         'FUA':fua,
@@ -4588,6 +4607,7 @@ function verificarRegla53(data) {
   const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
   const digitador = data.usuarioDigitador_87;
   const servicio = data.servicio_42;
+  const prestacion = "|"+data.servicio_42+"|"
 
   // Crear objeto Date con la fecha de nacimiento
   const fechaNacimiento = new Date(fechaNacimientoParts[2], fechaNacimientoParts[1] - 1, fechaNacimientoParts[0]);
@@ -4607,6 +4627,7 @@ function verificarRegla53(data) {
           rcData.push({
               'Cuenta': cuenta,
               'Servicio':tipoSservicio,
+              'Prestacion':prestacion,
               'Tipo': 'RC',
               'Número': '53',
               'FUA':fua,
@@ -4619,6 +4640,7 @@ function verificarRegla53(data) {
         rcData.push({
           'Cuenta': cuenta,
           'Servicio':tipoSservicio,
+          'Prestacion':prestacion,
           'Tipo': 'RC',
           'Número': '53',
           'FUA':fua,
@@ -4639,6 +4661,7 @@ function verificarRegla57(data) {
   const fechaAtencion = data.fechaAtencion_39.split(" ")[0]; // Tomar solo la fecha, sin la hora
   const digitador = data.usuarioDigitador_87;
   const affi = data.numFormatoAfiliado_18
+  const prestacion = "|"+data.servicio_42+"|"
 
   // Verificar si el número de formato de afiliado no está vacío
   if (numFormatoAfiliado) {
@@ -4651,6 +4674,7 @@ function verificarRegla57(data) {
               rcData.push({
                 'Cuenta': cuenta,
                 'Servicio':tipoSservicio,
+                'Prestacion':prestacion,
                 'Tipo': 'RC',
                 'Número': '57',
                 'FUA':fua,
@@ -4673,6 +4697,7 @@ function verificarReglaDeValidacionInterna1(data){
   const digitador = data.usuarioDigitador_87;
   const servicio = data.servicio_42;
   const procedimientos = data.procedimientos;
+  const prestacion = "|"+data.servicio_42+"|"
 
   if (servicio === "056" && tipoSservicio === "Hemodialisis") {
 
@@ -4683,6 +4708,7 @@ function verificarReglaDeValidacionInterna1(data){
       rcData.push({
         'Cuenta': cuenta,
         'Servicio':tipoSservicio,
+        'Prestacion':prestacion,
         'Tipo': 'RVI',
         'Número': '01',
         'FUA':fua,
@@ -4690,6 +4716,76 @@ function verificarReglaDeValidacionInterna1(data){
         'Descripcion': `No cumple con la regla de validacion interna 01. Falta procedimiento 90937 y 99203`
     });
     }
+  }
+}
+
+function verificarReglaDeValidacionInterna2(data) {
+  const cuenta = data.cuenta_1;
+  const servicio = data.servicio_42;
+  const digitador = data.usuarioDigitador_87;
+  const tipoSservicio = data.tipoServicio_88
+  const procedimientos = data.procedimientos;
+  const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
+  const prestacion = "|"+data.servicio_42+"|"
+  
+  // Verificar si el servicio es 062 o 063
+  if (servicio === "062" || servicio === "063") {
+      let prioridadEncontrada = false;
+      let prioridad99206Encontrada = false;
+
+      // Verificar cada procedimiento
+      procedimientos.forEach(proc => {
+          // Verificar si el procedimiento es una de las prioridades
+          if (proc.codigoCpt_2 === "99282" || proc.codigoCpt_2 === "99283" || proc.codigoCpt_2 === "99284" || proc.codigoCpt_2 === "99281") {
+              // Verificar si la cantidad es 1
+              if (proc.cantidadEntregada_6 !== "1" || proc.cantidadPrescrita_5 !== "1") {
+                  rcData.push({
+                      'Cuenta': cuenta,
+                      'Servicio':tipoSservicio,
+                      'Prestacion':prestacion,
+                      'Tipo': 'RVI',
+                      'Número': '02',
+                      'FUA':fua,
+                      'Digitador':digitador,
+                      'Descripción': `La cuenta ${cuenta} tiene un procedimiento de prioridad ${proc.codigoCpt_2} con cantidad diferente de 1.`
+                  });
+              }
+              prioridadEncontrada = true;
+          }
+
+          // Verificar si existe el procedimiento 99206
+          if (proc.codigoCpt_2 === "99206") {
+              prioridad99206Encontrada = true;
+          }
+      });
+
+      // Alertar si no se encontró ninguna prioridad
+      if (!prioridadEncontrada) {
+          rcData.push({
+              'Cuenta': cuenta,
+              'Servicio':tipoSservicio,
+              'Prestacion':prestacion,
+              'Tipo': 'RVI',
+              'Número': '01',
+              'FUA':fua,
+              'Digitador':digitador,
+              'Descripción': `La cuenta ${cuenta} no tiene ningún procedimiento de prioridad (99282, 99283, 99284, 99281).`
+          });
+      }
+
+      // Alertar si no se encontró el procedimiento 99206
+      if (!prioridad99206Encontrada) {
+          rcData.push({
+              'Cuenta': cuenta,
+              'Servicio':tipoSservicio,
+              'Prestacion':prestacion,
+              'Tipo': 'RVI',
+              'Número': '01',
+              'FUA':fua,
+              'Digitador':digitador,
+              'Descripción': `La cuenta ${cuenta} no tiene el procedimiento 99206.`
+          });
+      }
   }
 }
 

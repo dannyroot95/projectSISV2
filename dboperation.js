@@ -2368,6 +2368,58 @@ async function updatePaperNumReference(account,num) {
   }
 }
 
+async function getAuditRecipe(f1,f2) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('FECHA1',f1)
+    .input('FECHA2',f2)
+    .execute(`AUDITORIA_FARMACIA`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+async function getAuditRecipeDetail(id,t) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('IDRECETA',id)
+    .input('TIPO',t)
+    .execute(`AUDITORIA_DETALLE_RECETA`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+async function getAuditLab(f1,f2) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('FECHA1',f1)
+    .input('FECHA2',f2)
+    .execute(`AUDITORIA_LABORATORIO`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+async function getAuditImg(f1,f2) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('FECHA1',f1)
+    .input('FECHA2',f2)
+    .execute(`AUDITORIA_IMAGENES`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
 
 module.exports = {
   getdata: getdata,
@@ -2509,5 +2561,9 @@ module.exports = {
   getTramaSEREspecific:getTramaSEREspecific,
   getTramaSMIEspecific:getTramaSMIEspecific,
   updatePaperNumReference:updatePaperNumReference,
-  getAuditByAccount:getAuditByAccount
+  getAuditByAccount:getAuditByAccount,
+  getAuditRecipe:getAuditRecipe,
+  getAuditRecipeDetail:getAuditRecipeDetail,
+  getAuditLab:getAuditLab,
+  getAuditImg:getAuditImg
 };

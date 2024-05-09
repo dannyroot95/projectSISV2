@@ -69,6 +69,9 @@
 
       <button class="btn btn-primary" id="btn-query" onclick="query()" ><i class="bi bi-search"></i>&nbsp;Consultar atenciones</button>
       <button style="background-color: #004073;border-color: #004073;" class="btn btn-primary" id="btn-deleted" onclick="showModalDeleteAccount()" ><i class="bi bi-pencil-square"></i>&nbsp;Editar consulta de atenciones</button>
+      <button style="background-color: #3F006A;border-color: #3F006A;" class="btn btn-primary" id="btn-charge" onclick="showModalCharges()" ><i class="bi bi-cloud-upload-fill"></i>&nbsp;Tramas cargadas</button>
+      <button style="background-color: #B0035C;border-color: #B0035C;" class="btn btn-primary" id="btn-value" onclick="showModalValue()" ><i class="bi bi-coin"></i>&nbsp;Tramas valorizadas</button>
+
       &nbsp; 
       <a><div class="loaderSmall" id="loader"></div></a>
 
@@ -1059,6 +1062,146 @@
 </div>
 
    <!---->
+
+       <!-- Modal -->
+<div class="modal fade" id="modalTramas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Tramas cargadas en SALUDPOL&nbsp;&nbsp;<button id="btnListTrama" class="btn btn-success" onclick="getListTrama()"><i class="bi bi-arrow-clockwise"></i></button></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <table class="table table-hover table-bordered display minText">
+          <thead>
+            <tr>
+              <th>Descripción</th>
+              <th>Mes de producción</th>
+              <th>Observación</th>
+              <th>Fecha de cierre</th>
+              <th>Creación</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <!--------------------------------------------------------------->
+          <tbody id="tBodyListTrama">
+          
+          </tbody>
+        </table>
+
+        <center><a><div class="loaderSmall" id="loaderList"></div></a></center>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+   <!---->
+
+   
+       <!-- Modal -->
+<div class="modal fade" id="modalTramasValue" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Tramas valorizadas en SALUDPOL&nbsp;&nbsp;<button id="btnListTramaValue" class="btn btn-success" onclick="getListTramaProduccion()"><i class="bi bi-arrow-clockwise"></i></button></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <table class="table table-hover table-bordered display minText">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Año</th>
+              <th>Mes</th>
+              <th>Cant.Prestaciones</th>
+              <th>Valorizado de procedimientos</th>
+              <th>Valorizado de productos</th>
+              <th>Valorización total</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <!--------------------------------------------------------------->
+          <tbody id="tBodyListTramaValue">
+          
+          </tbody>
+        </table>
+
+        <center><a><div class="loaderSmall" id="loaderListValue"></div></a></center>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+   <!---->
+
+      
+       <!-- Modal -->
+<div class="modal fade" id="modalTramasObserved" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Detalle de trama observada</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <center><a><div class="loaderSmall" id="loaderListObserved"></div></a></center>
+
+        <table class="table table-hover table-bordered display minText">
+          <tbody>
+            <tr>
+              <td>Descripcion:</td>
+              <td colspan="2" id="PeriodoObs"></td>
+            </tr>
+            <tr>
+              <td>Periodo:</td>
+              <td colspan="2" id="anioObs"></td>
+            </tr>
+            <tr>
+              <td class="col-xs-4">Observaciones de Archivo de
+                Prestaciones:</td>
+                <td id="fileAte"></td>
+
+            </tr>
+            <tr>
+              <td>Observaciones de Archivo de Diagnósticos:</td>
+              <td id="fileDia"></td>
+
+            </tr>
+            <tr>
+              <td>Observaciones de Archivo de Procedimientos:</td>
+              <td id="filePro"></td>
+
+            </tr>
+            <tr>
+              <td>Observaciones de Archivo de Productos Médicos:</td>
+              <td id="fileMed"></td>
+            </tr>
+            <tr>
+              <td>Estado:</td>
+              <td colspan="2" id="obsStatus"></td>
+            </tr>
+
+            <tr>
+              <td>Descripción:</td>
+              <td colspan="2" id="descripcionObs"></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+   <!---->
+
 
      <script>
 

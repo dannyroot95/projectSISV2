@@ -19,6 +19,8 @@ createDatatableSearchDiagnosys()
 createDatatableSearchDiagnosysByLab()
 createDatatableSearchDiagnosysByImg()
 createDatatableSearchService()
+getListTrama()
+//getListTramaProduccion()
 
 
 function generateYear(){
@@ -828,6 +830,8 @@ document.getElementById("inputGroupSelectProductionMonth").disabled = true
 document.getElementById("inputGroupSelectProductionYear").disabled = true
 document.getElementById("btn-query").disabled = true
 document.getElementById("btn-deleted").disabled = true
+document.getElementById("btn-charge").disabled = true
+document.getElementById("btn-value").disabled = true
 document.getElementById("btn-trama").disabled = true
 document.getElementById("btn-upload-trama").disabled = true
 document.getElementById("btn-obs").disabled = true
@@ -843,6 +847,8 @@ function enableButtons(){
   document.getElementById("inputGroupSelectProductionYear").disabled = false
   document.getElementById("btn-query").disabled = false
   document.getElementById("btn-deleted").disabled = false
+  document.getElementById("btn-charge").disabled = false
+  document.getElementById("btn-value").disabled = false
   document.getElementById("btn-trama").disabled = false
   document.getElementById("btn-upload-trama").disabled = false
   document.getElementById("btn-obs").disabled = false
@@ -1814,7 +1820,7 @@ function updateDniPatient(){
    let id_patient = (document.getElementById("d-id-patient").innerHTML).toString()
    let dni = document.getElementById("ed-dni").value
 
-   if(dni != "" && dni.length == 8){
+   if(dni != ""){
 
     fetch(`${url}/update-dni-patient/${dni}/${id_patient}`)
             .then(response => response.json())
@@ -4646,3 +4652,232 @@ function printResum(){
     pdf.save(`RESUMEN ${textMonth} - ${year}.pdf`);
   });
 }
+
+function getListTrama(){
+
+  document.getElementById("loaderList").style = "display:block;"
+  document.getElementById("tBodyListTrama").innerHTML = ""
+
+  document.getElementById("btnListTrama").disabled = true
+  document.getElementById("btnListTramaValue").style = "display:none;"
+  document.getElementById("loaderListValue").style = "display:block;"
+  document.getElementById("tBodyListTramaValue").innerHTML = ""
+
+   fetch(`${url}/get-list-trama-saludpol`)
+           .then(response => response.json())
+           .then(data => {
+
+             document.getElementById("loaderList").style = "display:none;"
+
+             let datosFiltrados = data
+
+             const $tbody = $('#tBodyListTrama');
+             datosFiltrados.forEach(rowData => {
+              const $row = $('<tr></tr>');
+              rowData.forEach((cellData, index) => {
+                let $cell;
+                $cell = $('<td></td>').text(cellData);
+
+                if (index === 3 && cellData === '') {
+                  $cell = $('<td></td>').html('<span style="color: red;">Sin datos</span>');
+                }
+
+                if (cellData.includes('PROCESADA')) {
+                  $cell = $('<td style="background-color:#00a65a;"></td>').html('<span style="color: white;font-weight:bold;">PROCESADA</span>');
+                }
+
+                if (cellData.includes('CERRADA')) {
+                  $cell = $('<td style="background-color:#3c8dbc;"></td>').html('<span style="color: white;font-weight:bold;">CERRADA</span>');
+                }
+
+                if (cellData.includes('EN PROCESO')) {
+                  $cell = $('<td style="background-color:#f0ad4e;"></td>').html('<span style="color: white;font-weight:bold;">EN PROCESO</span>');
+                }
+
+                if (cellData.includes('OBSERVADA')) {
+                  $cell = $('<td style="background-color:#C40000;"></td>').html('<span style="color: white;font-weight:bold;">OBSERVADA</span>');
+                }
+
+                if (cellData.includes('VER')) {
+                  let link = cellData.split("|")[1]
+                  $cell = $('<td></td>').html(`<a 
+                  target="a_blank" href="https://app-gtips.saludpol.gob.pe:38071/app-gtips/cargas/${link}" download>
+                  <button class="btn btn-primary minText5">
+                  <i class="bi bi-archive"></i></button></a>`);
+                }
+
+                if (cellData.includes('EXCEL')) {
+                  let link = cellData.split("|")[2]
+                  $cell = $('<td></td>').html(`<a 
+                  target="a_blank" href="https://app-gtips.saludpol.gob.pe:38071/app-gtips/cargas/${link}" download>
+                  <button class="btn btn-success minText5">
+                  <i class="bi bi-file-earmark-spreadsheet"></i></button></a>`);
+                }
+
+                if (cellData.includes('OBSERVACIONES')) {
+                  let link = cellData.split("|")[2]
+                  $cell = $('<td></td>').html(`
+                  <button onclick="getObservedTrama('https://app-gtips.saludpol.gob.pe:38071/app-gtips/cargas/${link}')"
+                  class="btn btn-danger minText5">
+                  <i class="bi bi-eye-fill"></i></button>`);
+                }
+
+                $row.append($cell);
+              });
+              $tbody.append($row);
+            });
+           
+            document.getElementById("btnListTrama").disabled = false
+            document.getElementById("btnListTramaValue").style = "display:inline;"
+            getListTramaProduccion()
+
+           }).catch(err =>{
+               document.getElementById("btnListTrama").disabled = false
+               document.getElementById("loaderList").style = "display:none;"
+               document.getElementById("btnListTramaValue").style = "display:inline;"
+               console.log(err)
+           } );
+          }
+
+function getListTramaProduccion(){
+
+  document.getElementById("loaderListValue").style = "display:block;"
+  document.getElementById("tBodyListTramaValue").innerHTML = ""
+
+  document.getElementById("btnListTramaValue").disabled = true
+
+
+  fetch(`${url}/get-list-trama-saludpol-production`)
+           .then(response => response.json())
+           .then(data => {
+            document.getElementById("loaderListValue").style = "display:none;"
+             let datosFiltrados = data
+
+             const $tbody = $('#tBodyListTramaValue');
+             datosFiltrados.forEach(rowData => {
+              const $row = $('<tr></tr>');
+              rowData.forEach((cellData, index) => {
+                let $cell;
+                $cell = $('<td></td>').text(cellData);
+
+                if(index === 2){
+                  let numMonth = parseInt(cellData)
+                  $cell = $('<td></td>').text(obtenerNombreMes(numMonth));
+                }
+
+                if (index === 6 || index === 5 || index === 4) {
+                  let floatValue = parseFloat(cellData).toFixed(2)
+                  $cell = $('<td></td>').text("S/"+formatearNumero(floatValue));
+                }
+                if (cellData.includes('ABIERTO')) {
+                  $cell = $('<td style="background-color:green;"></td>')
+                  .html('<span style="color: white;font-weight:bold;">ABIERTO</span>');
+                }  
+                
+                if (cellData.includes('CERRADO')) {
+                  $cell = $('<td style="background-color:black;"></td>')
+                  .html('<span style="color: white;font-weight:bold;">CERRADO</span>');
+                }
+
+                $row.append($cell);
+              });
+              $tbody.append($row);
+            });
+
+             document.getElementById("btnListTramaValue").disabled = false
+
+           }).catch(err =>{
+               console.log(err)
+           } );
+}          
+
+
+function getObservedTrama(link){
+
+  let values = document.getElementById("btnListTramaValue")
+  if(values.disabled == false){
+    showModalObserved()
+    document.getElementById("loaderListObserved").style = "display:block;"
+    document.getElementById("PeriodoObs").innerHTML = ""
+    document.getElementById("anioObs").innerHTML = ""
+    document.getElementById("fileAte").innerHTML = ""
+    document.getElementById("fileDia").innerHTML = ""
+    document.getElementById("filePro").innerHTML = ""
+    document.getElementById("fileMed").innerHTML = ""
+    document.getElementById("obsStatus").innerHTML = ""
+    document.getElementById("descripcionObs").innerHTML = ""
+  
+  
+    let json = {
+      link:link
+    }
+  
+    fetch(`${url}/get-observed-trama`, {
+      method: 'POST', // o 'PUT', 'DELETE', etc.
+      headers: {
+        'Content-Type': 'application/json'
+      },body: JSON.stringify(json)})
+             .then(response => response.json())
+             .then(data => {
+  
+  
+            
+              document.getElementById("PeriodoObs").innerHTML = data[7][1]
+              document.getElementById("anioObs").innerHTML = data[1][1]
+  
+              if(data[2][1].href != ""){
+                document.getElementById("fileAte").innerHTML = "TRAMA OBSERVADA"
+              }else{
+                document.getElementById("fileAte").innerHTML = "SIN OBSERVACIÓN"
+              }
+  
+              if(data[3][1].href != ""){
+                document.getElementById("fileDia").innerHTML = "TRAMA OBSERVADA"
+              }else{
+                document.getElementById("fileDia").innerHTML = "SIN OBSERVACIÓN"
+              }
+  
+              if(data[4][1].href != ""){
+                document.getElementById("filePro").innerHTML = "TRAMA OBSERVADA"
+              }else{
+                document.getElementById("filePro").innerHTML = "SIN OBSERVACIÓN"
+              }
+  
+              if(data[5][1].href != ""){
+                document.getElementById("fileMed").innerHTML = "TRAMA OBSERVADA"
+              }else{
+                document.getElementById("fileMed").innerHTML = "SIN OBSERVACIÓN"
+              }
+  
+              document.getElementById("obsStatus").innerHTML = 'OBSERVADO' 
+              document.getElementById("obsStatus").style = "color: #ac0039;font-weight: bold;"
+              document.getElementById("descripcionObs").innerHTML = data[0][1]
+  
+              document.getElementById("loaderListObserved").style = "display:none;"
+  
+  
+             }).catch(err =>{
+                 document.getElementById("loaderListObserved").style = "display:none;"
+                 console.log(err)
+             } );
+  }else{
+    alert('Espere un momento...')
+  }
+
+  
+}
+
+function showModalCharges(){
+    $('#modalTramas').modal('show')
+  }
+  
+function showModalValue(){
+    $('#modalTramasValue').modal('show')
+  }
+
+function showModalObserved(){
+    $('#modalTramasObserved').modal('show')
+}
+   
+  
+

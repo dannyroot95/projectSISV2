@@ -29,8 +29,8 @@ function search(){
           .then(response => response.json())
           .then(data => {
 
-              insertData(data)
-
+            insertData(data)
+          
           }).catch(err => {
             document.getElementById("btn-search").disabled = false
             document.getElementById("btn-cancel").disabled = false

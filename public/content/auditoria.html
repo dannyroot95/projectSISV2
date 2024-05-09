@@ -41,6 +41,20 @@
         <label class="form-check-label minText">Cuenta</label>
       </div>
 
+      <div class="form-check form-check-inline">
+        <input class="form-check-input minText" type="checkbox" value="" id="chk-recipes">
+        <label class="form-check-label minText">Farmacia</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input minText" type="checkbox" value="" id="chk-lab">
+        <label class="form-check-label minText">Laboratorio</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input minText" type="checkbox" value="" id="chk-img">
+        <label class="form-check-label minText">Imágenes</label>
+      </div>
 
       <p></p>
 
@@ -73,7 +87,7 @@
     
     <br>
 
-    <div class="table-responsive">
+    <div class="table-responsive" id="tb-resposive">
         <table class="table table-hover table-bordered display" id="tb-data">
             <thead>
               <tr>
@@ -96,6 +110,41 @@
             </tbody>
           </table>
         </div>
+
+        <!---->
+
+        <div class="table-responsive" style="display: none;" id="tb-resposive3">
+          
+          <div class="input-group mb-3" style="display: flex;width: 60%;">
+            <span class="input-group-text minText5" id="basic-addon1">Fecha de inicio</span>
+            <input type="date" class="form-control minText5" id="date-ini-2">
+            <span class="input-group-text minText5" id="basic-addon1">Fecha final</span>
+            <input type="date" class="form-control minText5" id="date-fin-2">
+            <button onclick="getAudit_X()" class="btn btn-outline-primary minText5"><i class="bi bi-person-bounding-box"></i>&nbsp;Auditar</button>
+            &nbsp;
+            <a><div class="loaderSmall" id="loader3"></div></a>
+            &nbsp;
+        </div>
+        <br>
+          
+          <table class="table table-hover table-bordered display" id="tb-data3">
+              <thead>
+                <tr>
+                  <th id="it" class="minText5" scope="col"></th>
+                  <th class="minText5" scope="col">Receta</th>
+                  <th class="minText5" scope="col">Cuenta</th>
+                  <th class="minText5" scope="col">Fecha</th>
+                  <th class="minText5" scope="col">Hora</th>
+                  <th class="minText5" scope="col">Servicio</th>
+                  <th class="minText5" scope="col">Fuente</th>
+                  <th class="minText5" scope="col">Paciente</th>
+                  <th class="minText5" scope="col">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="tbody3">
+              </tbody>
+            </table>
+          </div>
 
         <!--modal-->
 
@@ -144,6 +193,42 @@
         </div>
 
         <!---->
+
+        <!-- Modal -->
+<div class="modal fade" id="itemsModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Items</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+         
+        <table class="table table-hover table-bordered display" id="tb-data-detail">
+          <thead>
+            <tr>
+              <th class="minText5" scope="col">#</th>
+              <th class="minText5" scope="col">Codigo</th>
+              <th class="minText5" scope="col">Descripción</th>
+              <th class="minText5" scope="col">Cantidad</th>
+              <th class="minText5" scope="col">Precio Total</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyDetail">
+          </tbody>
+        </table>
+
+        <center><a><div class="loaderSmall" id="loader4">
+        </div></a></center>
+
+      </div>
+      <!--footer-->
+    </div>
+  </div>
+</div>
+
+        <!-- Modal -->
 
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/bootstrap/datatables.min.js"></script>

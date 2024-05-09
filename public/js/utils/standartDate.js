@@ -69,3 +69,22 @@ function typeService(service){
     return type
 
   }
+
+  function obtenerNombreMes(numeroMes) {
+    // Array de nombres de meses
+    const nombresMeses = [
+        "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+        "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+    ];
+
+    // Validar que el número de mes esté dentro del rango válido (1-12)
+    if (numeroMes >= 1 && numeroMes <= 12) {
+        // Restar 1 al número del mes para obtener el índice correcto en el array
+        const indiceMes = numeroMes - 1;
+        // Devolver el nombre del mes en mayúsculas
+        return nombresMeses[indiceMes];
+    } else {
+        // Si el número de mes no está en el rango válido, devolver un mensaje de error
+        return "Número de mes inválido";
+    }
+}
