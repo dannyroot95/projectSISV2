@@ -4826,31 +4826,30 @@ function getObservedTrama(link){
               document.getElementById("anioObs").innerHTML = data[1][1]
   
               if(data[2][1].href != ""){
-                document.getElementById("fileAte").innerHTML = "TRAMA OBSERVADA"
+                document.getElementById("fileAte").innerHTML = `<b style="color:red;">TRAMA OBSERVADA</b>`
               }else{
-                document.getElementById("fileAte").innerHTML = "SIN OBSERVACIÓN"
+                document.getElementById("fileAte").innerHTML = `<b style="color:green;">SIN OBSERVACIÓN</b>`
               }
   
               if(data[3][1].href != ""){
-                document.getElementById("fileDia").innerHTML = "TRAMA OBSERVADA"
+                document.getElementById("fileDia").innerHTML = `<b style="color:red;">TRAMA OBSERVADA</b>`
               }else{
-                document.getElementById("fileDia").innerHTML = "SIN OBSERVACIÓN"
+                document.getElementById("fileDia").innerHTML = `<b style="color:green;">SIN OBSERVACIÓN</b>`
               }
   
               if(data[4][1].href != ""){
-                document.getElementById("filePro").innerHTML = "TRAMA OBSERVADA"
+                document.getElementById("filePro").innerHTML = `<b style="color:red;">TRAMA OBSERVADA</b>`
               }else{
-                document.getElementById("filePro").innerHTML = "SIN OBSERVACIÓN"
+                document.getElementById("filePro").innerHTML = `<b style="color:green;">SIN OBSERVACIÓN</b>`
               }
   
               if(data[5][1].href != ""){
-                document.getElementById("fileMed").innerHTML = "TRAMA OBSERVADA"
+                document.getElementById("fileMed").innerHTML = `<b style="color:red;">TRAMA OBSERVADA</b>`
               }else{
-                document.getElementById("fileMed").innerHTML = "SIN OBSERVACIÓN"
+                document.getElementById("fileMed").innerHTML = `<b style="color:green;">SIN OBSERVACIÓN</b>`
               }
   
-              document.getElementById("obsStatus").innerHTML = 'OBSERVADO' 
-              document.getElementById("obsStatus").style = "color: #ac0039;font-weight: bold;"
+              document.getElementById("obsStatus").innerHTML = `<b style="color:#ac0039;">OBSERVADO</b>`
               document.getElementById("descripcionObs").innerHTML = data[0][1]
   
               document.getElementById("loaderListObserved").style = "display:none;"

@@ -2709,10 +2709,13 @@ async function loginSaludPol(username, password){
   } catch (error) {
     console.error('Error durante el inicio de sesión:', error);
     return false; // Devuelve false si hay un error durante el inicio de sesión
+  }finally {
+    await page.close();
   }
 }
 
 async function getListChargeTrama() {
+  page = await browser.newPage(); 
 
   try {
        // Verificar si el inicio de sesión fue exitoso
@@ -2755,13 +2758,13 @@ async function getListChargeTrama() {
   } catch (error) {
     console.error('Error al obtener datos:', error);
     return false; // Devuelve false si hay un error durante el inicio de sesión
-  } /*finally {
-    await browser.close();
-  }*/
+  } finally {
+    await page.close();
+  }
 }
 
 async function getListProductionTrama() {
-
+  page = await browser.newPage(); 
   try {
     // Verificar si el inicio de sesión fue exitoso
     const isLoggedIn = await page.evaluate(() => {
@@ -2794,10 +2797,13 @@ async function getListProductionTrama() {
   } catch (error) {
     console.error('Producción:', error);
     return false; // Devuelve false si hay un error durante el inicio de sesión
+  }finally {
+    await page.close();
   }
 }
 
 async function getObservedTrama(link) {
+  page = await browser.newPage(); 
   try {
     // Ir a la página
     const isLoggedIn = await page.evaluate(() => {
@@ -2835,11 +2841,13 @@ async function getObservedTrama(link) {
   } catch (error) {
     console.error('Error observacion:', error);
     return false;
+  }finally {
+    await page.close();
   }
 }
 
 async function downloadFile(url) {
-
+  page = await browser.newPage(); 
   try {
     // Ir a la URL de descarga
     await page.goto(url);
@@ -2850,7 +2858,9 @@ async function downloadFile(url) {
     console.log('Descarga completada.');
   } catch (error) {
     console.error('Error durante la descarga:', error);
-  } 
+  }finally {
+    await page.close();
+  }
 
 }
 

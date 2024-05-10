@@ -98,6 +98,15 @@ function insertData(data){
         arrayInc.push([d.Ncuenta,d.Asegurado,d.HC,d.FF,d.F_ingreso,d.F_egreso,d.F_E_Administrativo,d.Origen,d.Servicio_egreso,d.E_cuenta,d.medico,d.Nombre_usuario,d.F_ultima_receta,d.TotalValorizado])
 
         vTotal += parseFloat(d.TotalValorizado)
+        let serIn = d.Servicio_ingreso
+        let serEg = d.Servicio_egreso
+        if(serIn == "NINGUNO"){
+            serIn = `<b style="color:green;">NINGUNO</b>`
+        }
+
+        if(serEg == "NINGUNO"){
+            serEg = `<b style="color:green;">NINGUNO</b>`
+        }
      
         allData.push({
 
@@ -114,11 +123,15 @@ function insertData(data){
             'DNI-Digitador':isNulledString(d.dni_digitador),
             'U.Digitador':isNulledString(d.Usuario),
             'Digitador':isNulledString(d.Nombre_usuario),
+            'Tipo de profesional' : isNulledString(d.tipo_profesional),
             'Origen':d.Origen,
-            'UPS':(d.Servicio_egreso),
+            'UPS':d.ups,
+            'Servicio ingreso':(serIn),
+            'Servicio egreso':(serEg),
+            'Tipo de alta':(isNulledString(d.tipo_alta)),
             'Estado':d.E_cuenta,
             'Fecha de ultima receta':isNulledDateWithHour(d.F_ultima_receta),
-            'Valorizado':d.TotalValorizado
+            'Valorizado':isNulledString('s/'+(parseFloat(d.TotalValorizado).toFixed(2)).toString())
 
         })
 
@@ -140,11 +153,15 @@ function insertData(data){
               <td class="minText4">${isNulledString(d.dni_digitador)}</td>
               <td class="minText4">${isNulledString(d.Usuario)}</td>
               <td class="minText4">${isNulledString(d.Nombre_usuario)}</td>
+              <td class="minText4">${isNulledString(d.tipo_profesional)}</td>
               <td class="minText4">${isNulledString(d.Origen)}</td>
-              <td class="minText4">${(d.Servicio_egreso)}</td>
+              <td class="minText4">${isNulledString(d.ups)}</td>
+              <td class="minText4">${(serIn)}</td>
+              <td class="minText4">${(serEg)}</td>
+              <td class="minText4">${isNulledString(d.tipo_alta)}</td>
               <td class="minText4">${statusAccount(d.E_cuenta)}</td>
               <td class="minText4">${isNulledDateWithHour(d.F_ultima_receta)}</td>
-              <td class="minText4"><b style="color:green;">S/${d.TotalValorizado}</b></td>
+              <td class="minText4"><b style="color:green;">${isNulledString('s/'+(parseFloat(d.TotalValorizado).toFixed(2)).toString())}</b></td>
               </tr>`;
           })
           .join("")
@@ -185,6 +202,7 @@ function cancel(){
     return x
 
   }
+
 
   function isNulledDateWithHour(val){
 
