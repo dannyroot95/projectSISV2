@@ -1467,6 +1467,20 @@ console.log("error :" + error);
     }
   }
 
+  async function update_gender_patient_fua(cuenta,gender,id_patient) {
+    try {
+      let pool = await sql.connect(config);
+      let res = await pool.request()
+      .input('CUENTA',cuenta)
+      .input('GENERO',gender)
+      .input('ID_PACIENTE',id_patient)
+      .execute(`ACTUALIZAR_GENERO_PACIENTE_FUA`) 
+      return [[{success:"actualizado"}]]
+    } catch (error) {
+       return [[{success:"error"}]]
+    }
+  }
+
   async function update_date_atention(account,date1,date2) {
     try {
       console.log(date1)
@@ -2487,6 +2501,7 @@ module.exports = {
   update_quantity_procedure:update_quantity_procedure,
   update_dni_patient:update_dni_patient,
   update_gender_patient:update_gender_patient,
+  update_gender_patient_fua:update_gender_patient_fua,
   update_date_atention:update_date_atention,
   update_nro_ref_origin:update_nro_ref_origin,
   get_data_medic:get_data_medic,

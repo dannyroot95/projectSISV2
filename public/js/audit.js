@@ -5,9 +5,11 @@ let loader = document.getElementById("loader")
 let load = document.getElementById("loader2")
 let loader2 = document.getElementById("loader3")
 let loader4 = document.getElementById("loader4")
+let selectElementType = document.getElementById('inputGroupSelectType');
 createDatatable()
 createDatatable2()
 createDatatable3()
+createDatatable4()
 
 let checkbox = document.getElementById("chk-user");
 let checkboxAccount = document.getElementById("chk-account");
@@ -156,6 +158,19 @@ searchInput.addEventListener("input", function() {
     }
 });
 
+selectElementType.addEventListener('change', function() {
+    let option = selectElementType.value
+    if(option == 1){
+        document.getElementById("txt-code").innerHTML = "Código"
+        document.getElementById("et-code").style = "display:block;"
+        document.getElementById("btnTableItems").style = "display:none;"
+    }else{
+        document.getElementById("et-code").style = "display:none;"
+        document.getElementById("txt-code").innerHTML = "Ingrese los códigos :"
+        document.getElementById("btnTableItems").style = "display:block;"
+    }
+});
+
 function createDatatable(){
 
     $('#tb-data').DataTable({
@@ -251,6 +266,37 @@ function createDatatable3(){
 
 }
 
+function createDatatable4(){
+
+    $('#tb-data-items').DataTable({
+        language: {
+              "decimal": "",
+              "emptyTable": "No hay información",
+              "info": "Mostrando _START_ a _END_ de _TOTAL_ datos",
+              "infoEmpty": "<b>Mostrando 0 to 0 of 0 datos</b>",
+              "infoFiltered": "(Filtrado de _MAX_ total datos)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_ datos",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar en la lista:",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+              }
+       },scrollY: '50vh',scrollX: true, sScrollXInner: "100%",
+       scrollCollapse: true,
+      });
+
+      var table = $('#tb-data-items').DataTable();
+      $('#container').css( 'display', 'block' );
+      table.columns.adjust().draw();
+ 
+}
 
 function getAuditByDate(){
 
@@ -888,6 +934,15 @@ function insertDataDetailRecipe(data){
           .join("")
       );
 
+}
+
+
+function showModalItems(){
+   $('#modalItems').modal('show')
+   setTimeout(function() {
+    document.getElementById("it2").click();
+  }, 500);
+   document.getElementById("tbodyDetailItem").innerHTML = ""
 }
 
 function downloadExcel2(){

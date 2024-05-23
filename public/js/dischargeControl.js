@@ -100,12 +100,18 @@ function insertData(data){
         vTotal += parseFloat(d.TotalValorizado)
         let serIn = d.Servicio_ingreso
         let serEg = d.Servicio_egreso
+        let isObserved = parseFloat(d.TotalValorizado).toFixed(2)
+        let strObserved = `<b style="color:green;">ATENDIDO</b>`
         if(serIn == "NINGUNO"){
             serIn = `<b style="color:green;">NINGUNO</b>`
         }
 
         if(serEg == "NINGUNO"){
             serEg = `<b style="color:green;">NINGUNO</b>`
+        }
+
+        if(isObserved < 1.00){
+            strObserved = `<b style="color:red;">NO ATENDIDO</b>`
         }
      
         allData.push({
@@ -120,10 +126,11 @@ function insertData(data){
             'HC':isNulledString(d.HC),
             'Codigo prestacional':isNulledString(d.prestacion),
             'Medico':d.medico,
-            'DNI-Digitador':isNulledString(d.dni_digitador),
-            'U.Digitador':isNulledString(d.Usuario),
-            'Digitador':isNulledString(d.Nombre_usuario),
-            'Tipo de profesional' : isNulledString(d.tipo_profesional),
+            'U.Crea':isNulledString(d.usuario_crea),
+            'U.Nombre Crea':isNulledString(d.nombre_usuario_crea),
+            'U.Digitador FUA':isNulledString(d.Usuario),
+            'Digitador FUA':isNulledString(d.Nombre_usuario),
+            'Tipo de profesional FUA' : isNulledString(d.tipo_profesional),
             'Origen':d.Origen,
             'UPS':d.ups,
             'Servicio ingreso':(serIn),
@@ -131,8 +138,10 @@ function insertData(data){
             'Tipo de alta':(isNulledString(d.tipo_alta)),
             'Estado':d.E_cuenta,
             'Fecha de ultima receta':isNulledDateWithHour(d.F_ultima_receta),
-            'Valorizado':isNulledString('s/'+(parseFloat(d.TotalValorizado).toFixed(2)).toString())
-
+            'Valorizado':isNulledString('s/'+(parseFloat(d.TotalValorizado).toFixed(2)).toString()),
+            'Mes':d.mes,
+            'Periodo':d.periodo,
+            'Observaciones':strObserved
         })
 
         
@@ -150,7 +159,8 @@ function insertData(data){
               <td class="minText4">${d.HC}</td>
               <td class="minText4">${isNulledString(d.prestacion)}</td>
               <td class="minText4">${isNulledString(d.medico)}</td>
-              <td class="minText4">${isNulledString(d.dni_digitador)}</td>
+              <td class="minText4">${isNulledString(d.usuario_crea)}</td>
+              <td class="minText4">${isNulledString(d.nombre_usuario_crea)}</td>
               <td class="minText4">${isNulledString(d.Usuario)}</td>
               <td class="minText4">${isNulledString(d.Nombre_usuario)}</td>
               <td class="minText4">${isNulledString(d.tipo_profesional)}</td>
@@ -162,6 +172,9 @@ function insertData(data){
               <td class="minText4">${statusAccount(d.E_cuenta)}</td>
               <td class="minText4">${isNulledDateWithHour(d.F_ultima_receta)}</td>
               <td class="minText4"><b style="color:green;">${isNulledString('s/'+(parseFloat(d.TotalValorizado).toFixed(2)).toString())}</b></td>
+              <td class="minText4">${(d.mes)}</td>
+              <td class="minText4">${(d.periodo)}</td>
+              <td class="minText4">${(strObserved)}</td>
               </tr>`;
           })
           .join("")

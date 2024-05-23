@@ -1838,6 +1838,21 @@ router.get("/update-gender-patient/:a/:b", function (req, res,next) {
   });
 });
 
+router.get("/update-gender-patient-fua/:a/:b/:c", function (req, res,next) {
+ 
+  let cuenta = req.params.a;
+  let id_patient = req.params.b;
+  let gender = req.params.c;
+  
+  sql.update_gender_patient_fua(cuenta,gender,id_patient).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({success:"error"})
+    }
+  });
+});
+
 router.get("/update-date-atention/:a/:b/:c", function (req, res,next) {
   
   let account = req.params.a;
@@ -2650,6 +2665,22 @@ router.get("/get-list-trama-saludpol", function (req, res,next) {
 
 });
 
+router.get("/get-trama-saludpol-login", function (req, res,next) {
+
+  (async () => {
+    const username = 'convenioshospitalsantarosa@gmail.com';
+    const password = '29722788';
+    const isLoggedIn = await loginSaludPol(username,password);
+  
+    if (isLoggedIn) {
+      res.json({login:"success"});
+
+    } else {
+      res.json({login:"failed"})
+    }
+  })();
+});
+
 router.get("/get-list-trama-saludpol-production", function (req, res,next) {
 
   (async () => {
@@ -2662,7 +2693,6 @@ router.get("/get-list-trama-saludpol-production", function (req, res,next) {
       res.json({error:"fallido"})
     }
   })();
-
 });
 
 router.post("/get-observed-trama", async function (req, res, next) {
@@ -2846,6 +2876,7 @@ async function getObservedTrama(link) {
   }
 }
 
+/*
 async function downloadFile(url) {
   page = await browser.newPage(); 
   try {
@@ -2862,28 +2893,40 @@ async function downloadFile(url) {
     await page.close();
   }
 
-}
+}*/
 
+/*
 const executeLogin = async () => {
   try {
-      const username = 'convenioshospitalsantarosa@gmail.com';
-      const password = '29722788';
-      const loginSuccess = await loginSaludPol(username, password);
+      // Obtén la hora actual
+      const now = new Date();
+      const hours = now.getHours();
 
-      if (loginSuccess) {
-          console.log('logeado');
+      // Verifica si la hora actual está entre las 7:00 AM y las 5:00 PM
+      if (hours >= 7 && hours < 17) {
+          // Si está dentro del intervalo de tiempo, procede con el inicio de sesión
+          const username = 'convenioshospitalsantarosa@gmail.com';
+          const password = '29722788';
+          const loginSuccess = await loginSaludPol(username, password);
+
+          if (loginSuccess) {
+              console.log('Inicio de sesión exitoso');
+          } else {
+              console.log('Inicio de sesión fallido');
+          }
       } else {
-          console.log('fallido');
+          // Si está fuera del intervalo de tiempo, simplemente muestra un mensaje de que no es hora de iniciar sesión
+          console.log('No es hora de iniciar sesión');
       }
   } catch (error) {
       console.error('Error:', error);
   }
 };
-
+*/
 // Ejecutar la función por primera vez
-executeLogin();
+//executeLogin();
 // Programar la ejecución cada 15 minutos
-setInterval(executeLogin, 10 * 60 * 1000);
+//setInterval(executeLogin, 10 * 60 * 1000);
 
 
 module.exports = router;

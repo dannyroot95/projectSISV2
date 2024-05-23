@@ -67,10 +67,10 @@
       <select class="custom-select" id="inputGroupSelectProductionYear">
       </select>
 
-      <button class="btn btn-primary" id="btn-query" onclick="query()" ><i class="bi bi-search"></i>&nbsp;Consultar atenciones</button>
-      <button style="background-color: #004073;border-color: #004073;" class="btn btn-primary" id="btn-deleted" onclick="showModalDeleteAccount()" ><i class="bi bi-pencil-square"></i>&nbsp;Editar consulta de atenciones</button>
-      <button style="background-color: #3F006A;border-color: #3F006A;" class="btn btn-primary" id="btn-charge" onclick="showModalCharges()" ><i class="bi bi-cloud-upload-fill"></i>&nbsp;Tramas cargadas</button>
-      <button style="background-color: #B0035C;border-color: #B0035C;" class="btn btn-primary" id="btn-value" onclick="showModalValue()" ><i class="bi bi-coin"></i>&nbsp;Tramas valorizadas</button>
+      <button class="btn btn-size btn-primary" id="btn-query" onclick="query()" ><i class="bi bi-search"></i>&nbsp;Consultar atenciones</button>
+      <button style="background-color: #004073;border-color: #004073;" class="btn btn-size btn-primary" id="btn-deleted" onclick="showModalDeleteAccount()" ><i class="bi bi-pencil-square"></i>&nbsp;Editar consulta de atenciones</button>
+      <button style="background-color: #3F006A;border-color: #3F006A;" class="btn btn-size btn-primary" id="btn-charge" onclick="showModalCharges()" ><i class="bi bi-cloud-upload-fill"></i>&nbsp;Tramas cargadas</button>
+      <button style="background-color: #B0035C;border-color: #B0035C;" class="btn btn-size btn-primary" id="btn-value" onclick="showModalValue()" ><i class="bi bi-coin"></i>&nbsp;Tramas valorizadas</button>
 
       &nbsp; 
       <a><div class="loaderSmall" id="loader"></div></a>
@@ -84,12 +84,12 @@
 
     <div class="input-group mb-3">
       <H2 style="margin-top: 5x;">OPCIONES : </H2>&nbsp;&nbsp;
-      <button style="display: none;" class="btn btn-dark" id="btn-trama" onclick="buildTrama()" ><i class="bi bi-bounding-box"></i>&nbsp;Generar trama</button>
-      <button style="display: none;" class="btn btn-dark" id="btn-upload-trama"><i class="bi bi-upload"></i><a target="_blank" style="color: white;text-decoration:none; " href="https://app-gtips.saludpol.gob.pe:38071/app-gtips/">&nbsp;Subir trama</a></button>
-      <button style="display: none;" class="btn btn-danger" id="btn-obs" onclick="obtenerDatos()" ><i class="bi bi-exclamation-triangle"></i>&nbsp;Observar atenciones</button>
-      <button style="display: none;" class="btn btn-success" id="btn-report" onclick="fetchSequentially()" ><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Generar reporte</button>
-      <button style="display: none;" class="btn btn-light border-black" id="btn-resum" onclick="fetchResum()"><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Generar resumen</button>
-      <button style="display: none; background-color: #49002b;border-color: #49002b;" class="btn btn-success" id="btn-no-ate" onclick="showModalEditAtention()" ><i class="bi bi-eye-slash-fill"></i>&nbsp;Atenciones no figuradas</button>
+      <button style="display: none;" class="btn btn-size btn-dark" id="btn-trama" onclick="buildTrama()" ><i class="bi bi-bounding-box"></i>&nbsp;Generar trama</button>
+      <button style="display: none;" class="btn btn-size btn-dark" id="btn-upload-trama"><i class="bi bi-upload"></i><a target="_blank" style="color: white;text-decoration:none; " href="https://app-gtips.saludpol.gob.pe:38071/app-gtips/">&nbsp;Subir trama</a></button>
+      <button style="display: none;" class="btn btn-size btn-danger" id="btn-obs" onclick="obtenerDatos()" ><i class="bi bi-exclamation-triangle"></i>&nbsp;Observar atenciones</button>
+      <button style="display: none;" class="btn btn-size btn-success" id="btn-report" onclick="fetchSequentially()" ><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Generar reporte</button>
+      <button style="display: none;" class="btn btn-size btn-light border-black" id="btn-resum" onclick="fetchResum()"><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Generar resumen</button>
+      <button style="display: none; background-color: #49002b;border-color: #49002b;" class="btn btn-size btn-success" id="btn-no-ate" onclick="showModalEditAtention()" ><i class="bi bi-eye-slash-fill"></i>&nbsp;Atenciones no figuradas</button>
     </div>
 
       
@@ -167,8 +167,8 @@
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">N° de cuenta</span>
           <input type="number" id="nAccount" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-          <button class="btn btn-success" onclick="addToTableIn()" ><i class="bi bi-plus-circle"></i>&nbsp; Incluir</button>
-          <button class="btn btn-danger" onclick="addToTable()" ><i class="bi bi-x-circle"></i>&nbsp; Excluir</button>
+          <button class="btn btn-size btn-success" onclick="addToTableIn()" ><i class="bi bi-plus-circle"></i>&nbsp; Incluir</button>
+          <button class="btn btn-size btn-danger" onclick="addToTable()" ><i class="bi bi-x-circle"></i>&nbsp; Excluir</button>
         </div>
     
         <label style="color: green;">Cuentas incluidas</label>
@@ -203,7 +203,7 @@
 
       </div>
       <div class="modal-footer">
-        <button onclick="consult()" type="button" class="btn btn-primary"><i class="bi bi-check-all"></i>&nbsp; Consultar</button>
+        <button onclick="consult()" type="button" class="btn btn-size btn-primary"><i class="bi bi-check-all"></i>&nbsp; Consultar</button>
       </div>
     </div>
   </div>
@@ -1107,7 +1107,7 @@
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">Tramas valorizadas en SALUDPOL&nbsp;&nbsp;<button id="btnListTramaValue" class="btn btn-success" onclick="getListTramaProduccion()"><i class="bi bi-arrow-clockwise"></i></button></h1>
+        <h1 class="modal-title fs-5">Tramas valorizadas en SALUDPOL&nbsp;&nbsp;<button id="btnListTramaValue" class="btn btn-size btn-success" onclick="getListTramaProduccion()"><i class="bi bi-arrow-clockwise"></i></button></h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

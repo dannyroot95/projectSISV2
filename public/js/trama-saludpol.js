@@ -19,8 +19,7 @@ createDatatableSearchDiagnosys()
 createDatatableSearchDiagnosysByLab()
 createDatatableSearchDiagnosysByImg()
 createDatatableSearchService()
-getListTrama()
-//getListTramaProduccion()
+loginSaludPol()
 
 
 function generateYear(){
@@ -4651,6 +4650,30 @@ function printResum(){
     // Guardar o mostrar el PDF generado
     pdf.save(`RESUMEN ${textMonth} - ${year}.pdf`);
   });
+}
+
+function loginSaludPol(){
+
+  document.getElementById("loaderList").style = "display:block;"
+  document.getElementById("btnListTrama").disabled = true
+  document.getElementById("loaderListValue").style = "display:block;"
+
+  document.getElementById("loaderListValue").style = "display:block;"
+  document.getElementById("btnListTramaValue").disabled = true
+
+  fetch(`${url}/get-trama-saludpol-login`)
+           .then(response => response.json())
+           .then(data => {
+
+            if(data.login == "success"){
+              getListTrama()
+            }else{
+              loginSaludPol()
+            }
+
+           }).catch(err =>{
+               console.log(err)
+           } );
 }
 
 function getListTrama(){

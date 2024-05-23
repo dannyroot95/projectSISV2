@@ -3089,9 +3089,10 @@ var actual = +dia + '/' + mes + '/' + anio;
 function updateSexPatient(){
 
   let sex = document.getElementById("inputGroupSelectSex").value
+  let cuenta = document.getElementById("d-account").innerHTML
   let id = document.getElementById("d-idpatient").innerHTML
 
-  fetch(`${url}/update-gender-patient/${sex}/${id}`,{
+  fetch(`${url}/update-gender-patient-fua/${cuenta}/${id}/${sex}`,{
     method: 'get',
     headers: {
       'Accept': 'application/json'
@@ -3330,9 +3331,10 @@ function updateNullDatePregnancy() {
       if(data[0].success == "actualizado"){
         Swal.fire(
           'Muy bien!',
-          'Sin fecha de parto!',
+          'Fecha de parto eliminada!',
           'success'
         )
+        document.getElementById("fua-date-pregnancy").value = ""
       }else{
         Swal.fire(
           'Oops!',
@@ -4004,11 +4006,11 @@ function jsonATE(){
 
   function jsonMatch(jsonAte) {
 
-    var tableProcedures = $('#tb-data-6').DataTable(); // Obtén la instancia de la tabla DataTables para los procedimientos
-    var jsonProcedures = [];
+    let tableProcedures = $('#tb-data-6').DataTable(); // Obtén la instancia de la tabla DataTables para los procedimientos
+    let jsonProcedures = [];
   
     tableProcedures.rows().data().each(function (rowData) {
-        var data = {
+      let data = {
             cuenta_1: rowData[1],
             codigoCpt_2: rowData[2],
             codigoCpms_3: rowData[3],
@@ -4019,11 +4021,11 @@ function jsonATE(){
         jsonProcedures.push(data);
     });
 
-    var tableDiagnoses = $('#tb-data-2').DataTable(); // Obtén la instancia de la tabla DataTables para los diagnósticos
-    var jsonDiagnoses = [];
+    let tableDiagnoses = $('#tb-data-2').DataTable(); // Obtén la instancia de la tabla DataTables para los diagnósticos
+    let jsonDiagnoses = [];
 
     tableDiagnoses.rows().data().each(function (rowData) {
-        var data = {
+      let data = {
             cuenta_1: rowData[1],
             codigoDiagnostico_2: rowData[2],
             correlativo_3: rowData[3],
@@ -4033,11 +4035,11 @@ function jsonATE(){
         jsonDiagnoses.push(data);
     });
 
-    var tableSupplies = $('#tb-data-3').DataTable(); // Obtén la instancia de la tabla DataTables para los insumos
-    var jsonSupplies = [];
+    let tableSupplies = $('#tb-data-3').DataTable(); // Obtén la instancia de la tabla DataTables para los insumos
+    let jsonSupplies = [];
 
     tableSupplies.rows().data().each(function (rowData) {
-        var data = {
+      let data = {
             cuenta_1: rowData[1],
             codigoInsumo_2: rowData[2],
             correlativo_3: rowData[3],
@@ -4047,11 +4049,11 @@ function jsonATE(){
         jsonSupplies.push(data);
     });
 
-    var tableMedications = $('#tb-data-5').DataTable(); // Obtén la instancia de la tabla DataTables para los medicamentos
-    var jsonMedications = [];
+    let tableMedications = $('#tb-data-5').DataTable(); // Obtén la instancia de la tabla DataTables para los medicamentos
+    let jsonMedications = [];
 
     tableMedications.rows().data().each(function (rowData) {
-        var data = {
+      let data = {
             cuenta_1: rowData[1],
             codigoMedicamento_2: rowData[2],
             correlativo_3: rowData[3],
@@ -4061,11 +4063,11 @@ function jsonATE(){
         jsonMedications.push(data);
     });
 
-    var tableSmi = $('#tb-data-4').DataTable(); // Obtén la instancia de la tabla DataTables para los datos smi
-    var jsonSmi = [];
+    let tableSmi = $('#tb-data-4').DataTable(); // Obtén la instancia de la tabla DataTables para los datos smi
+    let jsonSmi = [];
 
     tableSmi.rows().data().each(function (rowData) {
-        var data = {
+      let data = {
             cuenta_1: rowData[1],
             cantidadActividadPreventiva_2: rowData[2],
             resultadoSmi_3: rowData[3]
@@ -4073,11 +4075,11 @@ function jsonATE(){
         jsonSmi.push(data);
     });
 
-    var tableNewborn = $('#tb-data-8').DataTable(); // Obtén la instancia de la tabla DataTables para los datos de recién nacido
-    var jsonNewborn = [];
+    let tableNewborn = $('#tb-data-8').DataTable(); // Obtén la instancia de la tabla DataTables para los datos de recién nacido
+    let jsonNewborn = [];
 
     tableNewborn.rows().data().each(function (rowData) {
-        var data = {
+      let data = {
             cuenta_1: rowData[1],
             correlativoRn_2: rowData[2],
             tipoIdentifiacion_3: rowData[3],
@@ -4090,69 +4092,69 @@ function jsonATE(){
         jsonNewborn.push(data);
     });
 
-    var combinedData = {};
+    let combinedData = {};
 
     // Iterar a través del primer JSON (jsonAte)
     jsonAte.forEach(function (item) {
         // Clonar el objeto para no modificar el original
-        var combinedItem = { ...item };
+        let combinedItem = { ...item };
 
         // Filtrar los elementos del segundo JSON (jsonProcedures) que coinciden con la "cuenta_1" del primer JSON
-        var matchingProcedures = jsonProcedures.filter(function (subItem) {
+        let matchingProcedures = jsonProcedures.filter(function (subItem) {
             return subItem.cuenta_1 === item.cuenta_1;
         }).map(function (subItem) {
             // Clonar el objeto de procedimientos y excluir el campo "cuenta_1"
-            var procedures = { ...subItem };
+            let procedures = { ...subItem };
             delete procedures.cuenta_1;
             return procedures;
         });
 
         // Filtrar los elementos del tercer JSON (jsonDiagnoses) que coinciden con la "cuenta_1" del primer JSON
-        var matchingDiagnoses = jsonDiagnoses.filter(function (subItem) {
+        let matchingDiagnoses = jsonDiagnoses.filter(function (subItem) {
             return subItem.cuenta_1 === item.cuenta_1;
         }).map(function (subItem) {
             // Clonar el objeto de diagnósticos y excluir el campo "cuenta_1"
-            var diagnoses = { ...subItem };
+            let diagnoses = { ...subItem };
             delete diagnoses.cuenta_1;
             return diagnoses;
         });
 
         // Filtrar los elementos del cuarto JSON (jsonSupplies) que coinciden con la "cuenta_1" del primer JSON
-        var matchingSupplies = jsonSupplies.filter(function (subItem) {
+        let matchingSupplies = jsonSupplies.filter(function (subItem) {
             return subItem.cuenta_1 === item.cuenta_1;
         }).map(function (subItem) {
             // Clonar el objeto de insumos y excluir el campo "cuenta_1"
-            var supplies = { ...subItem };
+            let supplies = { ...subItem };
             delete supplies.cuenta_1;
             return supplies;
         });
 
         // Filtrar los elementos del quinto JSON (jsonMedications) que coinciden con la "cuenta_1" del primer JSON
-        var matchingMedications = jsonMedications.filter(function (subItem) {
+        let matchingMedications = jsonMedications.filter(function (subItem) {
             return subItem.cuenta_1 === item.cuenta_1;
         }).map(function (subItem) {
             // Clonar el objeto de medicamentos y excluir el campo "cuenta_1"
-            var medications = { ...subItem };
+            let medications = { ...subItem };
             delete medications.cuenta_1;
             return medications;
         });
 
         // Filtrar los elementos del sexto JSON (jsonSmi) que coinciden con la "cuenta_1" del primer JSON
-        var matchingSmi = jsonSmi.filter(function (subItem) {
+        let matchingSmi = jsonSmi.filter(function (subItem) {
             return subItem.cuenta_1 === item.cuenta_1;
         }).map(function (subItem) {
             // Clonar el objeto de smi y excluir el campo "cuenta_1"
-            var smi = { ...subItem };
+            let smi = { ...subItem };
             delete smi.cuenta_1;
             return smi;
         });
 
         // Filtrar los elementos del séptimo JSON (jsonNewborn) que coinciden con la "cuenta_1" del primer JSON
-        var matchingNewborn = jsonNewborn.filter(function (subItem) {
+        let matchingNewborn = jsonNewborn.filter(function (subItem) {
             return subItem.cuenta_1 === item.cuenta_1;
         }).map(function (subItem) {
             // Clonar el objeto de recién nacido y excluir el campo "cuenta_1"
-            var newborn = { ...subItem };
+            let newborn = { ...subItem };
             delete newborn.cuenta_1;
             return newborn;
         });
@@ -4180,7 +4182,7 @@ function jsonATE(){
     });
 
     // Obtener un arreglo de los objetos combinados
-    var combinedArray = Object.values(combinedData);
+    let combinedArray = Object.values(combinedData);
     
     c2 = 0
     rcData = []
@@ -4203,13 +4205,13 @@ function jsonATE(){
     }
     
   function recorded(arrayDeDatos) {
-   
+    contarAtencionesPorDiaYProfesional(arrayDeDatos)
       arrayDeDatos.forEach((datos) => {
           const cuenta = datos.cuenta_1;
           const fua = datos.disa_2+"-"+datos.lote_3+'-'+datos.fua_4
           const servicio = datos.tipoServicio_88
           const digitador = datos.usuarioDigitador_87
-          const prestacion = "|"+datos.servicio_42+"|"
+          const prestacion = `<b style="color:black;font-weight:bold;">${datos.servicio_42}</b>`
           // Verificar regla 12
           if (!verificarRegla12(datos)) {
               rcData.push({
@@ -4233,8 +4235,13 @@ function jsonATE(){
           verificarRegla14(datos)
           verificarRegla53(datos)
           verificarRegla57(datos)
+          verificarRegla33(datos)
+          verificarReglaValidacion8(datos,arrayDeDatos)
+          verificarReglaValidacion12(datos)
+          verificarReglaValidacion13(datos)
           verificarReglaDeValidacionInterna1(datos)
           verificarReglaDeValidacionInterna2(datos)
+         
       });
   
       if(rcData.length == 0){
@@ -4250,6 +4257,13 @@ function jsonATE(){
       
   }
   
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------ RC Y RV --------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
   function verificarRegla12(data) {
       // Verificar si hay al menos un diagnóstico
       if (!data.diagnosticos || data.diagnosticos.length < 1) {
@@ -4270,7 +4284,7 @@ function jsonATE(){
         const insumos = data.insumos;
         const servicio = data.tipoServicio_88
         const digitador = data.usuarioDigitador_87
-        const prestacion = "|"+data.servicio_42+"|"
+        const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
 
         if (!insumos || insumos.length === 0) {
             //console.log(`Cuenta ${cuenta}: No hay insumos registrados.`);
@@ -4304,7 +4318,7 @@ function verificarValidacion19(data) {
   const digitador = data.usuarioDigitador_87
   let rv19 = 0;
   let descripcion = `No cumple con la regla de validación 19. `;
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
 
   if (servicio == "050") {
       const proc86901= procedimientos.find(proc => proc.codigoCpt_2 === "86901");
@@ -4357,7 +4371,7 @@ function verificarRegla59(data) {
   const fua = data.disa_2+"-"+data.lote_3+"-"+data.fua_4
   const tipoSservicio = data.tipoServicio_88
   const digitador = data.usuarioDigitador_87
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
   const fechaIngresoParts = (data.fechaIngresoHospitalizacion_46).split("/");
   const fechaAltaParts = (data.fechaAltaHospitalizacion_47).split("/");
 
@@ -4446,7 +4460,7 @@ function verificarRegla79(data) {
   const fua = data.disa_2+"-"+data.lote_3+"-"+data.fua_4
   const tipoSservicio = data.tipoServicio_88
   const digitador = data.usuarioDigitador_87
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
   // Verificar el servicio y el tipo de personal de salud según las condiciones de la regla
   switch (servicio) {
       case "056":
@@ -4522,7 +4536,7 @@ function verificarRegla47(data) {
   const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
   const tipoSservicio = data.tipoServicio_88
   const digitador = data.usuarioDigitador_87
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
 
   if (servicio === "055") {
     const tiene5914 = procedimientos.some(proc => proc.codigoCpt_2 === "59514");
@@ -4583,9 +4597,9 @@ function verificarRegla14(data) {
   const tipoSservicio = data.tipoServicio_88
   const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
   const digitador = data.usuarioDigitador_87
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
 
-  if (servicio === "050" && smi.length === 0) {
+  if (servicio === "050" && smi.length < 6) {
       rcData.push({
         'Cuenta': cuenta,
         'Servicio':tipoSservicio,
@@ -4597,17 +4611,41 @@ function verificarRegla14(data) {
         'Descripcion': `No cumple con la regla de consistencia 14. Falta Consignar algun SMI obligatorio, para 050 : 003,004,102,304,305,306,315"`
       });
   }
+
+  if (servicio === "054" || servicio === "055") {
+    const codigosRequeridos = ["003", "004", "005", "301"];
+    const codigosPresentes = smi.map(item => item.cantidadActividadPreventiva_2);
+
+    const codigosFaltantes = codigosRequeridos.filter(codigo => !codigosPresentes.includes(codigo));
+
+    if (codigosFaltantes.length > 0) {
+      rcData.push({
+        'Cuenta': cuenta,
+        'Servicio': tipoSservicio,
+        'Prestacion': prestacion,
+        'Tipo': 'RC',
+        'Número': '14',
+        'FUA': fua,
+        'Digitador': digitador,
+        'Descripcion': `No cumple con la regla de consistencia 14. Falta consignar las siguientes actividades preventivas obligatorias para el servicio 055: ${codigosFaltantes.join(', ')}`
+      });
+    }
+  }
+
 }
+
 
 function verificarRegla53(data) {
   const cuenta = data.cuenta_1;
   const diagnosticos = data.diagnosticos;
   const fechaNacimientoParts = data.fechaNacimiento_30.split("/");
-  const tipoSservicio = data.tipoServicio_88
+  const tipoSservicio = data.tipoServicio_88;
   const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
   const digitador = data.usuarioDigitador_87;
   const servicio = data.servicio_42;
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${servicio}</b>`;
+  const condicionMaterna = data.condicionMaterna_35;
+  const sexo = data.sexo_31;
 
   // Crear objeto Date con la fecha de nacimiento
   const fechaNacimiento = new Date(fechaNacimientoParts[2], fechaNacimientoParts[1] - 1, fechaNacimientoParts[0]);
@@ -4618,39 +4656,70 @@ function verificarRegla53(data) {
       (fechaActual.getMonth() - fechaNacimiento.getMonth());
 
   if (servicio === "050") {
-      // Verificar si hay diagnósticos con código Z380
-      const diagnosticoZ380 = diagnosticos.find(diag => diag.codigoDiagnostico_2 === "Z380");
-      const diagnosticoO60X = diagnosticos.find(diag => diag.codigoDiagnostico_2 === "O60X");
+    // Verificar si hay diagnósticos con código Z380
+    const diagnosticoZ380 = diagnosticos.find(diag => diag.codigoDiagnostico_2 === "Z380");
+    const diagnosticoO60X = diagnosticos.find(diag => diag.codigoDiagnostico_2 === "O60X");
 
-      // Verificar si la edad es mayor o igual a 5 meses si existe al menos un diagnóstico con código Z380
-      if (diagnosticoZ380 && edadEnMeses >= 5) {
-          rcData.push({
-              'Cuenta': cuenta,
-              'Servicio':tipoSservicio,
-              'Prestacion':prestacion,
-              'Tipo': 'RC',
-              'Número': '53',
-              'FUA':fua,
-              'Digitador':digitador,
-              'Descripcion': `No cumple con la regla de consistencia 53. El diagnostico Z380 no se aplica para el rango de edad del Asegurado`
-          });
-      }
-
-      if(diagnosticoO60X){
-        rcData.push({
-          'Cuenta': cuenta,
-          'Servicio':tipoSservicio,
-          'Prestacion':prestacion,
-          'Tipo': 'RC',
-          'Número': '53',
-          'FUA':fua,
-          'Digitador':digitador,
-          'Descripcion': `No cumple con la regla de consistencia 53. El diagnostico O60X no se aplica para el Sexo del Asegurado`
+    // Verificar si la edad es mayor o igual a 5 meses si existe al menos un diagnóstico con código Z380
+    if (diagnosticoZ380 && edadEnMeses >= 5) {
+      rcData.push({
+        'Cuenta': cuenta,
+        'Servicio': tipoSservicio,
+        'Prestacion': prestacion,
+        'Tipo': 'RC',
+        'Número': '53',
+        'FUA': fua,
+        'Digitador': digitador,
+        'Descripcion': `No cumple con la regla de consistencia 53. El diagnóstico Z380 no se aplica para el rango de edad del asegurado`
       });
-      }
+    }
 
+    if (diagnosticoO60X) {
+      rcData.push({
+        'Cuenta': cuenta,
+        'Servicio': tipoSservicio,
+        'Prestacion': prestacion,
+        'Tipo': 'RC',
+        'Número': '53',
+        'FUA': fua,
+        'Digitador': digitador,
+        'Descripcion': `No cumple con la regla de consistencia 53. El diagnóstico O60X no se aplica para el sexo del asegurado`
+      });
+    }
+  }
+
+  // Verificación de códigos O009 y O990
+  const diagnosticoO009_O990 = diagnosticos.find(diag => diag.codigoDiagnostico_2 === "O009" || diag.codigoDiagnostico_2 === "O990");
+
+  if (diagnosticoO009_O990) {
+    if (condicionMaterna !== 1 && condicionMaterna !== 2) {
+      rcData.push({
+        'Cuenta': cuenta,
+        'Servicio': tipoSservicio,
+        'Prestacion': prestacion,
+        'Tipo': 'RC',
+        'Número': '53',
+        'FUA': fua,
+        'Digitador': digitador,
+        'Descripcion': `No cumple con la regla de consistencia 53. El diagnóstico ${diagnosticoO009_O990.codigoDiagnostico_2} requiere que la condición materna sea 1 o 2`
+      });
+    }
+
+    if (sexo !== '0') {
+      rcData.push({
+        'Cuenta': cuenta,
+        'Servicio': tipoSservicio,
+        'Prestacion': prestacion,
+        'Tipo': 'RC',
+        'Número': '53',
+        'FUA': fua,
+        'Digitador': digitador,
+        'Descripcion': `No cumple con la regla de consistencia 53. El diagnóstico ${diagnosticoO009_O990.codigoDiagnostico_2} requiere que el sexo del asegurado sea femenino (valor 0)`
+      });
+    }
   }
 }
+
 
 function verificarRegla57(data) {
   const cuenta = data.cuenta_1;
@@ -4661,7 +4730,7 @@ function verificarRegla57(data) {
   const fechaAtencion = data.fechaAtencion_39.split(" ")[0]; // Tomar solo la fecha, sin la hora
   const digitador = data.usuarioDigitador_87;
   const affi = data.numFormatoAfiliado_18
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
 
   // Verificar si el número de formato de afiliado no está vacío
   if (numFormatoAfiliado) {
@@ -4689,6 +4758,49 @@ function verificarRegla57(data) {
   }
 }
 
+function verificarRegla33(data) {
+  const cuenta = data.cuenta_1;
+  const servicio = data.servicio_42;
+  const recienNacido = data.recienNacido;
+  const tipoSservicio = data.tipoServicio_88;
+  const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
+  const digitador = data.usuarioDigitador_87;
+  const prestacion = `<b style="color:black;font-weight:bold;">${servicio}</b>`;
+
+  if (servicio === "055" || servicio === "054") {
+    if (recienNacido.length === 0) {
+      rcData.push({
+        'Cuenta': cuenta,
+        'Servicio': tipoSservicio,
+        'Prestacion': prestacion,
+        'Tipo': 'RC',
+        'Número': '33',
+        'FUA': fua,
+        'Digitador': digitador,
+        'Descripcion': `No cumple con la regla de consistencia 33. No se ha registrado ningún recién nacido.`
+      });
+    } else {
+      recienNacido.forEach((rn, index) => {
+        const numeroDocumentoValido = /^\d{8}$/.test(rn.numeroDocumentoRn_4);
+        const tipoIdentificacionValido = /^\d$/.test(rn.tipoIdentifiacion_3);
+
+        if (!numeroDocumentoValido || !tipoIdentificacionValido) {
+          rcData.push({
+            'Cuenta': cuenta,
+            'Servicio': tipoSservicio,
+            'Prestacion': prestacion,
+            'Tipo': 'RC',
+            'Número': '33',
+            'FUA': fua,
+            'Digitador': digitador,
+            'Descripcion': `No cumple con la regla de consistencia 33. El recién nacido en la posición ${index + 1} no tiene correctamente llenado el campo numeroDocumentoRn_4 (debe tener 8 caracteres numéricos) o tipoIdentifiacion_3 (debe ser un único carácter numérico).`
+          });
+        }
+      });
+    }
+  }
+}
+
 function verificarReglaDeValidacionInterna1(data){
 
   const cuenta = data.cuenta_1;
@@ -4697,7 +4809,7 @@ function verificarReglaDeValidacionInterna1(data){
   const digitador = data.usuarioDigitador_87;
   const servicio = data.servicio_42;
   const procedimientos = data.procedimientos;
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
 
   if (servicio === "056" && tipoSservicio === "Hemodialisis") {
 
@@ -4726,7 +4838,7 @@ function verificarReglaDeValidacionInterna2(data) {
   const tipoSservicio = data.tipoServicio_88
   const procedimientos = data.procedimientos;
   const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
-  const prestacion = "|"+data.servicio_42+"|"
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
   
   // Verificar si el servicio es 062 o 063
   if (servicio === "062" || servicio === "063") {
@@ -4789,6 +4901,191 @@ function verificarReglaDeValidacionInterna2(data) {
   }
 }
 
+
+// Función para contar las atenciones por día y por profesional
+function contarAtencionesPorDiaYProfesional(data) {
+  const atencionesPorDiaYProfesional = {};
+
+  // Iterar sobre los datos para contar las atenciones
+  data.forEach(entry => {
+
+    if(entry.servicio_42 == '056'){
+
+      const fechaAtencion = entry.fechaAtencion_39.split(" ")[0]; // Obtener solo la fecha sin la hora
+      const documentoResponsableAtencion = entry.documentoResponsableAtencion_73;
+
+      // Verificar si ya existe una entrada para esta fecha y este profesional de salud
+      if (!atencionesPorDiaYProfesional[fechaAtencion]) {
+          atencionesPorDiaYProfesional[fechaAtencion] = {};
+      }
+
+      if (!atencionesPorDiaYProfesional[fechaAtencion][documentoResponsableAtencion]) {
+          atencionesPorDiaYProfesional[fechaAtencion][documentoResponsableAtencion] = 0;
+      }
+    
+      // Incrementar el contador de atenciones para este día y este profesional de salud
+      atencionesPorDiaYProfesional[fechaAtencion][documentoResponsableAtencion]++;
+  }});
+
+  return atencionesPorDiaYProfesional;
+}
+
+function getMaxFormatosAtencion(tipoPersonalSalud) {
+  switch (tipoPersonalSalud) {
+      case "01": // Médico
+          return 40;
+      case "03": // Odontólogo
+          return 40;
+      case "08": // Psicólogo
+          return 24;
+      case "10": // Nutricionista
+          return 24;
+      default:
+          return 0;
+  }
+}
+
+function verificarReglaValidacion8(data,arrayDeDatos) {
+  const cuenta = data.cuenta_1;
+  const servicio = data.servicio_42;
+  const tipoPersonalSalud = data.tipoPersonalSalud_74;
+  const fechaAtencion = data.fechaAtencion_39;
+  const documentoResponsableAtencion = data.documentoResponsableAtencion_73
+
+  const digitador = data.usuarioDigitador_87;
+  const tipoSservicio = data.tipoServicio_88
+  const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
+  const prestacion = `<b style="color:black;font-weight:bold;">${data.servicio_42}</b>`
+
+  // Verificar si el servicio es 056
+  if (servicio === "056") {
+      // Verificar si el tipo de personal de salud es médico, nutricionista, odontólogo o psicólogo
+      if (tipoPersonalSalud === "01" || tipoPersonalSalud === "03" || tipoPersonalSalud === "08" || tipoPersonalSalud === "10") {
+          // Contar las atenciones por día y por médico
+          const atencionesPorDiaYProfesional = contarAtencionesPorDiaYProfesional(arrayDeDatos);
+          const maxFormatosAtencion = getMaxFormatosAtencion(tipoPersonalSalud);
+          const fechaAtencionSinHora = fechaAtencion.split(" ")[0];
+          const atencionesDelDia = atencionesPorDiaYProfesional[fechaAtencionSinHora] ? atencionesPorDiaYProfesional[fechaAtencionSinHora][documentoResponsableAtencion] || 0 : 0;
+
+          // Verificar si se excede el número máximo de formatos de atención permitidos
+          if (atencionesDelDia > maxFormatosAtencion) {
+              rcData.push({
+                  'Cuenta': cuenta,
+                  'Servicio':tipoSservicio,
+                  'Prestacion':prestacion,
+                  'Tipo': 'RV',
+                  'Número': '08',
+                  'FUA':fua,
+                  'Digitador':digitador,
+                  'Descripción': `El profesional de salud con tipo ${tipoPersonalSalud} supera el número máximo de formatos únicos de atención permitidos.`
+              });
+          }
+      } else {
+          // El tipo de personal de salud no está sujeto a la regla de validación 8
+          rcData.push({
+              'Cuenta': cuenta,
+              'Servicio':tipoSservicio,
+              'Prestacion':prestacion,
+              'Tipo': 'RV',
+              'Número': '08',
+              'FUA':fua,
+              'Digitador':digitador,
+              'Descripción': `El tipo de profesional de salud ${tipoPersonalSalud} no está sujeto a la regla de validación 8.`
+          });
+      }
+  }
+}
+
+function verificarReglaValidacion12(data) {
+  const cuenta = data.cuenta_1;
+  const servicio = data.servicio_42;
+  const medicamentos = data.medicamentos;
+  const digitador = data.usuarioDigitador_87;
+  const tipoServicio = data.tipoServicio_88;
+  const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
+  const prestacion = `<b style="color:black;font-weight:bold;">${servicio}</b>`;
+
+  if (servicio === "054") {
+      const codigosRequeridos = ["05253", "05254", "ACM436", "ACM923"];
+      const medicamentosEncontrados = medicamentos.filter(med => codigosRequeridos.includes(med.codigoMedicamento_2));
+
+      if (medicamentosEncontrados.length === 0) {
+          rcData.push({
+              'Cuenta': cuenta,
+              'Servicio': tipoServicio,
+              'Prestacion': prestacion,
+              'Tipo': 'RV',
+              'Número': '12',
+              'FUA': fua,
+              'Digitador': digitador,
+              'Descripción': `El FUA ${fua} no cumple con la regla de validación 12. Debe haber al menos uno de los siguientes medicamentos: 05253, 05254, ACM436, ACM923.`
+          });
+      }
+  }
+}
+
+function verificarReglaValidacion13(data) {
+  const cuenta = data.cuenta_1;
+  const servicio = data.servicio_42;
+  const diagnosticos = data.diagnosticos;
+  const digitador = data.usuarioDigitador_87;
+  const tipoServicio = data.tipoServicio_88;
+  const fua = data.disa_2 + "-" + data.lote_3 + "-" + data.fua_4;
+  const prestacion = `<b style="color:black;font-weight:bold;">${servicio}</b>`;
+
+  // Verificar si hay un solo diagnóstico
+  if (diagnosticos.length === 1) {
+    const diagnostico = diagnosticos[0];
+    const codigoDiagnostico = diagnostico.codigoDiagnostico_2;
+
+    if (servicio === "065" || servicio === "066" || servicio === "067") {
+      if (codigosDiagnosticoNoPermitidos065to067.has(codigoDiagnostico)) {
+        rcData.push({
+          'Cuenta': cuenta,
+          'Servicio': tipoServicio,
+          'Prestacion': prestacion,
+          'Tipo': 'RV',
+          'Número': '13',
+          'FUA': fua,
+          'Digitador': digitador,
+          'Descripción': `RV-13 El FUA ${fua} no cumple con la regla de validación 13. Código afectado: ${codigoDiagnostico}`
+        });
+      }
+    } else if (servicio === "068") {
+      if (codigosDiagnosticoNoPermitidos068.has(codigoDiagnostico)) {
+        rcData.push({
+          'Cuenta': cuenta,
+          'Servicio': tipoServicio,
+          'Prestacion': prestacion,
+          'Tipo': 'RV',
+          'Número': '13',
+          'FUA': fua,
+          'Digitador': digitador,
+          'Descripción': `RV-13 El FUA ${fua} no cumple con la regla de validación 13. Código afectado: ${codigoDiagnostico}`
+        });
+      }
+    } else if (servicio === "056") {
+      if (codigosDiagnosticoNoPermitidos056.has(codigoDiagnostico)) {
+        rcData.push({
+          'Cuenta': cuenta,
+          'Servicio': tipoServicio,
+          'Prestacion': prestacion,
+          'Tipo': 'RV',
+          'Número': '13',
+          'FUA': fua,
+          'Digitador': digitador,
+          'Descripción': `RV-13 El FUA ${fua} no cumple con la regla de validación 13. Código afectado: ${codigoDiagnostico}`
+        });
+      }
+    }
+  }
+}
+s
+
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------ FIN RC Y RV --------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 

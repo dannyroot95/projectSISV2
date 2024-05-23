@@ -97,7 +97,7 @@ body{
   text-decoration: none;
 }
 .sidebar .nav-links li a .link_name{
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 400;
   color: #fff;
   transition: all 0.4s ease;
@@ -117,7 +117,7 @@ body{
 }
 .sidebar .nav-links li .sub-menu a{
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   padding: 5px 0;
   white-space: nowrap;
   opacity: 0.6;
@@ -497,6 +497,10 @@ body{
     font-size: 12px;
   }
 
+  .minText14{
+    font-size: 14px;
+  }
+
 
   #body {
     overflow-y: scroll;
@@ -535,6 +539,9 @@ body{
   transition: all 0.3s;
 }
 
+.btn-size{
+  font-size: 15px;
+}
 
 .btn-login:hover {
   outline: none;
