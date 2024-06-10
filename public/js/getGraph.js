@@ -491,10 +491,10 @@ function yearLater(){
         },
       })
 
-      html2canvas(document.querySelector("#myChart")).then(canvas => {
+      html2canvas(document.querySelector("#myChart"), { scale: 3 }).then(canvas => {
         //document.body.appendChild(canvas)
 
-        html2canvas(document.querySelector("#myChartPie")).then(canvas2 => {
+        html2canvas(document.querySelector("#myChartPie"), { scale: 3 }).then(canvas2 => {
             //document.body.appendChild(canvas)
             
             var pdf = new jspdf.jsPDF()
@@ -505,7 +505,7 @@ function yearLater(){
             pdf.text(30, 20, "Reporte de atenciones")
             //pdf.text(30, 26, "Fecha : "+onlyDateNumber(Date.now()))
             pdf.setFontSize(12)
-            pdf.addImage('/image/logoHSR.png', 'PNG', 4, 7, 22, 12)
+            pdf.addImage('/image/logoHSR.jpg', 'PNG', 4, 7, 22, 12)
           
             pdf.addImage(canvas, 'JPEG', 7, 32, 195, 90);
             pdf.addImage(canvas2, 'JPEG', -48, 140, 280, 66);

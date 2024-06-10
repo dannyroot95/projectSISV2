@@ -1,11 +1,13 @@
 getAllUsers()
 let allData = []
 let allData2 = []
+var reportItems = []
 let loader = document.getElementById("loader")
 let load = document.getElementById("loader2")
 let loader2 = document.getElementById("loader3")
 let loader4 = document.getElementById("loader4")
 let selectElementType = document.getElementById('inputGroupSelectType');
+let selectElementModality = document.getElementById('inputGroupSelectModality');
 createDatatable()
 createDatatable2()
 createDatatable3()
@@ -169,6 +171,10 @@ selectElementType.addEventListener('change', function() {
         document.getElementById("txt-code").innerHTML = "Ingrese los códigos :"
         document.getElementById("btnTableItems").style = "display:block;"
     }
+});
+
+selectElementModality.addEventListener('change', function() {
+    document.getElementById("tbodyDetailItemGroup").innerHTML = ""
 });
 
 function createDatatable(){
@@ -936,16 +942,323 @@ function insertDataDetailRecipe(data){
 
 }
 
-
 function showModalItems(){
    $('#modalItems').modal('show')
    setTimeout(function() {
     document.getElementById("it2").click();
   }, 500);
-   document.getElementById("tbodyDetailItem").innerHTML = ""
 }
+
+function showModalItemsGroup(){
+    $('#modalItemsGroup').modal('show')
+ }
+
+function getItemsAudit(){
+
+ let query = document.getElementById("inputGroupSelectType").value
+ let f1 = document.getElementById("f-item-ini").value
+ let f2 = document.getElementById("f-item-fin").value
+ let typeItem = document.getElementById("inputGroupSelectModality").value
+ let code = document.getElementById("et-code").value
+
+ let valuesItem = {
+    type:typeItem,
+    fechaIni:f1,
+    fechaFin:f2,
+    code:code
+}
+
+ if(query == 1){
+
+    if(f1 != "" && f2!= "" && code != ""){
+        fetchItemsAuditOnly(valuesItem)
+    }else{
+        Swal.fire(
+            'Oops!',
+            'Complete los campos!',
+            'info'
+          )
+    }
+
+ }else{
+    
+    if(f1 != "" && f2!= ""){
+
+    let values = [];
+    let table = document.getElementById('tb-data-items-group');
+    let tbody = table.getElementsByTagName('tbody')[0];
+  
+    if(tbody.rows.length !== 0){
+
+        if(tbody.rows.length > 1){
+            for (var i = 0; i < tbody.rows.length; i++) {
+                var row = tbody.rows[i];
+                var cell = row.cells[0]; // Primera celda de la fila
+                
+                // Obtener el valor y agregarlo al arreglo
+                var val = cell.innerText || cell.textContent;
+                values.push(val.trim());
+                
+            }
+            
+            // Generar el objeto JSON de ejemplo
+            var json = {
+                "values": values
+            };
+            fetchItemsInsertTable(json,valuesItem)
+        }else{
+            Swal.fire(
+                'Oops!',
+                'Debe existir mas de un item!',
+                'info'
+              ) 
+        }
+
+    }else{
+        Swal.fire(
+            'Oops!',
+            'Debe ingresar al menos un codigo a la tabla!',
+            'info'
+          )
+    }
+    }else{
+        Swal.fire(
+            'Oops!',
+            'Debe ingresar la fecha inicial y final!',
+            'info'
+          ) 
+    }
+ }
+
+}
+
+function fetchItemsAuditOnly(json){
+    document.getElementById("loaderItem").style = "display:block;"
+    fetch(`${url}/get-items-audit-only`,{
+        method: 'POST',
+        headers: {
+           'Content-Type': 'application/json'
+        },body: JSON.stringify(json)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+      if(data.length > 0){
+        insertDataItems(data)
+      }else{
+        document.getElementById("loaderItem").style = "display:none;"
+        Swal.fire(
+            'Oops!',
+            'No se encontraron items!',
+            'info'
+          )
+      }
+    }).catch(err => {
+        document.getElementById("loaderItem").style = "display:none;"
+        loader4.style = "display:none;"
+        Swal.fire(
+            'Oops!',
+            'Error 404!',
+            'error'
+          )
+        console.log(err)
+    }); 
+}
+
+function fetchItemsAuditGroup(json){
+    document.getElementById("loaderItem").style = "display:block;"
+    fetch(`${url}/get-items-audit-group`,{
+        method: 'POST',
+        headers: {
+           'Content-Type': 'application/json'
+        },body: JSON.stringify(json)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if(data.length > 0){
+        insertDataItems(data)
+      }else{
+        document.getElementById("loaderItem").style = "display:none;"
+        Swal.fire(
+            'Oops!',
+            'No se encontraron items!',
+            'info'
+          )
+      }
+    }).catch(err => {
+        document.getElementById("loaderItem").style = "display:none;"
+        loader4.style = "display:none;"
+        Swal.fire(
+            'Oops!',
+            'Error 404!',
+            'error'
+          )
+        console.log(err)
+    }); 
+}
+
+
+function insertDataItems(data){
+
+    reportItems = []
+
+    $('#tb-data-items').DataTable().destroy()
+    $("#tbodyDetailItem").html(data.map((d) => {
+
+        let fua = d.fua
+        let egreso = d.FechaEgreso
+        let usuarioFua = d.usuarioFua
+        let servEgreso = d.servicioEgreso
+        if(fua === "SIN FUA"){
+            fua = `<b style="color:red;">SIN FUA</b>`
+        }
+
+        if(egreso === "SIN FECHA"){
+            egreso = `<b style="color:red;">SIN FECHA</b>`
+        }
+
+        if(usuarioFua === "SIN DATOS"){
+            usuarioFua = `<b style="color:black;">SIN DATOS</b>`
+        }
+
+        if(servEgreso === "SIN DATOS"){
+            servEgreso = `<b style="color:black;">SIN DATOS</b>`
+        }
+
+
+        reportItems.push({
+            "Cuenta":d.IdCuentaAtencion,
+            "Código Ítem":d.Codigo,
+            "Nombre de ítem":d.Nombre,
+            "Fuente de financiamiento":d.fuente,
+            "Servicio ingreso":d.servicioIngreso,
+            "Servicio egreso":servEgreso,
+            "Paciente":d.paciente,
+            "Usuario cuenta": d.usuarioCuenta,
+            "Usuario FUA": usuarioFua,
+            "FUA":fua
+        })
+
+              return `
+              <tr style="cursor: pointer;">
+              <td class="minText5">${d.IdCuentaAtencion}</td>
+              <td class="minText5">${d.FechaIngreso}</td>
+              <td class="minText5">${egreso}</td>
+              <td class="minText5">${d.Codigo}</td>
+              <td class="minText5">${d.Nombre}</td>
+              <td class="minText5">${d.fuente}</td>
+              <td class="minText5">${d.servicioIngreso}</td>
+              <td class="minText5">${servEgreso}</td>
+              <td class="minText5">${d.paciente}</td>
+              <td class="minText5">${d.usuarioCuenta}</td>
+              <td class="minText5">${usuarioFua}</td>
+              <td class="minText5">${fua}</td>
+              </tr>`;
+          })
+          .join("")
+      );
+     
+      document.getElementById("loaderItem").style = "display:none;"
+      createDatatable4()
+      var lenx = document.getElementById("tb-data-items_length")
+      lenx.innerHTML = lenx.innerHTML+`&nbsp;&nbsp;<button onclick="downloadExcelItems();" class="btn btn-success minText5"><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Descargar</button>
+      `
+}
+
+function addToTable(){
+
+    let n = document.getElementById("et-group-code").value;
+  
+    if (n != "") {
+  
+      let table = document.getElementById('tb-data-items-group');
+      let tbody = table.getElementsByTagName('tbody')[0];
+      let rowS = tbody.getElementsByTagName('tr');
+  
+      // Verificar si el valor ya existe en alguna fila
+      let exist = false;
+      for (let i = 0; i < rowS.length; i++) {
+        let cell = rowS[i].getElementsByTagName('td')[0];
+        let valueCell = cell.innerText || cell.textContent;
+        if (valueCell.trim() === n.trim()) {
+          exist = true;
+          break;
+        }
+      }
+  
+      if (exist) {
+        Swal.fire(
+          'Oops!',
+          'El codigo ya existe en la tabla!',
+          'info'
+        );
+      } else {
+        let td =
+          `<tr>
+            <td  class="minText5" scope="col"><center>${n}</center></td>
+            <td  class="minText5" scope="col"><center>
+            <button onclick="deleteItem(this)" class="minText5 btn btn-danger">Eliminar</button>
+            </center></td>
+          </tr>`;
+        $(td).appendTo('#tbodyDetailItemGroup');
+        document.getElementById("et-group-code").value = "";
+      }
+    } else {
+      Swal.fire(
+        'Oops!',
+        'Ingrese el un codigo de item!',
+        'info'
+      );
+    }
+  }
+
+  function deleteItem(button){
+    var row = button.parentNode.parentNode.parentNode; // Obtener la fila que contiene el botón
+    row.parentNode.removeChild(row);
+  }
+  
+  function fetchItemsInsertTable(json,values){
+
+
+    fetch(`${url}/includes-items-audit`, {
+      method: 'POST', // o 'PUT', 'DELETE', etc.
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(json) // data es un objeto con los datos a enviar
+    })
+    .then(response => response.json())
+    .then(data => {
+       if(data.success == "insertado"){
+        
+        fetchItemsAuditGroup(values)
+  
+       }else{
+        Swal.fire(
+          'Oops!',
+          'Se produjo un error',
+          'warning'
+        )
+       }
+    })
+    .catch(error => {
+      Swal.fire(
+          'Oops!',
+          'Se produjo un error',
+          'warning'
+        )
+      console.error(error)
+  
+  });
+  
+  }  
 
 function downloadExcel2(){
     let xls = new XlsExport(allData2, 'auditoriaDetalle');
     xls.exportToXLS(`DETALLE_DE_AUDITORIA.xls`)
+}
+
+function downloadExcelItems(){
+    let xls = new XlsExport(reportItems, 'listado de items');
+    xls.exportToXLS(`DETALLE_DE_AUDITORIA_ITEMS.xls`)
 }

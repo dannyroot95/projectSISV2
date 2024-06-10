@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='/css/calendar.css' rel='stylesheet'>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="/js/JSPDF/jspdf.min.js"></script>
+    <script src="/js/JSPDF/jspdf.plugin.autotable.min.js"></script>
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+    </head>
+
+    <style>
+        .table1 {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .th1, .td1 {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .th11 {
+            background-color: #c1d4e9;
+        }
+
+        .zc-ref {
+        display: none;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .chart {
+            width: 45%;
+            height: 400px;
+        }
+
+    </style>
+
+    <body id="g-body">
+    
+        <h2>Estadísticas globales</h2>
+        <p></p>
+        <div class="input-group mb-3" style="width: 80%;">
+            <div class="input-group-prepend">
+              <span class="input-group-text minText5">Fecha de inicio</span>
+            </div>
+            <input type="date" class="form-control minText5" id="d-init">
+            <div class="input-group-prepend">
+              <span class="input-group-text minText5">Fecha final</span>
+            </div>
+              <input type="date" class="form-control minText5" id="d-final">
+      
+              
+              <div class="input-group-prepend">
+                <label class="input-group-text minText5">Fuente de financiamiento</label>
+              </div>
+              <select class="custom-select minText5" id="inputGroupSelectFinance">
+              </select>
+      
+              <button class="btn btn-primary minText5" id="btn-search" onclick="search()"><i class="bi bi-search"></i>&nbsp;Buscar</button>
+              <a><div class="loaderSmall" id="loader"></div></a>
+            </div>
+       
+
+          <img id="image" src="/image/stadistics.jpg" width="100%">
+
+        <div id="allData" style="display: none;">
+            <br>
+            <center><h6 id="months"></h6></center>
+            <p></p>
+        <table class="table1">
+            <thead>
+                <tr>
+                    <th class="th1 th11" rowspan="2">CONCEPTO</th>
+                    <th class="th1 th11" rowspan="2">Total</th>
+                    <th class="th1 th11" colspan="2">Niños</th>
+                    <th class="th1 th11" rowspan="2">Adolescentes<p></p>12 - 17</th>
+                    <th class="th1 th11" colspan="2">Adultos</th>
+                    <th class="th1 th11" rowspan="2">Adulto Mayor 60 a más</th>
+                </tr>
+                <tr>
+                    <th class="th1 th11">0 - 4</th>
+                    <th class="th1 th11">5 - 11</th>
+                    <th class="th1 th11">18 - 29</th>
+                    <th class="th1 th11">30 - 59</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyAteAge">
+            </tbody>
+        </table>
+
+        <p></p>
+
+        <div class="chart-container">
+            <div id='Chart1' class="chart"></div>
+            <div id='Chart2' class="chart"></div>
+        </div>
+
+ 
+
+        </div>
+
+    </body>
+    
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/indicators.js"></script>

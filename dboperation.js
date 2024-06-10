@@ -2435,6 +2435,91 @@ async function getAuditImg(f1,f2) {
 }
 
 
+async function getItemsAudit(type,f1,f2,code) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('TYPE_ITEM',type)
+    .input('FECHAINI',f1+' 00:00')
+    .input('FECHAFIN',f2+' 23:59')
+    .input('CODE',code)
+    .execute(`AUDITORIA_POR_CODIGO_ITEM`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+async function getItemsAuditGroup(type,f1,f2) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('TYPE_ITEM',type)
+    .input('FECHAINI',f1+' 00:00')
+    .input('FECHAFIN',f2+' 23:59')
+    .execute(`AUDITORIA_POR_CODIGO_GRUPO_ITEM`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+async function setIncludesItems(values) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool
+      .request()
+      .query(`INSERT INTO BD_SIS_TOOLS..itemsAuditoria (Codigo) 
+      VALUES ${values.map((value) => `('${value}')`).join(", ")}`);
+    return res.recordsets;
+  } catch (error) {
+    console.log("error: " + error);
+  } finally {
+    sql.close();
+  }
+}
+
+async function indicatorAteAges(f1,f2,font) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('F1',f1+' 00:00')
+    .input('F2',f2+' 23:59')
+    .input('FUENTE',font)
+    .execute(`INDICADOR_GRUPO_ETAREO`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+async function getQueryHistoryPatient(type,value) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('TYPE',type)
+    .input('VALUE',value)
+    .execute(`CONSULTA_HISTORIA_PACIENTE`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+async function updateHistoryPatient(idPatient,history) {
+  try {
+    let pool = await sql.connect(config);
+    let res = await pool.request()
+    .input('IDPACIENTE',idPatient)
+    .input('HISTORIA',history)
+    .execute(`ACTUALIZACION_HISTORIA_PACIENTE`) 
+    return res.recordsets;
+  } catch (error) {
+    console.log("error : " + error);
+  }
+}
+
+
 module.exports = {
   getdata: getdata,
   sendTrama:sendTrama,
@@ -2580,5 +2665,11 @@ module.exports = {
   getAuditRecipe:getAuditRecipe,
   getAuditRecipeDetail:getAuditRecipeDetail,
   getAuditLab:getAuditLab,
-  getAuditImg:getAuditImg
+  getAuditImg:getAuditImg,
+  getItemsAudit:getItemsAudit,
+  setIncludesItems:setIncludesItems,
+  getItemsAuditGroup:getItemsAuditGroup,
+  indicatorAteAges:indicatorAteAges,
+  getQueryHistoryPatient:getQueryHistoryPatient,
+  updateHistoryPatient:updateHistoryPatient
 };

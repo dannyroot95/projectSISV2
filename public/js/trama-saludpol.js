@@ -2120,7 +2120,7 @@ function deleteProcedure(){
     table = document.getElementById("tb-data-pro")
     const numReg = table.rows.length;
   
-    if(numReg > 2){
+    if(numReg > 0){
   
     fetch(`${url}/delete-procedure-saludpol/${order}/${id_product}/${account}`)
       .then(response => response.json())

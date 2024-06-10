@@ -4,6 +4,7 @@ var router = express.Router();
 const sql = require("../dboperation");
 const path = require('path');
 const puppeteer = require('puppeteer');
+const { Console } = require('console');
 
 var browser
 var page 
@@ -1249,6 +1250,22 @@ function getTypeUser(value,user){
         </ul>
       </li>
 
+      
+      <li>
+      <div class="iocn-link">
+        <a>
+          <i class='bx bx-collection' ></i>
+          <span class="link_name">Caja</span>
+        </a>
+        <i class='bx bxs-chevron-down arrow' ></i>
+      </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Caja</a></li>
+          <li><a href="#estado_comprobante">Estado de comprobantes</a></li>
+        </ul>
+      </li>
+
+
         <li>
           <div class="iocn-link">
             <a>
@@ -1264,19 +1281,37 @@ function getTypeUser(value,user){
           </ul>
         </li>
   
+
         <li>
-          <div class="iocn-link">
-            <a>
-              <i class='bx bx-collection' ></i>
-              <span class="link_name">Caja</span>
-            </a>
-            <i class='bx bxs-chevron-down arrow' ></i>
-          </div>
-          <ul class="sub-menu">
-            <li><a class="link_name" href="#">Caja</a></li>
-            <li><a href="#estado_comprobante">Estado de comprobantes</a></li>
-          </ul>
-        </li>
+        <div class="iocn-link">
+          <a>
+            <i class='bx bx-line-chart'></i>
+            <span class="link_name">Indicadores</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name">Indicadores</a></li>
+          <li><a href="#indicadores">Estadísticas globales</a></li>
+          <li><a href="#estadisticas-atenciones">Atenciones</a></li>
+          <li><a href="#estadisticas-caja">Caja</a></li>
+        </ul>
+      </li>
+
+      <li>
+      <div class="iocn-link">
+        <a>
+          <i class='bx bxs-bookmarks'></i>
+          <span class="link_name">Historias</span>
+        </a>
+        <i class='bx bxs-chevron-down arrow' ></i>
+      </div>
+      <ul class="sub-menu">
+        <li><a class="link_name">Historias</a></li>
+        <li><a href="#actualizacion-historia">Actualizacion</a></li>
+      </ul>
+    </li>
+      
       
         <li>
         <div class="iocn-link">
@@ -1339,24 +1374,6 @@ function getTypeUser(value,user){
  
       </div>
     </li>
-
-
-    <li>
-    <div class="iocn-link">
-      <a>
-        <i class='bx bx-line-chart'></i>
-        <span class="link_name">Estadisticas</span>
-      </a>
-      <i class='bx bxs-chevron-down arrow' ></i>
-    </div>
-    <ul class="sub-menu">
-      <li><a class="link_name">Estadisticas</a></li>
-      <li><a href="#estadisticas-atenciones">Atenciones</a></li>
-      <li><a href="#estadisticas-caja">Caja</a></li>
-    </ul>
-  </li>
-
-
 
   </ul>
   
@@ -1424,6 +1441,20 @@ function getTypeUser(value,user){
         </ul>
       </li>
 
+      <li>
+          <div class="iocn-link">
+            <a>
+              <i class='bx bx-collection' ></i>
+              <span class="link_name">Caja</span>
+            </a>
+            <i class='bx bxs-chevron-down arrow' ></i>
+          </div>
+          <ul class="sub-menu">
+            <li><a class="link_name" href="#">Caja</a></li>
+            <li><a href="#estado_comprobante">Estado de comprobantes</a></li>
+          </ul>
+        </li>
+
         <li>
           <div class="iocn-link">
             <a>
@@ -1438,20 +1469,37 @@ function getTypeUser(value,user){
             <li><a href="#fua_correcion">Correción de FUA</a></li>
           </ul>
         </li>
-  
+
         <li>
-          <div class="iocn-link">
-            <a>
-              <i class='bx bx-collection' ></i>
-              <span class="link_name">Caja</span>
-            </a>
-            <i class='bx bxs-chevron-down arrow' ></i>
-          </div>
-          <ul class="sub-menu">
-            <li><a class="link_name" href="#">Caja</a></li>
-            <li><a href="#estado_comprobante">Estado de comprobantes</a></li>
-          </ul>
-        </li>
+        <div class="iocn-link">
+          <a>
+            <i class='bx bx-line-chart'></i>
+            <span class="link_name">Indicadores</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name">Indicadores</a></li>
+          <li><a href="#indicadores">Estadísticas globales</a></li>
+          <li><a href="#estadisticas-atenciones">Atenciones</a></li>
+          <li><a href="#estadisticas-caja">Caja</a></li>
+        </ul>
+      </li>
+
+
+      <li>
+      <div class="iocn-link">
+        <a>
+          <i class='bx bxs-bookmarks'></i>
+          <span class="link_name">Historias</span>
+        </a>
+        <i class='bx bxs-chevron-down arrow' ></i>
+      </div>
+      <ul class="sub-menu">
+        <li><a class="link_name">Historias</a></li>
+        <li><a href="#actualizacion-historia">Actualizacion</a></li>
+      </ul>
+    </li>
       
         <li>
         <div class="iocn-link">
@@ -1512,21 +1560,6 @@ function getTypeUser(value,user){
         <div id="typeuser" class="job">Tipo de usuario</div>
         </div>
     </li>
-
-    <li>
-    <div class="iocn-link">
-      <a>
-        <i class='bx bx-line-chart'></i>
-        <span class="link_name">Estadisticas</span>
-      </a>
-      <i class='bx bxs-chevron-down arrow' ></i>
-    </div>
-    <ul class="sub-menu">
-      <li><a class="link_name">Estadisticas</a></li>
-      <li><a href="#estadisticas-atenciones">Atenciones</a></li>
-      <li><a href="#estadisticas-caja">Caja</a></li>
-    </ul>
-  </li>
 
 
   </ul>
@@ -2711,6 +2744,105 @@ router.post("/get-observed-trama", async function (req, res, next) {
   }
 });
 
+router.post("/get-items-audit-only", function (req, res,next) {
+
+  let data = req.body
+  let type = data.type
+  let f1 = data.fechaIni
+  let f2 = data.fechaFin
+  let code = data.code
+
+  sql.getItemsAudit(type,f1,f2,code).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.post("/get-items-audit-group", function (req, res,next) {
+
+  let data = req.body
+  let type = data.type
+  let f1 = data.fechaIni
+  let f2 = data.fechaFin
+
+  sql.getItemsAuditGroup(type,f1,f2).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.post("/includes-items-audit", function (req, res, next) {
+  const { values } = req.body;
+
+  sql.setIncludesItems(values)
+    .then(() => {
+      res.json({ success: "insertado" });
+    })
+    .catch((error) => {
+      console.error("Error al insertar los valores:", error);
+      res.status(500).json({ success: "error" });
+    });
+});
+
+router.get("/indicator-ate-ages/:a/:b/:c", function (req, res, next) {
+ 
+  let f1 = req.params.a
+  let f2 = req.params.b
+  let font = req.params.c
+  sql.indicatorAteAges(f1,f2,font).then((result) => {
+    if(result[0].length>0){
+      res.json(result);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+
+router.post("/get-history-patient", function (req, res,next) {
+
+  let data = req.body
+  let type = data.type
+  let value = data.value
+
+  sql.getQueryHistoryPatient(type,value).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.post("/update-history-patient", function (req, res,next) {
+
+  let data = req.body
+  let history = data.history
+  let idPatient = data.idPatient
+
+  sql.updateHistoryPatient(idPatient,history).then((result) => {
+    console.log(result)
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
 
 async function loginSaludPol(username, password){
    browser = await puppeteer.launch(); // Headless:false para ver la interfaz gráfica
@@ -2719,10 +2851,10 @@ async function loginSaludPol(username, password){
   try {
     await page.goto('https://app-gtips.saludpol.gob.pe:38071/app-gtips/login');
 
-    await page.waitForSelector('input[name="username"]');
+    await page.waitForSelector('input[name="username"]', { timeout: 10000 });
     await page.type('input[name="username"]', username);
 
-    await page.waitForSelector('input[name="password"]');
+    await page.waitForSelector('input[name="password"]', { timeout: 10000 });
     await page.type('input[name="password"]', password);
 
     await Promise.all([

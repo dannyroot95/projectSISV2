@@ -53,7 +53,10 @@ function yearLater(){
         <input class="form-check-input mt-0 timeline" id="chk-${i}" type="checkbox" value="${i}">
       </div>
       <span class="input-group-text">${i}</span>
-      ${i === currentYear ? '<button class="btn btn-primary" onclick="filter();" id="btnFiltrar"><i class="bi bi-sort-numeric-up"></i>&nbsp;Filtrar</button>' : ''}
+      ${i === currentYear ? `<button class="btn btn-primary" onclick="filter();" id="btnFiltrar">
+      <i class="bi bi-sort-numeric-up"></i>
+      &nbsp;Filtrar
+      </button>&nbsp;<a><div class="loaderSmall" id="loaderFilter"></div><a>` : ''}
       `;
     }
   
@@ -74,6 +77,8 @@ function yearLater(){
     
     if (valoresCheckboxes.length >= 2) {
       
+      document.getElementById("loaderFilter").style = "display:block;"
+
       json = {}
       const resultados = {};
 
@@ -104,6 +109,7 @@ for (let i = 0; i < valoresCheckboxes.length; i++) {
         // Aquí tienes todos los datos en el objeto 'resultados'
         console.log(resultados);
         showGraphTimeLine(resultados)
+        document.getElementById("loaderFilter").style = "display:none;"
       }
     })
     .catch(error => {

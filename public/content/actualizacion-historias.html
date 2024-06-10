@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='/css/calendar.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <h2>Actualizacion de historia</h2>
+    <br>
+
+    <div class="input-group mb-3" style="width: 70%;">
+        <label class="input-group-text minText5">Tipo</label>
+        <select class="form-select minText5" id="inputGroupSelectType">
+          <option value="1">HISTORIA</option>
+          <option value="2">DNI/OTROS</option>
+          <option value="3">NOMBRES</option>
+        </select>
+        <label class="input-group-text minText5">Número</label>
+        <input type="number" id="valueType" class="form-control minText5">
+        <button onclick="search()" class="btn btn-success minText5"><i class="bi bi-search"></i>&nbsp;Buscar</button>
+        <a><div id="loader" class="loaderSmall"></div></a>  
+    </div>
+
+      <br>
+      <br>
+
+   <div id="div-data" style="display: none;">
+    <div class="profile-card">
+        <div class="profile-image">
+            <img id="gender" src="/image/logoHSR.jpg" alt="Imagen de Usuario">
+        </div>
+        <div class="profile-details">
+            <h2 id="fullname" class="profile-name"></h2>
+            <p id="lastname" class="profile-title"></p>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="i-document"></span>
+                <input style="background-color: white;" id="i-dni" type="text" class="form-control" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">Fecha de nacimiento</span>
+                <input style="background-color: white;" id="i-birth" type="text" class="form-control" disabled>
+            </div>
+        
+            <div class="input-group mb-3">
+                <span class="input-group-text">Teléfono</span>
+                <input style="background-color: white;" id="i-phone" type="text" class="form-control" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text minText5">Historia</span>
+                <input id="i-history" style="background-color: white;" type="text" class="form-control minText5">
+                <span class="input-group-text minText5">Tipo de historia</span>
+                <input id="i-history-type" style="background-color: white;" id="i-estatus" type="text" class="form-control minText5" disabled>
+                <span class="input-group-text minText5">Estado</span>
+                <input id="i-history-status" style="background-color: white;" id="i-estatus" type="text" class="form-control minText5" disabled>
+                <span class="input-group-text minText5">Fecha de creacion</span>
+                <input id="i-history-create" style="background-color: white;" id="i-estatus" type="text" class="form-control minText5" disabled>
+                <button onclick="updateHistory()" class="btn btn-primary minText5">Actualizar</button>
+            </div>
+              
+            <p class="profile-description" id="i-address-generate"></p>
+            <p id="i-id" style="color: white;display: none;"></p>
+            
+        </div>
+    </div>
+</div>
+ 
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/historyUpdate.js"></script>
+ 
+</body>
+</html>

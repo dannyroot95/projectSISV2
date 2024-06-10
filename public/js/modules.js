@@ -47,6 +47,10 @@ $('document').ready(function () {
           box()
         }else if (direccion == '#auditoria') {
           audit()
+        }else if (direccion == '#indicadores') {
+          indicators()
+        }else if (direccion == '#actualizacion-historia') {
+          updateHistory()
         }else {
           routeErrE();
         }
@@ -55,7 +59,7 @@ $('document').ready(function () {
   })
   
 
-  function inicio() {
+ function inicio() {
     window.location.hash = "#inicio"
     contentModulo.innerHTML = urlModule("/content/inicio.html");
   }
@@ -130,6 +134,14 @@ $('document').ready(function () {
   function audit() {
     window.location.hash = "#auditoria"
     contentModulo.innerHTML = urlModule("/content/auditoria.html");
+  }
+  function indicators() {
+    window.location.hash = "#indicadores"
+    contentModulo.innerHTML = urlModule("/content/indicadores.html");
+  }
+  function updateHistory() {
+    window.location.hash = "#actualizacion-historia"
+    contentModulo.innerHTML = urlModule("/content/actualizacion-historias.html");
   }
   function routeErrE() {
     console.log("ruta error")

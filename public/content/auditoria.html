@@ -237,28 +237,35 @@
       <div class="modal-content">
           <div class="modal-header">
           <h1 class="modal-title fs-5">Procedimientos - Medicamentos - Insumos</h1>
-          &nbsp;
-          <h1 class="modal-title fs-5" id="detail-account"></h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
          
             <div class="input-group mb-3">
-              <label style="background-color: rgb(78, 0, 59);color: #fff;border-color:rgb(78, 0, 59) ;" class="input-group-text minText14" for="inputGroupSelect01"><i class="bi bi-asterisk"></i>&nbsp;Tipo de consulta</label>
-              <select class="form-select minText14" id="inputGroupSelectType">
+              <label style="background-color: rgb(78, 0, 59);color: #fff;border-color:rgb(78, 0, 59) ;" class="input-group-text minText5" for="inputGroupSelect01"><i class="bi bi-asterisk"></i>&nbsp;Tipo de consulta</label>
+              <select class="form-select minText5" id="inputGroupSelectType">
                 <option value="1" selected>Individual</option>
                 <option value="2">Grupal</option>
               </select>
-              <label class="input-group-text minText14" for="inputGroupSelect01">Tipo de item</label>
-              <select class="form-select minText14" id="inputGroupSelectModality">
+
+              <label class="input-group-text minText5">Fecha inicial</label>
+              <input id="f-item-ini" type="date" class="form-control minText5">
+
+              <label class="input-group-text minText5">Fecha final</label>
+              <input id="f-item-fin" type="date" class="form-control minText5">
+
+              <label class="input-group-text minText5" for="inputGroupSelect01">Tipo de item</label>
+              <select class="form-select minText5" id="inputGroupSelectModality">
                 <option value="1" selected>Procedimiento</option>
                 <option value="2">Medicamento</option>
                 <option value="3">Insumo</option>
               </select>
-              <label id="txt-code" class="input-group-text minText14">Código</label>
-              <input id="et-code" type="number" class="form-control minText14">
-              <button style="display: none;" id="btnTableItems" class="btn btn-danger minText14"><i class="bi bi-table"></i></button>
-              <button class="btn btn-outline-primary minText14"><i class="bi bi-search"></i>&nbsp;Auditar</button>
+              <label id="txt-code" class="input-group-text minText5">Código</label>
+              <input id="et-code" type="number" class="form-control minText5">
+              <button onclick="showModalItemsGroup()" style="display: none;" id="btnTableItems" class="btn btn-danger minText5"><i class="bi bi-table"></i></button>
+              <button onclick="getItemsAudit()" class="btn btn-outline-primary minText5"><i class="bi bi-search"></i>&nbsp;Auditar</button>
+              <a><div class="loaderSmall" id="loaderItem">
+              </div></a>
             </div>
 
             <br>
@@ -268,10 +275,16 @@
           <thead>
             <tr>
               <th id="it2" class="minText5" scope="col">Cuenta</th>
+              <th class="minText5" scope="col">Fecha de ingreso</th>
+              <th class="minText5" scope="col">Fecha de egreso</th>
               <th class="minText5" scope="col">Código</th>
               <th class="minText5" scope="col">Nombre item</th>
-              <th class="minText5" scope="col">fuente de financiamiento</th>
+              <th class="minText5" scope="col">Financiamiento</th>
+              <th class="minText5" scope="col">Servicio ingreso</th>
+              <th class="minText5" scope="col">Servicio egreso</th>
               <th class="minText5" scope="col">Paciente</th>
+              <th class="minText5" scope="col">Usuario(CUENTA)</th>
+              <th class="minText5" scope="col">Usuario(FUA)</th>
               <th class="minText5" scope="col">FUA</th>
             </tr>
           </thead>
@@ -287,7 +300,44 @@
 
   <!---->
 
+      <!--modal-->
 
+      <div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="modalItemsGroup" tabindex="-1" aria-labelledby="modalItemsGroup" aria-hidden="true">
+        <div  class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5">Ingrese los codigos a la tabla</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <div class="input-group mb-3">
+              <label class="input-group-text minText5">Código</label>
+              <input id="et-group-code" type="number" class="form-control minText5">
+              <button onclick="addToTable()" class="btn btn-success minText5"><b>+</b>&nbsp;Agregar</button>
+              </div>
+
+              <table class="table table-hover table-bordered display" id="tb-data-items-group">
+                <thead>
+                  <tr>
+                    <th class="minText5" scope="col">Código</th>
+                    <th class="minText5" scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyDetailItemGroup">
+                </tbody>
+              </table>
+
+     
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-success minText5" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  
+    <!---->
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/bootstrap/datatables.min.js"></script>
     <script src="/js/utils/standartDate.js"></script>
