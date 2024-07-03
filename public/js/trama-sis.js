@@ -4188,7 +4188,7 @@ function jsonATE(){
     rcData = []
     recorded(combinedArray)
   }
-
+  
   function downloadRC(){
 
     let selectElement = document.getElementById("inputGroupSelectProductionMonth2")
