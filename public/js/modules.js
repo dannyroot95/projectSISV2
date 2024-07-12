@@ -51,6 +51,8 @@ $('document').ready(function () {
           indicators()
         }else if (direccion == '#actualizacion-historia') {
           updateHistory()
+        }else if (direccion == '#migracion-historia') {
+          migrationHistory()
         }else {
           routeErrE();
         }
@@ -142,6 +144,10 @@ $('document').ready(function () {
   function updateHistory() {
     window.location.hash = "#actualizacion-historia"
     contentModulo.innerHTML = urlModule("/content/actualizacion-historias.html");
+  }
+  function migrationHistory() {
+    window.location.hash = "#migracion-historia"
+    contentModulo.innerHTML = urlModule("/content/migracion-historias.html");
   }
   function routeErrE() {
     console.log("ruta error")

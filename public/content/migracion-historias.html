@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='/css/calendar.css' rel='stylesheet'>
+</head>
+<style>
+    .card-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      margin: 10px;
+    }
+    .migrar-text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+
+<body>
+
+    <h2>Migracion de historias</h2>
+    <br>
+
+    <div class="input-group mb-3" style="width: 40%;">
+        <label class="input-group-text minText5">Historia</label>
+        <input type="number" id="valueHistory" class="form-control minText5">
+        <button onclick="addHistory(1)" class="btn btn-primary minText5"><b>+</b>&nbsp;Agregar a Historia 1</button>
+        <button style="background-color: rgb(156, 8, 149);border-color: rgb(156, 8, 149);" onclick="addHistory(2)" class="btn btn-success minText5"><b>+</b>&nbsp;Agregar a Historia 2</button>
+        <a><div id="loader" class="loaderSmall"></div></a>  
+    </div>
+
+      <br>
+      <br>
+
+
+     
+      
+    <div class="card-container" style="margin-top: -30px;">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="/image/banner1.jpg" alt="Card image cap">
+          <div class="card-body">
+            <b><label id="name1" style="font-size: 14px;"></label></b>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">Historia</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="history1" class="form-control minText5">
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">DNI</label>
+                <input type="number" id="dni1" class="form-control minText5">
+                <button onclick="searchDni()" class="btn btn-primary minText5"><i class="bi bi-search"></i></button>
+                <a><div id="loader" class="loaderSmall"></div></a>  
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">F.Nacimiento</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="fNacimiento1" class="form-control minText5">
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">F.Creación</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="fCreacion1" class="form-control minText5">
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">Género</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="genero1" class="form-control minText5">
+            </div>
+  
+          </div>
+        </div>
+  
+        <div class="migrar-text">
+          <h4>Migrar a &#x2192;</h4>
+        </div>
+  
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="/image/banner2.jpg" alt="Card image cap">
+          <div class="card-body">
+            <b><label id="name2" style="font-size: 14px;"></label></b>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">Historia</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="history2" class="form-control minText5">
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">DNI</label>
+                <input type="number" id="dni2" class="form-control minText5">
+                <button onclick="searchDni()" class="btn btn-primary minText5"><i class="bi bi-search"></i></button>
+                <a><div id="loader" class="loaderSmall"></div></a>  
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">F.Nacimiento</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="fNacimiento2" class="form-control minText5">
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">F.Creación</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="fCreacion2" class="form-control minText5">
+            </div>
+  
+            <div class="input-group mb-3">
+                <label class="input-group-text minText5">Género</label>
+                <input disabled style="color: black;background-color: white;" type="number" id="genero2" class="form-control minText5">
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p></p>
+    <center><button style="font-size: 30px;" class="btn btn-dark"><i class="bi bi-arrow-repeat"></i>&nbsp;INICIAR MIGRACION</button></center>
+
+
+</div>
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/historyMigration.js"></script>
+ 
+</body>
+</html>

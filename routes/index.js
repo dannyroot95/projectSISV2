@@ -1266,6 +1266,22 @@ function getTypeUser(value,user){
       </li>
 
 
+      <li>
+          <div class="iocn-link">
+            <a>
+               <i class='bx bxs-receipt'></i>
+              <span class="link_name">Citas</span>
+            </a>
+            <i class='bx bxs-chevron-down arrow' ></i>
+          </div>
+          <ul class="sub-menu">
+            <li><a class="link_name" href="#">Citas</a></li>
+            <li><a href="#reporte-citas">Reportes</a></li>
+            <li><a href="#cupos-citas">Cupos</a></li>
+          </ul>
+        </li>
+
+
         <li>
           <div class="iocn-link">
             <a>
@@ -1308,7 +1324,8 @@ function getTypeUser(value,user){
       </div>
       <ul class="sub-menu">
         <li><a class="link_name">Historias</a></li>
-        <li><a href="#actualizacion-historia">Actualizacion</a></li>
+        <li><a href="#actualizacion-historia">Actualización</a></li>
+        <li><a href="#migracion-historia">Migración</a></li>
       </ul>
     </li>
       
@@ -1456,6 +1473,21 @@ function getTypeUser(value,user){
         </li>
 
         <li>
+        <div class="iocn-link">
+          <a>
+             <i class='bx bxs-receipt'></i>
+            <span class="link_name">Citas</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Citas</a></li>
+          <li><a href="#reporte-citas">Reportes</a></li>
+          <li><a href="#cupos-citas">Cupos</a></li>
+        </ul>
+      </li>
+
+        <li>
           <div class="iocn-link">
             <a>
               <i class='bx bx-file'></i>
@@ -1497,7 +1529,8 @@ function getTypeUser(value,user){
       </div>
       <ul class="sub-menu">
         <li><a class="link_name">Historias</a></li>
-        <li><a href="#actualizacion-historia">Actualizacion</a></li>
+        <li><a href="#actualizacion-historia">Actualización</a></li>
+        <li><a href="#migracion-historia">Migración</a></li>
       </ul>
     </li>
       
@@ -1618,6 +1651,22 @@ function getTypeUser(value,user){
             <li><a class="link_name" href="#">Catalogo</a></li>
           </ul>
         </li>
+
+
+        <li>
+        <div class="iocn-link">
+          <a>
+             <i class='bx bxs-receipt'></i>
+            <span class="link_name">Citas</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Citas</a></li>
+          <li><a href="#reporte-citas">Reportes</a></li>
+          <li><a href="#cupos-citas">Cupos</a></li>
+        </ul>
+      </li>
 
   
        <li>
