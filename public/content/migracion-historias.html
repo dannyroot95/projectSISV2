@@ -38,8 +38,9 @@
     <div class="input-group mb-3" style="width: 40%;">
         <label class="input-group-text minText5">Historia</label>
         <input type="number" id="valueHistory" class="form-control minText5">
-        <button onclick="addHistory(1)" class="btn btn-primary minText5"><b>+</b>&nbsp;Agregar a Historia 1</button>
-        <button style="background-color: rgb(156, 8, 149);border-color: rgb(156, 8, 149);" onclick="addHistory(2)" class="btn btn-success minText5"><b>+</b>&nbsp;Agregar a Historia 2</button>
+        <button id="btn1" onclick="addHistory(1)" class="btn btn-primary minText5"><b>+</b>&nbsp;Agregar a Historia 1</button>
+        <button id="btn2" style="background-color: rgb(156, 8, 149);border-color: rgb(156, 8, 149);" onclick="addHistory(2)" class="btn btn-success minText5"><b>+</b>&nbsp;Agregar a Historia 2</button>
+        <button id="btn3" onclick="cleanAll()" class="btn btn-danger minText5"><i class="bi bi-trash3-fill"></i>&nbsp;Limpiar todo</button>
         <a><div id="loader" class="loaderSmall"></div></a>  
     </div>
 
@@ -62,25 +63,27 @@
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">DNI</label>
-                <input type="number" id="dni1" class="form-control minText5">
-                <button onclick="searchDni()" class="btn btn-primary minText5"><i class="bi bi-search"></i></button>
-                <a><div id="loader" class="loaderSmall"></div></a>  
+                <input disabled style="color: black;background-color: white;" type="number" id="dni1" class="form-control minText5"> 
             </div>
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">F.Nacimiento</label>
-                <input disabled style="color: black;background-color: white;" type="number" id="fNacimiento1" class="form-control minText5">
+                <input disabled style="color: black;background-color: white;" type="text" id="fNacimiento1" class="form-control minText5">
             </div>
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">F.Creación</label>
-                <input disabled style="color: black;background-color: white;" type="number" id="fCreacion1" class="form-control minText5">
+                <input disabled style="color: black;background-color: white;" type="text" id="fCreacion1" class="form-control minText5">
             </div>
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">Género</label>
-                <input disabled style="color: black;background-color: white;" type="number" id="genero1" class="form-control minText5">
+                <input disabled style="color: black;background-color: white;" type="text" id="genero1" class="form-control minText5">
             </div>
+
+            <p></p>
+            <label style="font-size: 10px;"># Paciente :</label>&nbsp;<label style="font-size: 10px;" id="id1"></label>
+  
   
           </div>
         </div>
@@ -101,25 +104,27 @@
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">DNI</label>
-                <input type="number" id="dni2" class="form-control minText5">
-                <button onclick="searchDni()" class="btn btn-primary minText5"><i class="bi bi-search"></i></button>
-                <a><div id="loader" class="loaderSmall"></div></a>  
+                <input disabled style="color: black;background-color: white;" type="number" id="dni2" class="form-control minText5">
             </div>
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">F.Nacimiento</label>
-                <input disabled style="color: black;background-color: white;" type="number" id="fNacimiento2" class="form-control minText5">
+                <input disabled style="color: black;background-color: white;" type="text" id="fNacimiento2" class="form-control minText5">
             </div>
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">F.Creación</label>
-                <input disabled style="color: black;background-color: white;" type="number" id="fCreacion2" class="form-control minText5">
+                <input disabled style="color: black;background-color: white;" type="text" id="fCreacion2" class="form-control minText5">
             </div>
   
             <div class="input-group mb-3">
                 <label class="input-group-text minText5">Género</label>
-                <input disabled style="color: black;background-color: white;" type="number" id="genero2" class="form-control minText5">
+                <input disabled style="color: black;background-color: white;" type="text" id="genero2" class="form-control minText5">
             </div>
+
+            
+            <p></p>
+            <label style="font-size: 10px;"># Paciente :</label>&nbsp;<label style="font-size: 10px;" id="id2"></label>
   
           </div>
         </div>
@@ -127,7 +132,7 @@
     </div>
 
     <p></p>
-    <center><button style="font-size: 30px;" class="btn btn-dark"><i class="bi bi-arrow-repeat"></i>&nbsp;INICIAR MIGRACION</button></center>
+    <center><button id="btn4" onclick="migrate()" style="font-size: 30px;" class="btn btn-dark"><i class="bi bi-arrow-repeat"></i>&nbsp;INICIAR MIGRACION</button>&nbsp;<a><div class="loaderSmall" id="loader2"></div></a></center>
 
 
 </div>
