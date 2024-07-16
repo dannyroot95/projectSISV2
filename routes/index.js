@@ -2885,6 +2885,21 @@ router.post("/update-history-patient", function (req, res,next) {
   });
 });
 
+router.post("/migrate-history", function (req, res,next) {
+
+  let data = req.body
+
+  sql.migrateHistory(data).then((result) => {
+    console.log(result)
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

@@ -2519,6 +2519,23 @@ async function updateHistoryPatient(idPatient,history) {
   }
 }
 
+async function migrateHistory(data) {
+
+  try {
+      let pool = await sql.connect(config);
+      let res = await pool.request()
+          .input('DNI1', data.dni1)
+          .input('IDPACIENTE1', data.idPaciente1)
+          .input('DNI2', data.dni2)
+          .input('IDPACIENTE2', data.idPaciente2)
+          .execute('MIGRACION_HISTORIA');
+      return res.recordsets;
+  } catch (error) {
+      console.log(error);
+      return [{ success: "error" + ' ' + error.message }];
+  }
+}
+
 
 module.exports = {
   getdata: getdata,
@@ -2671,5 +2688,6 @@ module.exports = {
   getItemsAuditGroup:getItemsAuditGroup,
   indicatorAteAges:indicatorAteAges,
   getQueryHistoryPatient:getQueryHistoryPatient,
-  updateHistoryPatient:updateHistoryPatient
+  updateHistoryPatient:updateHistoryPatient,
+  migrateHistory:migrateHistory
 };

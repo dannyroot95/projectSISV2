@@ -93,6 +93,7 @@ function insertData(data,n){
         document.getElementById("genero"+n).style = "background-color: white;"
         document.getElementById("genero"+n).value = ""
         document.getElementById("id"+n).innerHTML = ""
+        document.getElementById("name"+n).innerHTML = ""
         Swal.fire(
             'Oops!',
             'La historia debe ser diferente!',
@@ -109,6 +110,7 @@ function cleanAll() {
         let fCreacion = document.getElementById("fCreacion" + n);
         let genero = document.getElementById("genero" + n);
         let id = document.getElementById("id" + n);
+        let name = document.getElementById("name" + n)
 
         if (history) history.value = "";
         if (dni) dni.value = "";
@@ -119,6 +121,7 @@ function cleanAll() {
             genero.value = "";
         }
         if (id) id.innerHTML = "";
+        if (name) name.innerHTML = "";
     }
 }
 
@@ -156,20 +159,7 @@ function modalConfirm(){
         document.getElementById("btn4").style = "display:none;"
         disable()
 
-        setTimeout(function() {
-
-            document.getElementById("loader2").style = "display:none;"
-            document.getElementById("btn4").style = "display:block;font-size: 30px;"
-            enable()
-            cleanAll()
-            
-            Swal.fire(
-                'Muy bien!',
-                'Historia migrada satisfactoriamente!',
-                'success'
-              );
-
-          }, 5000);
+        migrateHistory()
 
       }
     })
@@ -191,3 +181,73 @@ function modalConfirm(){
     document.getElementById("btn4").disabled = true
     document.getElementById("valueHistory").disabled = true
   }
+
+
+  function migrateHistory(){
+
+    let dni1 = document.getElementById("dni1").value
+    let paciente1 = document.getElementById("id1").innerHTML
+
+    let dni2 = document.getElementById("dni2").value
+    let paciente2 = document.getElementById("id2").innerHTML
+
+
+    let jsonM = {
+        dni1:dni1,
+        idPaciente1:paciente1,
+        dni2:dni2,
+        idPaciente2:paciente2
+    }
+    
+    fetch(`${url}/migrate-history`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonM)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let response = data[0].IdPaciente.toString()
+        if(response === "ACTUALIZADO"){
+
+            document.getElementById("loader2").style = "display:none;"
+            document.getElementById("btn4").style = "display:block;font-size: 30px;"
+            enable()
+            cleanAll()
+
+            Swal.fire(
+                'Muy bien!',
+                'La historia ha sido migrada!',
+                'success'
+            );
+        }else{
+
+            document.getElementById("loader2").style = "display:none;"
+            document.getElementById("btn4").style = "display:block;font-size: 30px;"
+            enable()
+            cleanAll()
+
+            Swal.fire(
+                'Oops!',
+                'No se pudo migrar la historia!',
+                'info'
+            );
+        }
+       
+    })
+    .catch(err => {
+        console.log(err)
+        document.getElementById("loader2").style = "display:none;"
+        document.getElementById("btn4").style = "display:block;font-size: 30px;"
+        enable()
+        cleanAll()
+        Swal.fire(
+            'Oops!',
+            'Migración cancelada , revise procedimiento!',
+            'error'
+        );
+    });
+
+}
