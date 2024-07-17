@@ -209,7 +209,7 @@ function modalConfirm(){
     })
     .then(response => response.json())
     .then(data => {
-        let response = data[0].IdPaciente.toString()
+        let response = data[0].message.toString()
         if(response === "ACTUALIZADO"){
 
             document.getElementById("loader2").style = "display:none;"
