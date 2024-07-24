@@ -617,6 +617,7 @@ function insertDataTrama1(data){
 }
 
 async function fetchWithInterval(urls) {
+  report = []
   for (const id of urls) {
     try {
       // Realiza la solicitud fetch con el ID actual
@@ -671,6 +672,7 @@ async function fetchWithInterval(urls) {
 async function fetchSequentially() {
 
   let ctx = 0
+  report = []
   disableButtons()
   loader.style = "display:block;"
 
@@ -4349,6 +4351,8 @@ async function fetchResum() {
   let ctxPharmacy = 0
   let ctxLab = 0
   let totalPharmacy = 0.0
+  let totalProcedure = 0.0
+  let totalImage = 0.0
   let totalLab = 0.0
   let tableTotalImgCE = []
   let tableTotalImgEM = []
@@ -4472,6 +4476,8 @@ async function fetchResum() {
     const total6 = processTable(tableTotalProHOSP).reduce((acc, current) => acc + parseFloat(current.unit), 0);
 
     let tt = total1+total2+total3+total4+total5+total6+totalPharmacy+totalLab
+    let totalProcedure = total4+total5+total6
+    let totalImage = total1+total2+total3
 
     var selectMonth = document.getElementById("inputGroupSelectProductionMonth");
     var textMonth = selectMonth.options[selectMonth.selectedIndex].text.toUpperCase();
@@ -4491,6 +4497,13 @@ async function fetchResum() {
     dataResum(processTable(tableTotalImgCE),processTable(tableTotalImgEM),processTable(tableTotalImgHOSP))
     dataResum(processTable(tableTotalProCE),processTable(tableTotalProEM),processTable(tableTotalProHOSP))
 
+
+    console.log('procedimientos -> '+formatearNumero(parseFloat(totalProcedure).toFixed(2)))
+    console.log('imagenes -> '+formatearNumero(parseFloat(totalImage).toFixed(2)))
+
+    console.log('procedimientos EMER -> '+formatearNumero(parseFloat(total5).toFixed(2)))
+    console.log('procedimientos CE -> '+formatearNumero(parseFloat(total4).toFixed(2)))
+    console.log('procedimientos HOSP -> '+formatearNumero(parseFloat(total6).toFixed(2)))
 
     $('#modalResum').modal('show')
     //RESULT

@@ -2524,6 +2524,8 @@ async function migrateHistory(data) {
   try {
       let pool = await sql.connect(config);
       let res = await pool.request()
+          .input('NOMBRE1', data.name1)
+          .input('GENERO1',parseInt(data.sex1))
           .input('DNI1', data.dni1)
           .input('IDPACIENTE1', data.idPaciente1)
           .input('DNI2', data.dni2)

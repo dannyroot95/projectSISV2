@@ -61,12 +61,14 @@ function insertData(data,n){
     let dni2 = document.getElementById("dni2").value
 
     if(history1 != history2){
-        document.getElementById("name"+n).innerHTML = data.ApellidoPaterno+" "+data.ApellidoMaterno+" "+data.PrimerNombre
+        document.getElementById("name"+n).innerHTML = data.ApellidoPaterno+" "+data.ApellidoMaterno
+        document.getElementById("nam"+n).innerHTML = data.PrimerNombre
         document.getElementById("dni"+n).value = data.NroDocumento
         document.getElementById("fNacimiento"+n).value = data.FechaNacimiento
         document.getElementById("fCreacion"+n).value = data.FechaCreacionHistoria
         document.getElementById("id"+n).innerHTML = data.IdPaciente
-
+        document.getElementById("Idgenero"+n).value = data.IdSexo
+        
         if(data.sexo == "MASCULINO" ){
             document.getElementById("genero"+n).style = "color: white;background-color: #005185;"
             document.getElementById("genero"+n).value = data.sexo
@@ -92,8 +94,10 @@ function insertData(data,n){
         document.getElementById("fCreacion"+n).value = ""
         document.getElementById("genero"+n).style = "background-color: white;"
         document.getElementById("genero"+n).value = ""
+        document.getElementById("Idgenero"+n).value = ""
         document.getElementById("id"+n).innerHTML = ""
         document.getElementById("name"+n).innerHTML = ""
+        document.getElementById("nam"+n).innerHTML = ""
         Swal.fire(
             'Oops!',
             'La historia debe ser diferente!',
@@ -111,6 +115,8 @@ function cleanAll() {
         let genero = document.getElementById("genero" + n);
         let id = document.getElementById("id" + n);
         let name = document.getElementById("name" + n)
+        let nam = document.getElementById("nam" + n)
+        let idSex = document.getElementById("Idgenero" + n)
 
         if (history) history.value = "";
         if (dni) dni.value = "";
@@ -120,8 +126,10 @@ function cleanAll() {
             genero.style.backgroundColor = "white";
             genero.value = "";
         }
+        if(idSex) idSex.value = ""
         if (id) id.innerHTML = "";
         if (name) name.innerHTML = "";
+        if (nam) nam.innerHTML = "";
     }
 }
 
@@ -187,6 +195,8 @@ function modalConfirm(){
 
     let dni1 = document.getElementById("dni1").value
     let paciente1 = document.getElementById("id1").innerHTML
+    let name1 = document.getElementById("nam1").innerHTML
+    let sex1 = document.getElementById("Idgenero1").value
 
     let dni2 = document.getElementById("dni2").value
     let paciente2 = document.getElementById("id2").innerHTML
@@ -196,7 +206,9 @@ function modalConfirm(){
         dni1:dni1,
         idPaciente1:paciente1,
         dni2:dni2,
-        idPaciente2:paciente2
+        idPaciente2:paciente2,
+        name1:name1,
+        sex1:sex1
     }
     
     fetch(`${url}/migrate-history`, {
