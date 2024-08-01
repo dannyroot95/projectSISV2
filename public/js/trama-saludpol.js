@@ -414,9 +414,23 @@ function fetchTramaSaludpol(init,final){
             document.getElementById("btn-resum").style = "display:block;"
             document.getElementById("btn-no-ate").style = "display:block;background-color: #49002b;border-color: #49002b;"
           }).catch(err => {
-            
-            console.log(err)
+
+            Swal.fire(
+              'Oops!',
+              'Sin datos registrados!',
+              'info'
+            )
+
+            document.getElementById("tbody").innerHTML = ""
+            document.getElementById("tbody2").innerHTML = ""
+            document.getElementById("tbody3").innerHTML = ""
+            document.getElementById("tbody4").innerHTML = ""
+
+            createDatatable()
+
+            loader.style = "display:none;"
             enableButtons()
+            console.log(err)
           }); 
 
 }
