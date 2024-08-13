@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="/libraries/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="/libraries/sweetalert2/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/bootstrap/icons/font/bootstrap-icons.css">
+    <link href='/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/bootstrap/datatables.min.css' rel='stylesheet'>
+    <link href='/css/styles.css' rel='stylesheet'>
+    <link href='/css/calendar.css' rel='stylesheet'>
+    <script type="text/javascript" src="/libraries/xlsexport/xls-export.es5.js"></script>
+</head>
+
+<style>
+  .select2-container--default .select2-selection--single {
+    line-height: 30px;
+    height: 32px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 30px;
+}
+ 
+</style>
+
+<body>
+
+    <h2>Estados de cupos (Citas)</h2>
+    <br>
+
+    <div class="input-group mb-3" style="width: 85%;">
+        <label class="input-group-text minText5">Tipo</label>
+        <select class="form-select minText5" id="inputGroupSelectType">
+          <option value="1">MES</option>
+          <option value="2">DIA</option>
+          <option value="3">RANGO DE FECHAS</option>
+          <option value="4">MEDICO</option>
+          <option value="5">ESPECIALIDAD</option>
+        </select>
+
+        <div id="divSelected" class="minText5">
+        <select class="form-select minText5" id="inputGroupSelectMonth">
+            <option value="1">ENERO</option>
+            <option value="2">FEBRERO</option>
+            <option value="3">MARZO</option>
+            <option value="4">ABRIL</option>
+            <option value="5">MAYO</option>
+            <option value="6">JUNIO</option>
+            <option value="7">JULIO</option>
+            <option value="8">AGOSTO</option>
+            <option value="9">SEPTIEMBRE</option>
+            <option value="10">OCTUBRE</option>
+            <option value="11">NOVIEMBRE</option>
+            <option value="12">DICIEMBRE</option>
+          </select>
+        </div>
+
+        
+        <div id="divSelected2" class="minText5">
+        </div>    
+
+         
+        <div id="divSelected3" class="minText5">
+        </div>    
+
+        <button onclick="query()" class="btn btn-primary minText5"><i class="bi bi-search"></i>&nbsp;Consultar</button>
+        <button id="btnExport" onclick="exportToExcel()" style="display: none;" class="btn btn-success minText5"><i class="bi bi-file-earmark-spreadsheet-fill"></i>&nbsp;Exportar</button>
+
+        <a><div id="loader" class="loaderSmall"></div></a>  
+    </div>
+            
+  <div id="body">
+    <br>
+    <label style="font-weight: bolder;font-size: 22px;">Datos</label>
+    <div class="table-responsive">
+     <table class="table table-hover table-bordered display" id="tb-data">
+         <thead>
+           <tr>
+
+            <th class="minText4" scope="col">Médico</th>
+            <th class="minText4" scope="col">Fecha</th>
+            <th class="minText4" scope="col">Hora de inicio</th>
+            <th class="minText4" scope="col">Hora de finalización</th>
+            <th class="minText4" scope="col">Turno</th>
+            <th class="minText4" scope="col">Especialidad</th>
+            <th class="minText4" scope="col">Servicio</th>
+            <th class="minText4" scope="col">Cupos</th>
+            <th class="minText4" scope="col">Emitidos</th>
+            <th class="minText4" scope="col">Libres</th>
+
+           </tr>
+         </thead>
+         <tbody id="tbody">
+         </tbody>
+       </table>
+     </div>
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/datatables.min.js"></script>
+    <script src="/js/utils/constants.js"></script>
+    <script src="/js/utils/standartDate.js"></script>
+    <script src="/js/appointments-quote.js"></script>
+ 
+</body>
+</html>

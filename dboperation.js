@@ -167,6 +167,34 @@ console.log("error :" + error);
     }
   }
 
+  async function getAllMedics() {
+    try {
+      let pool = await sql.connect(config);
+      let res = await pool.request().query(`SELECT M.IdMedico,UPPER(E.ApellidoPaterno+' '+E.ApellidoMaterno+' '+E.Nombres) AS nombres FROM SIGH..Empleados E 
+      INNER JOIN SIGH..Medicos M ON M.IdEmpleado = E.IdEmpleado
+      WHERE E.esActivo = 1 ORDER BY E.ApellidoPaterno`);
+      return res.recordsets;
+    } catch (error) {
+      console.log("error :" + error);
+    }finally {
+      sql.close();
+    }
+  }
+
+  async function getAllSpecialties() {
+    try {
+      let pool = await sql.connect(config);
+      let res = await pool.request().query(`SELECT E.IdEspecialidad , UPPER(E.Nombre) as nombre 
+      FROM SIGH..Especialidades E WHERE E.TiempoPromedioAtencion IS NOT NULL`);
+      return res.recordsets;
+    } catch (error) {
+      console.log("error :" + error);
+    }finally {
+      sql.close();
+    }
+  }
+
+
   async function insurance_report(type , init_month , final_month ) {
 
     try {
@@ -2538,6 +2566,26 @@ async function migrateHistory(data) {
   }
 }
 
+async function getQuotes(data) {
+
+  try {
+      let pool = await sql.connect(config);
+      let res = await pool.request()
+          .input('TYPE', data.type)
+          .input('YEAR',data.year)
+          .input('MONTH', data.month)
+          .input('IDMEDICO', data.idMedico)
+          .input('IDESPECIALIDAD', data.idEspecialidad)
+          .input('F1', data.f1)
+          .input('F2', data.f2)
+          .execute('CONSULTA_CUPOS');
+      return res.recordsets;
+  } catch (error) {
+      console.log(error);
+      return [{ success: "error" + ' ' + error.message }];
+  }
+}
+
 
 module.exports = {
   getdata: getdata,
@@ -2691,5 +2739,8 @@ module.exports = {
   indicatorAteAges:indicatorAteAges,
   getQueryHistoryPatient:getQueryHistoryPatient,
   updateHistoryPatient:updateHistoryPatient,
-  migrateHistory:migrateHistory
+  migrateHistory:migrateHistory,
+  getAllMedics:getAllMedics,
+  getAllSpecialties:getAllSpecialties,
+  getQuotes:getQuotes
 };

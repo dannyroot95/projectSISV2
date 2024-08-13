@@ -42,6 +42,18 @@ router.get("/getdata_status_invoice", function (req, res, next) {
   });
 });
 
+router.get("/get-all-medics", function (req, res, next) {
+  sql.getAllMedics().then((result) => {
+    res.json(result[0]);
+  });
+});
+
+router.get("/get-all-specialities", function (req, res, next) {
+  sql.getAllSpecialties().then((result) => {
+    res.json(result[0]);
+  });
+});
+
 router.get("/diagnosticos_procedimientos/:st/:id", function (req, res, next) {
   let anio = req.params.st;
 	let mes = req.params.id;
@@ -2890,7 +2902,6 @@ router.post("/migrate-history", function (req, res,next) {
   let data = req.body
 
   sql.migrateHistory(data).then((result) => {
-    console.log(result)
     if(result[0].length>0){
       res.json(result[0]);
     }else{
@@ -2898,6 +2909,20 @@ router.post("/migrate-history", function (req, res,next) {
     }
   });
 });
+
+router.post("/get-quotes", function (req, res,next) {
+
+  let data = req.body
+
+  sql.getQuotes(data).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
 
 
 

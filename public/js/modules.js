@@ -53,6 +53,8 @@ $('document').ready(function () {
           updateHistory()
         }else if (direccion == '#migracion-historia') {
           migrationHistory()
+        }else if (direccion == '#cupos-citas') {
+          appointmentSlots()
         }else {
           routeErrE();
         }
@@ -148,6 +150,10 @@ $('document').ready(function () {
   function migrationHistory() {
     window.location.hash = "#migracion-historia"
     contentModulo.innerHTML = urlModule("/content/migracion-historias.html");
+  }
+  function appointmentSlots(){
+    window.location.hash = "#cupos-citas"
+    contentModulo.innerHTML = urlModule("/content/cupos-citas.html");
   }
   function routeErrE() {
     console.log("ruta error")
