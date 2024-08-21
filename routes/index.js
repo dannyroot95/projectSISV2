@@ -48,6 +48,13 @@ router.get("/get-all-medics", function (req, res, next) {
   });
 });
 
+router.get("/get-name-patient-by-id/:a", function (req, res, next) {
+  let id = req.params.a;
+  sql.getPatientById(id).then((result) => {
+    res.json(result[0]);
+  });
+});
+
 router.get("/get-all-specialities", function (req, res, next) {
   sql.getAllSpecialties().then((result) => {
     res.json(result[0]);

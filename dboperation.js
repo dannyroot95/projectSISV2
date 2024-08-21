@@ -185,7 +185,7 @@ console.log("error :" + error);
     try {
       let pool = await sql.connect(config);
       let res = await pool.request().query(`SELECT E.IdEspecialidad , UPPER(E.Nombre) as nombre 
-      FROM SIGH..Especialidades E WHERE E.TiempoPromedioAtencion IS NOT NULL`);
+      FROM SIGH..Especialidades E`);
       return res.recordsets;
     } catch (error) {
       console.log("error :" + error);
@@ -193,6 +193,26 @@ console.log("error :" + error);
       sql.close();
     }
   }
+
+  async function getPatientById(id) {
+    try {
+      let pool = await sql.connect(config);
+      let res = await pool.request().query(`
+      SELECT
+      UPPER(ApellidoPaterno) AS ApellidoPaterno,
+      UPPER(ApellidoMaterno) AS ApellidoMaterno,
+      UPPER(PrimerNombre) AS PrimerNombre,
+      ISNULL(UPPER(SegundoNombre),'') AS SegundoNombre,
+      ISNULL(UPPER(TercerNombre),'') AS TercerNombre 
+      FROM SIGH..Pacientes WHERE IdPaciente = ${id}`);
+      return res.recordsets;
+    } catch (error) {
+      console.log("error :" + error);
+    }finally {
+      sql.close();
+    }
+  }
+
 
 
   async function insurance_report(type , init_month , final_month ) {
@@ -2742,5 +2762,6 @@ module.exports = {
   migrateHistory:migrateHistory,
   getAllMedics:getAllMedics,
   getAllSpecialties:getAllSpecialties,
-  getQuotes:getQuotes
+  getQuotes:getQuotes,
+  getPatientById:getPatientById
 };

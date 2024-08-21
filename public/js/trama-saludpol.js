@@ -1756,7 +1756,14 @@ function updateQuantityProcedure(){
 function showModalEditAccount(){
 
   $('#editAccount').modal('show')
+  document.getElementById("ed-ap-paterno").value = ""
+  document.getElementById("ed-ap-materno").value = ""
+  document.getElementById("ed-name-patient").value = ""
+  document.getElementById("ed-name2-patient").value = ""
+  document.getElementById("ed-name3-patient").value = ""
+  let idPatient = document.getElementById("d-id-patient").innerHTML
   getAndUpdateGender()
+  getNamePatient(idPatient)
 
   document.getElementById("ed-doc-auth").value = ""
   document.getElementById("et-f-in").value = ""
@@ -1817,18 +1824,14 @@ function getAndUpdateGender() {
   masculinoCheckbox.addEventListener("change", function() {
     if (masculinoCheckbox.checked) {
       femeninoCheckbox.checked = false
-      
     }
   });
 
   femeninoCheckbox.addEventListener("change", function() {
     if (femeninoCheckbox.checked) {
       masculinoCheckbox.checked = false
-      
-     
     }
   });
-  
 }
 
 function updateDniPatient(){
@@ -1866,8 +1869,6 @@ function updateDniPatient(){
                   'error'
                 )
             } );
-
-
    }else{
     Swal.fire(
       'Oops!',
@@ -1898,8 +1899,6 @@ function updateGenderPatient(){
     value = 2
     fetchUpdateGenderPatient(id_patient,value)
    }
-
-
 }
 
 function fetchUpdateGenderPatient(id_patient,gender){
@@ -1943,6 +1942,84 @@ function fetchUpdateGenderPatient(id_patient,gender){
             } );
           }
 
+function getNamePatient(id){
+      
+  fetch(`${url}/get-name-patient-by-id/${id}`)
+          .then(response => response.json())
+              .then(data => {
+         
+                document.getElementById("ed-ap-paterno").value = data[0].ApellidoPaterno
+                document.getElementById("ed-ap-materno").value = data[0].ApellidoMaterno
+                document.getElementById("ed-name-patient").value = data[0].PrimerNombre
+                document.getElementById("ed-name2-patient").value = data[0].SegundoNombre
+                document.getElementById("ed-name3-patient").value = data[0].TercerNombre
+
+              }).catch(err =>{
+                console.log(err)
+              } );
+}         
+
+function updateFullNamePatient(){
+  let idPaciente = document.getElementById("d-id-patient").innerHTML
+  let paterno = document.getElementById("ed-ap-paterno").value
+  let materno = document.getElementById("ed-ap-materno").value
+  let nombre1 = document.getElementById("ed-name-patient").value
+  let nombre2 = document.getElementById("ed-name2-patient").value
+  let nombre3 = document.getElementById("ed-name3-patient").value
+
+
+  if(paterno != "" && materno != "" && nombre1 != ""){
+
+    let parameters = {
+      idPaciente : idPaciente,
+      paterno : paterno,
+      materno : materno,
+      primerNombre : nombre1,
+      segundoNombre : nombre2,
+      tercerNombre : nombre3
+    }
+    
+  fetch(`${url}/update-fullname-patient`,{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },body: JSON.stringify(parameters)
+})
+  .then(response => response.json())
+  .then(data => {
+
+      if(data[0].success == "actualizado"){
+
+          Swal.fire(
+            'Muy bien!',
+            'Datos de paciente actualizado!',
+            'success'
+          )
+          
+      }else{
+        Swal.fire(
+          'Oops!',
+          'Ocurrió un error',
+          'error'
+        )
+      }
+  }).catch(err => {
+      Swal.fire(
+        'Oops!',
+        'Ocurrió un error 404',
+        'error'
+      )
+  }); 
+
+  }else{
+    Swal.fire(
+      'Oops!',
+      'Complete los campos!',
+      'info'
+    )
+  }
+
+}              
 
  function updateDate(){
 

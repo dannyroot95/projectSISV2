@@ -490,6 +490,7 @@ function insertDataTable(data){
 
         let emitidos = d.emitidos
         let libres = d.libres
+        let turno = d.turno
 
         if(emitidos > d.cupos){
             emitidos = d.cupos
@@ -498,6 +499,23 @@ function insertDataTable(data){
         if(libres < 0 || libres == 0){
             libres = '0'
         }
+
+        if(turno == 'M'){
+            turno = '<img src="/image/turnoMañana.png" width="42px;">&nbsp;M'
+        }else if(turno == 'T'){
+            turno = '<img src="/image/turnoTarde.png" width="42px;">&nbsp;T'
+        }else if(turno == 'MT'){
+            turno = '<img src="/image/turnoMT.png" width="42px;">&nbsp;MT'
+        }else if(turno == 'MEM'){
+            turno = '<img src="/image/turnoMEM.png" width="42px;">&nbsp;MEM'
+        }else if(turno == 'MET'){
+            turno = '<img src="/image/turnoMET.png" width="42px;">&nbsp;MET'
+        }else if(turno == 'GD'){
+            turno = '<img src="/image/turnoGD.png" width="42px;">&nbsp;GD'
+        }else if(turno == 'MVC'){
+            turno = '<img src="/image/turnoMVC.png" width="42px;">&nbsp;MVC'
+        }
+        
 
         allData.push({
 
@@ -519,11 +537,11 @@ function insertDataTable(data){
               <td class="minText5">${d.fecha}</td>
               <td class="minText5">${d.HoraInicio}</td>
               <td class="minText5">${d.HoraFin}</td>
-              <td class="minText5">${d.turno}</td>
+              <td class="minText5"><center><b>${turno}<b/></center></td>
               <td class="minText5">${d.especialidad}</td>
               <td class="minText5">${d.servicio}</td>
               <td style="background-color: #003c81;color: white;font-weight: bold"><center>${d.cupos}</center></td>
-              <td style="background-color: #e7a503;color: black;font-weight: bold"><center>${emitidos}</center></td>
+              <td style="background-color: #d10000;color: white;font-weight: bold"><center>${emitidos}</center></td>
               <td style="background-color: green;color: white;font-weight: bold"><center>${libres}</center></td>
               </tr>`;
           })

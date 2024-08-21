@@ -478,7 +478,7 @@
 
          <!-- Modal -->
          <div class="modal fade" style="background-color: #fffcfc8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="editAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
+          <div class="modal-dialog modal-xl">
             <div class="modal-content border border-dark rounded">
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Editar cuenta N°</h1>
@@ -504,11 +504,30 @@
              
                 <h5>Paciente</h5>
                 <p></p>
+
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">DNI</span>
                   <input type="number" id="ed-dni" maxlength="8" class="form-control" aria-describedby="basic-addon1">
                   <button onclick="updateDniPatient()" class="btn btn-success">Actualizar</button>
                 </div>
+
+                <p></p>
+
+                <div class="input-group mb-3">
+                  <span  class="input-group-text minText5" id="basic-addon1">A.Paterno</span>
+                  <input style="text-transform: uppercase;" type="text" id="ed-ap-paterno" class="form-control minText5" aria-describedby="basic-addon1">
+                  <span class="input-group-text minText5" id="basic-addon1">A.Materno</span>
+                  <input style="text-transform: uppercase;" type="text" id="ed-ap-materno" class="form-control minText5" aria-describedby="basic-addon1">
+                  <span class="input-group-text minText5" id="basic-addon1">Nombre 1</span>
+                  <input style="text-transform: uppercase;" type="text" id="ed-name-patient" class="form-control minText5" aria-describedby="basic-addon1">
+                  <span class="input-group-text minText5" id="basic-addon1">Nombre 2</span>
+                  <input style="text-transform: uppercase;" type="text" id="ed-name2-patient" class="form-control minText5" aria-describedby="basic-addon1">
+                  <span class="input-group-text minText5" id="basic-addon1">Nombre 3</span>
+                  <input style="text-transform: uppercase;" type="text" id="ed-name3-patient" class="form-control minText5" aria-describedby="basic-addon1">
+                  <button onclick="updateFullNamePatient()" class="btn btn-success minText5">Actualizar</button>
+                </div>
+
+
                 <p></p>
 
                 <h5>Servicio</h5>
