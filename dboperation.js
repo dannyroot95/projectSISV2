@@ -1915,11 +1915,12 @@ console.log("error :" + error);
     }
   }
 
-  async function get_graph(year) {
+  async function get_graph(year,font) {
     try {
       let pool = await sql.connect(config);
       let res = await pool.request()
       .input('YEAR',year)
+      .input('FUENTE',font)
       .execute(`GRAFICO`) 
       return res.recordsets
     } catch (error) {

@@ -1,6 +1,7 @@
 let loader = document.getElementById("loader")
 let chart = document.getElementById("myChart")
 let pie = document.getElementById("myChartPie")
+let barChar = document.getElementById("chart_div")
 let print = document.getElementById("btn-print")
 let divFilter = document.getElementById("divFilter")
 let divSelectors = document.getElementById("selectors")
@@ -29,6 +30,10 @@ const today = new Date();
 let currentMonth = today.getMonth();
 let currentYear = today.getFullYear();
 let arrayValorizado = []
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
 
 function getMonthName(month) {
   const months = [
@@ -254,10 +259,11 @@ serviceSelector.addEventListener("change", function () {
 function setGraph(){
 
     let drop = document.getElementById("dp_graph").value
+    let font = document.getElementById("inputGroupSelectFinance").value
 
     if(drop != "0"){
         enableLoader()
-        fetchGraph(drop)
+        fetchGraph(drop,font)
     }else{
         Swal.fire(
             'Oops',
@@ -271,6 +277,7 @@ function enableLoader(){
     loader.style = "display:block;"
     chart.style = "display:none;"
     pie.style = "display:none;"
+    barChar.style = "display:none;"
     print.style = "display:none;"
     divFilter.style = "display:none;"
     divSelectors.style = "display:none;"
@@ -291,6 +298,9 @@ function disableLoader(){
     loader.style = "display:none;"
     chart.style = "display:block;"
     pie.style = "display:block;"
+    barChar.style = "display:flex;"
+    barChar.style = "width:100%"
+    barChar.style = "height:100%"
     print.style = "display:block;"
     divFilter.style = "display:block;"
     divSelectors.style = "display:flex;width:80%;"
@@ -351,7 +361,7 @@ function yearLater(){
        
         series: [{
             values: allData,
-            backgroundColor: "#6666FF #FF0066",
+            backgroundColor: "#004a87 #aad9ff",
             alpha: 0.5,
             valueBox: {
               placement: 'top',
@@ -390,9 +400,9 @@ function yearLater(){
   }
 
 
- function fetchGraph(year){
+ function fetchGraph(year,font){
 
-    fetch(`${url}/get-graph/${year}`,{
+    fetch(`${url}/get-graph/${year}/${font}`,{
         method: 'get',
         headers: {
           'Accept': 'application/json'
@@ -404,7 +414,7 @@ function yearLater(){
         json = data
         let totalAtenciones = 0;
         const totalesPorFuente = {};
-
+        
         const totalesPorMes = new Array(12).fill(0);
         // Recorrer el JSON y sumar los totales por mes
         data.forEach(entry => {
@@ -421,13 +431,15 @@ function yearLater(){
 
         });
 
-        console.log(totalesPorFuente)
+  
 
         loadChart(totalesPorMes,totalAtenciones)
         loadPie(totalesPorFuente)
         getMedics(data)
         getTypeAtention(data)
         getServices(data)
+        drawChart(data)
+        console.log(data)
 
       })
       .catch(error => {
@@ -439,6 +451,53 @@ function yearLater(){
         console.error(error)
     });
  }
+
+ function drawChart(data) {
+  // Simulación de recibir datos JSON
+  var jsonData = data
+  var summaryData = {};
+  jsonData.forEach(function(item) {
+      if (summaryData[item.Servicio]) {
+          summaryData[item.Servicio] += item.totalatenciones;
+      } else {
+          summaryData[item.Servicio] = item.totalatenciones;
+      }
+  });
+
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Servicio');
+  data.addColumn('number', 'Cantidad de Atenciones');
+
+  // Añadir los datos procesados al gráfico
+  Object.keys(summaryData).forEach(function(service) {
+      data.addRow([service, summaryData[service]]);
+  });
+
+  var options = {
+    title: 'Cantidad de atenciones por servicio', 
+    chartArea: { width: '70%', height: '80%' },
+    hAxis: { 
+      title: 'Cantidad de Atenciones', 
+      minValue: 0 
+    }
+    , 
+      vAxis: { 
+        title: 'Servicio' ,
+        textStyle: {
+          fontSize: 10 // Tamaño de fuente de las etiquetas del eje vertical
+      }
+      }, 
+      bars: 'horizontal', 
+      legend: { 
+        position: 'none' 
+      } 
+    
+    };
+
+  var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+  
+}
 
  function loadPie(totalesPorFuente){
     var myConfig = {
@@ -479,6 +538,7 @@ function yearLater(){
         width: "100%"
     });
  }
+
 
  function printer(){
 
@@ -743,7 +803,6 @@ function getMedicAndAtention(data, medic ,typeAte) {
 
   loadChart(totalesPorMes, totalAtenciones);
   loadPie(totalesPorFuente);
-
 }
 
 function getMedicAndService(data, medic ,service) {
@@ -944,3 +1003,4 @@ function valueProductionMedic(data) {
       console.log(err);
     });
 }
+

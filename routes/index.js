@@ -2275,9 +2275,10 @@ router.get("/delete-diagnosys-fua/:a/:b", function (req, res, next) {
   });
 });
 
-router.get("/get-graph/:a", function (req, res, next) {
+router.get("/get-graph/:a/:b", function (req, res, next) {
   let year = req.params.a 
-  sql.get_graph(year).then((result) => {
+  let font = req.params.b 
+  sql.get_graph(year,font).then((result) => {
     if(result[0].length>0){
       res.json(result[0]);
     }else{
