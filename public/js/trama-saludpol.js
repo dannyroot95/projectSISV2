@@ -4540,6 +4540,13 @@ async function fetchResum() {
                   quantity: parseInt(item.Cantidad),
                   unit: parseFloat(item.PrecioUnitario)
                 }
+                if(item.Nombre == `Infusión intravenosa para diagnóstico o terapia, administrada por el médico o bajo supervisión directa. (No incluye medicamentos)`)
+                {
+                  console.log("--")
+                  console.log(item)
+                  console.log(parseFloat(item.Cantidad))
+                  console.log(parseFloat(item.PrecioUnitario))
+                }
                 tableTotalProHOSP.push(jsonTable)
               }
           }  
@@ -4731,6 +4738,10 @@ function printResum(){
   if(length < 100){
     cells.forEach(cell => {
       cell.style.fontSize = "12px"; 
+    });
+  }else if(length > 175){
+    cells.forEach(cell => {
+      cell.style.fontSize = "9px";
     });
   }else{
     cells.forEach(cell => {
