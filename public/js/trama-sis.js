@@ -26,6 +26,7 @@ var insNotRegister = ["10249","10244","10248","27854","20842"]
 var typeMedicUser = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","25","26"]
 let onlySMI = ['050','054','055','017', '019', '020', '911', '021', '022', '024', '053', '056', '057', '058', '059', '060', '061', '062', '063', '064', '069', '070', '071', '074', '075', '200', '900', '901', 'S01', '904', '906', '065', '066', '067', '068', '111', '065', '067', '068'];
 var jsonAPISMI = []
+var jsonAPInsumos = []
 var jsonArfsisObs = []
 var pacientesAtendidos = {}
 
@@ -919,8 +920,17 @@ function insertDataInsumos(data){
     
     document.getElementById("tbody3").innerHTML = ""
     $('#tb-data-3').DataTable().destroy()
+    jsonAPInsumos = []
 
     $("#tbody3").html(data.map((d) => {
+
+      jsonAPInsumos.push({
+        cuenta:d.A1,
+        codigo : d.A2,
+        dx: d.A3,
+        prescrita:d.A4,
+        entregada: d.A5
+      })
         
               return `
               <tr style="cursor: pointer;">
@@ -1343,7 +1353,7 @@ function validateDataATE(d){
     if (d["A35"] == "1" && d["A50"] == "") {
       ctx++
       c++
-      let warning = `EL CAMPO ATE#50 (FECHA DE PARTO) DEBE DE CUMPLIR EL FORMATO DD/MM/AAAA Y SER UNA FECHA VALIDA`
+      let warning = `EL CAMPO ATE#50 (FECHA PROBABLE DE PARTO) DEBE DE CUMPLIR EL FORMATO DD/MM/AAAA Y SER UNA FECHA VALIDA`
       errors.push({
         '#':c,
         'ERRORES DE INCONSISTENCIA DE DATOS/DIGITACIÓN DETECTADOS':warning,
@@ -1356,7 +1366,7 @@ function validateDataATE(d){
     if (d["A35"] == "0"  && d["A50"].length > 0) {
       ctx++
       c++
-      let warning = `EL CAMPO ATE#50 (FECHA DE PARTO) DEBE SER VACIO SEGÚN AL CAMPO ATE#35`
+      let warning = `EL CAMPO ATE#50 (FECHA PROBABLE DE PARTO) DEBE SER VACIO SEGÚN AL CAMPO ATE#35`
       errors.push({
         '#':c,
         'ERRORES DE INCONSISTENCIA DE DATOS/DIGITACIÓN DETECTADOS':warning,
@@ -2529,6 +2539,7 @@ function showDetailModal(d){
   document.getElementById("fua-num-paper-reference").value = d.A41
 
   foundDataSmi((d.A1).trimEnd())
+  foundDataInsumos((d.A1).trimEnd())
 
   if(d.A50 != ""){
     document.getElementById("fua-date-pregnancy").value = (d.A50).split("/")[2]+'-'+(d.A50).split("/")[1]+'-'+(d.A50).split("/")[0]
@@ -3637,6 +3648,10 @@ setTimeout(() => {
         document.getElementById("btn-serach-w-service").disabled = true
         ft(disa,tipo,num.trim())
       }else if(tipo == "3" && num.length == 9){
+        document.getElementById("web-loader").style = "display:flex;"
+        document.getElementById("btn-serach-w-service").disabled = true
+        ft(disa,tipo,num.trim())
+      }else if(tipo == "E" && num.length == 8){
         document.getElementById("web-loader").style = "display:flex;"
         document.getElementById("btn-serach-w-service").disabled = true
         ft(disa,tipo,num.trim())
@@ -4945,6 +4960,7 @@ function getMaxFormatosAtencion(tipoPersonalSalud) {
   }
 }
 
+
 function verificarReglaValidacion8(data,arrayDeDatos) {
   const cuenta = data.cuenta_1;
   const servicio = data.servicio_42;
@@ -5245,68 +5261,197 @@ function showModalSMI(){
   document.getElementById("smi-account").innerHTML = smiAccount
 }
 
-function foundDataSmi(cuenta){
- 
-  let edadGest = document.getElementById("i-age-gest") // 005
-  let edadRn = document.getElementById("i-age-rn") // 304
-  let peso = document.getElementById("i-weight") //003
-  let talla = document.getElementById("i-tail") // 004
-  let imc = document.getElementById("i-imc") // 014
-  let apgar305 = document.getElementById("i-apgar305") // 305
-  let apgar306 = document.getElementById("i-apgar306") // 306
-  let vacunaBcg = document.getElementById("i-v-bcg") // 102
-  let vacunaHb = document.getElementById("i-v-hb") // 315
-  let psa1 = document.getElementById("i-p-1") // 301  
-  let psa2 = document.getElementById("i-p-2") // 901
+function showModalInsumos(){
+  $('#modalIns').modal('show')
+  let account = document.getElementById("d-account").innerHTML
+  document.getElementById("dt-account").innerHTML = account
+}
 
-  edadGest.value = ""
-  peso.value = ""
-  talla.value = ""
-  imc.value = ""
-  apgar305.value = ""
-  apgar306.value = ""
-  vacunaBcg.value = ""
-  vacunaHb.value = ""
-  psa1.value = ""
-  psa2.value = ""
-  edadRn.value = ""
+function foundDataSmi(cuenta) {
+  let edadGest = document.getElementById("i-age-gest");
+  let edadRn = document.getElementById("i-age-rn");
+  let peso = document.getElementById("i-weight");
+  let talla = document.getElementById("i-tail");
+  let imc = document.getElementById("i-imc");
+  let apgar305 = document.getElementById("i-apgar305");
+  let apgar306 = document.getElementById("i-apgar306");
+  let vacunaBcg = document.getElementById("i-v-bcg");
+  let vacunaHb = document.getElementById("i-v-hb");
+  let psa1 = document.getElementById("i-p-1");
+  let psa2 = document.getElementById("i-p-2");
 
-  document.getElementById("d-smi-age").style = "display:flex;"
-  document.getElementById("d-smi-weight-tail").style = "display:flex;"
-  document.getElementById("d-smi-apgar").style = "display:flex;"
-  document.getElementById("d-smi-bcg-hb").style = "display:flex;"
-  document.getElementById("d-smi-pa").style = "display:flex;"
+  // Reset fields
+  edadGest.value = "";
+  edadRn.value = "";
+  peso.value = "";
+  talla.value = "";
+  imc.value = "";
+  apgar305.value = "";
+  apgar306.value = "";
+  vacunaBcg.value = "";
+  vacunaHb.value = "";
+  psa1.value = "";
+  psa2.value = "";
 
-  for (var i = 0; i < jsonAPISMI.length; i++) {
-      if (jsonAPISMI[i].cuenta === cuenta) {
+  // Display sections
+  document.getElementById("d-smi-age").style.display = "flex";
+  document.getElementById("d-smi-weight-tail").style.display = "flex";
+  document.getElementById("d-smi-apgar").style.display = "flex";
+  document.getElementById("d-smi-bcg-hb").style.display = "flex";
+  document.getElementById("d-smi-pa").style.display = "flex";
 
-        if(jsonAPISMI[i].actividad === "005"){
-          edadGest.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "003"){
-          peso.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "004"){
-          talla.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "014"){
-          imc.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "305"){
-          apgar305.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "306"){
-          apgar306.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "102"){
-          vacunaBcg.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "315"){
-          vacunaHb.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "301"){
-          psa1.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "901"){
-          psa2.value = jsonAPISMI[i].valor 
-        }else if(jsonAPISMI[i].actividad === "304"){
-          edadRn.value = jsonAPISMI[i].valor 
-        }
-          //registrosEncontrados.push(jsonAPISMI[i]);
+  // Process data
+  for (let i = 0; i < jsonAPISMI.length; i++) {
+    if (jsonAPISMI[i].cuenta === cuenta) {
+      switch (jsonAPISMI[i].actividad) {
+        case "005":
+          edadGest.value = jsonAPISMI[i].valor;
+          break;
+        case "003":
+          peso.value = jsonAPISMI[i].valor;
+          break;
+        case "004":
+          talla.value = jsonAPISMI[i].valor;
+          break;
+        case "014":
+          imc.value = jsonAPISMI[i].valor;
+          break;
+        case "305":
+          apgar305.value = jsonAPISMI[i].valor;
+          break;
+        case "306":
+          apgar306.value = jsonAPISMI[i].valor;
+          break;
+        case "102":
+          vacunaBcg.value = jsonAPISMI[i].valor;
+          break;
+        case "315":
+          vacunaHb.value = jsonAPISMI[i].valor;
+          break;
+        case "301":
+          psa1.value = jsonAPISMI[i].valor;
+          break;
+        case "901":
+          psa2.value = jsonAPISMI[i].valor;
+          break;
+        case "304":
+          edadRn.value = jsonAPISMI[i].valor;
+          break;
       }
+    }
   }
-  //console.log(registrosEncontrados);
+}
+
+function foundDataInsumos(cuenta){
+  // Selecciona el tbody donde se agregarán las filas
+  let tbody = document.getElementById("tbodyIns");
+
+  // Limpia el contenido actual del tbody
+  tbody.innerHTML = "";
+
+  // Filtra el array jsonAPInsumos para encontrar insumos con la cuenta especificada
+  let insumosFiltrados = jsonAPInsumos.filter(function(insumo) {
+    return insumo.cuenta === cuenta;
+  });
+
+  // Recorre el array filtrado y crea las filas
+  insumosFiltrados.forEach(function(insumo) {
+    // Crea una nueva fila
+    let fila = document.createElement("tr");
+
+    let celdaCodigo = document.createElement("td");
+    celdaCodigo.textContent = insumo.codigo;
+    fila.appendChild(celdaCodigo);
+
+    let celdaDx = document.createElement("td");
+    celdaDx.textContent = insumo.dx;
+    fila.appendChild(celdaDx);
+
+    let celdaPrescrita = document.createElement("td");
+    celdaPrescrita.textContent = insumo.prescrita;
+    fila.appendChild(celdaPrescrita);
+
+    let celdaEntregada = document.createElement("td");
+    celdaEntregada.textContent = insumo.entregada;
+    fila.appendChild(celdaEntregada);
+
+    // Crea la celda para los botones con SVG
+    let celdaBotones = document.createElement("td");
+    celdaBotones.className = "text-center"; // Clase para centrar el contenido
+
+    // Botón de eliminar
+    let botonEliminar = document.createElement("button");
+    botonEliminar.className = "btn btn-danger me-2"; // Clase de Bootstrap para margen derecho y estilo
+    botonEliminar.addEventListener("click", function() {
+      // Acción al hacer clic en el botón
+      deleteInsumo(insumo.codigo,insumo.cuenta)
+    });
+
+    // SVG del botón eliminar
+    let svgEliminar = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgEliminar.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svgEliminar.setAttribute("width", "16");
+    svgEliminar.setAttribute("height", "16");
+    svgEliminar.setAttribute("fill", "currentColor");
+    svgEliminar.setAttribute("class", "bi bi-trash3");
+    svgEliminar.setAttribute("viewBox", "0 0 16 16");
+
+    let pathEliminar = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathEliminar.setAttribute("d", "M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5");
+
+    // Agrega el elemento path al SVG de eliminar
+    svgEliminar.appendChild(pathEliminar);
+    botonEliminar.appendChild(svgEliminar); // Agrega el SVG al botón eliminar
+    celdaBotones.appendChild(botonEliminar); // Agrega el botón eliminar a la celda
+
+    // Botón de editar
+    let botonEditar = document.createElement("button");
+    botonEditar.className = "btn btn-warning"; // Clase de Bootstrap para estilo
+
+    // SVG del botón editar (lápiz)
+    let svgEditar = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgEditar.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svgEditar.setAttribute("width", "16");
+    svgEditar.setAttribute("height", "16");
+    svgEditar.setAttribute("fill", "currentColor");
+    svgEditar.setAttribute("class", "bi bi-pencil-square");
+    svgEditar.setAttribute("viewBox", "0 0 16 16");
+
+    let pathEditar1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathEditar1.setAttribute("d", "M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z");
+
+    let pathEditar2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathEditar2.setAttribute("fill-rule", "evenodd");
+    pathEditar2.setAttribute("d", "M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z");
+
+    // Agrega los elementos path al SVG de editar
+    svgEditar.appendChild(pathEditar1);
+    svgEditar.appendChild(pathEditar2);
+    botonEditar.appendChild(svgEditar); // Agrega el SVG al botón editar
+    celdaBotones.appendChild(botonEditar); // Agrega el botón editar a la celda
+    botonEditar.addEventListener("click", function() {
+      // Acción al hacer clic en el botón
+      alert(`Acción para cuenta: ${insumo.codigo}`);
+    });
+
+    // Agrega la celda con los botones a la fila
+    fila.appendChild(celdaBotones);
+
+
+    // Agrega la fila completa al tbody
+    tbody.appendChild(fila);
+
+  });
+
+  // Si no hay insumos filtrados, puedes opcionalmente mostrar un mensaje
+  if (insumosFiltrados.length === 0) {
+    let fila = document.createElement("tr");
+    let celda = document.createElement("td");
+    celda.colSpan = 6; // Ajusta el colspan según el número total de columnas
+    celda.textContent = "No se encontraron insumos para la cuenta especificada.";
+    fila.appendChild(celda);
+    tbody.appendChild(fila);
+  }
 }
 
 function deleteSMI(type){
@@ -5378,6 +5523,12 @@ function deleteSMI(type){
     )
 
   }
+
+}
+
+
+function deleteInsumo(code,account){
+  alert(`Acción para cuenta: ${code}`);
 
 }
 
@@ -5488,7 +5639,6 @@ function updateInsertSMI(){
     vacunaBcg : vacunaBcg.value,
     vacunaHb : vacunaHb.value
   }
-
 
   const opciones = {
     method: 'POST',

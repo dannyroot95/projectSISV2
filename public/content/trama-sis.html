@@ -385,7 +385,7 @@
             &nbsp;&nbsp;&nbsp;
             <button class="btn btn-outline-danger minText5"><i class="bi bi-capsule"></i>&nbsp;Medicamentos</button>
             &nbsp;&nbsp;&nbsp;
-            <button class="btn btn-outline-success minText5"><i class="bi bi-bandaid-fill"></i>&nbsp;Insumos</button>
+            <button onclick="showModalInsumos()" class="btn btn-outline-success minText5"><i class="bi bi-bandaid-fill"></i>&nbsp;Insumos</button>
             &nbsp;&nbsp;&nbsp;
             <button id="btn-smi" onclick="showModalSMI()" class="btn btn-outline-warning minText5"><i class="bi bi-bandaid-fill" style="color: #1c1842;"></i>&nbsp;<label style="color: #1c1842;">SMI</label></button>
           </center> 
@@ -427,6 +427,7 @@
             <select class="custom-select minText5" id="s-type-formated">
               <option value="2">DNI (2)</option>
               <option value="3">Carnet de extrajería (3)</option>
+              <option value="E">Temporal</option>
             </select>
           <span class="input-group-text minText5" id="basic-addon1">Número formato</span>
           <input type="text" class="form-control minText5" id="web-formato">
@@ -741,17 +742,17 @@
         <!---->
 
         <div class="input-group mb-3" id="d-smi-weight-tail">
-          <span class="input-group-text minText5">Peso</span>
+          <span class="input-group-text minText5">Peso (003)</span>
           <input type="number" id="i-weight" class="form-control minText5">
-          <span class="input-group-text minText5">Talla</span>
+          <span class="input-group-text minText5">Talla (004)</span>
           <input type="number" id="i-tail" class="form-control minText5">
-          <span class="input-group-text minText5">IMC</span>
+          <span class="input-group-text minText5">IMC (014)</span>
           <input disabled style="color: black;" type="number" id="i-imc" class="form-control minText5">
           <button onclick="deleteSMI(1)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
         </div>
 
         <div class="input-group mb-3" id="d-smi-pa">
-          <span class="input-group-text minText5">Presión arterial</span>
+          <span class="input-group-text minText5">Presión arterial (301)</span>
           <input type="number" id="i-p-1" class="form-control minText5">
           <span class="input-group-text minText5">/</span>
           <input type="number" id="i-p-2" class="form-control minText5">
@@ -759,13 +760,13 @@
         </div>
         
         <div class="input-group mb-3" id="d-smi-age">
-          <span class="input-group-text minText5">Edad gestacional (semanas)</span>
+          <span class="input-group-text minText5">Edad gestacional en semanas (005)</span>
           <input type="number" id="i-age-gest" class="form-control minText5">
           <button onclick="deleteSMI(3)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
         </div>
 
         <div class="input-group mb-3" id="d-smi-age">
-          <span class="input-group-text minText5">Edad del recién nacido (semanas)</span>
+          <span class="input-group-text minText5">Edad del recién nacido en semanas (304)</span>
           <input type="number" id="i-age-rn" class="form-control minText5">
           <button onclick="deleteSMI(6)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
         </div>
@@ -779,9 +780,9 @@
         </div>
 
         <div class="input-group mb-3" id="d-smi-bcg-hb">
-          <span class="input-group-text minText5">Vacuna BCG</span>
+          <span class="input-group-text minText5">Vacuna BCG (102)</span>
           <input type="number" id="i-v-bcg" class="form-control minText5">
-          <span class="input-group-text minText5">Vacuna anti hepatitis B</span>
+          <span class="input-group-text minText5">Vacuna contra hepatitis B Recien Nacidos (315)</span>
           <input type="number" id="i-v-hb" class="form-control minText5">
           <button onclick="deleteSMI(5)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
         </div>
@@ -790,6 +791,44 @@
           <button onclick="updateInsertSMI()" class="btn btn-success minText5"><i class="bi bi-box-arrow-in-down"></i>&nbsp;Actualizar</button>
           <button onclick="deleteSMI(0)" class="btn btn-danger minText5"><i class="bi bi-x-circle"></i>&nbsp;Eliminar todo</button>
         </div>
+
+      </div>
+          
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="modalIns" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border border-dark rounded">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Insumos</h1>
+        &nbsp;
+        <label>-</label>
+        &nbsp;
+        <h1 id="dt-account" class="modal-title fs-5"></h1>
+        &nbsp;&nbsp;
+        <button class="btn btn-primary" style="font-size: 12px;"><b>+</b>&nbsp;Agregar</button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <table class="table table-responsive table-bordered display" id="tb-data-m-ins">
+          <thead>
+            <tr>
+              <th class="minText5">Codigo</th>
+              <th class="minText5">DX</th>
+              <th class="minText5">Prescrita</th>
+              <th class="minText5">Entregada</th>
+              <th class="minText5"></th>
+            </tr>
+          </thead>
+          <tbody id="tbodyIns">
+          </tbody>
+        </table>
+
+        <!---->
 
       </div>
           
@@ -910,7 +949,6 @@
       }
       $(item).appendTo('#tr-table-8')
      }
-
      </script>
 
     <script src="/bootstrap/js/bootstrap.min.js"></script>

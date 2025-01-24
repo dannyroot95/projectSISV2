@@ -1110,9 +1110,14 @@ console.log("error :" + error);
 
     let urlWebService = `http://app.sis.gob.pe/sisWSAFI/`
     let tipoDoc = tipo
+    let option = "1"
     if(tipoDoc == "2"){
       tipoDoc = "1"
+    }else if(tipoDoc == "E"){
+      tipoDoc = "E"
+      option = "2"
     }
+
   
     try{
 
@@ -1121,7 +1126,7 @@ console.log("error :" + error);
       <soap:Header/>
       <soap:Body>
          <sis:ConsultarAfiliadoFuaE>
-            <sis:intOpcion>1</sis:intOpcion>
+            <sis:intOpcion>${option}</sis:intOpcion>
             <!--Optional:-->
             <sis:strAutorizacion>${auth}</sis:strAutorizacion>
             <!--Optional:-->
@@ -2607,6 +2612,50 @@ async function getQuotes(data) {
   }
 }
 
+async function getDiagnosysFua(type,value) {
+  try {
+      let pool = await sql.connect(config);
+      let res = await pool.request()
+          .input('type', type)
+          .input('criterio', value)
+          .execute('BUSCAR_DIAGNOSTICO_TIPO');
+      return res.recordsets;
+  } catch (error) {
+      console.log(error);
+      return [{ success: "error" + ' ' + error.message }];
+  }
+}
+
+async function updateDiagnosysFua(id,account,dx) {
+  try {
+      let pool = await sql.connect(config);
+      let res = await pool.request()
+          .input('id', id)
+          .input('cuenta', account)
+          .input('codigo', dx)
+          .execute('ACTUALIZAR_DIAGNOSTICO_FUA');
+      return res.recordsets;
+  } catch (error) {
+      console.log(error);
+      return [{ success: "error" + ' ' + error.message }];
+  }
+}
+
+
+
+async function getSMI(account) {
+  try {
+      let pool = await sql.connect(config);
+      let res = await pool.request()
+          .input('CUENTA', account)
+          .execute('BUSCAR_SMI_POR_CUENTA');
+      return res.recordsets;
+  } catch (error) {
+      console.log(error);
+      return [{ success: "error" + ' ' + error.message }];
+  }
+}
+
 
 module.exports = {
   getdata: getdata,
@@ -2764,5 +2813,8 @@ module.exports = {
   getAllMedics:getAllMedics,
   getAllSpecialties:getAllSpecialties,
   getQuotes:getQuotes,
-  getPatientById:getPatientById
+  getPatientById:getPatientById,
+  getSMI:getSMI,
+  getDiagnosysFua:getDiagnosysFua,
+  updateDiagnosysFua:updateDiagnosysFua
 };

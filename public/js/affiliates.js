@@ -267,6 +267,8 @@ function deleteSymbols(event) {
         ft(disa,tipo,num.trim())
       }else if(tipo == "3" && num.length == 9){
         ft(disa,tipo,num.trim())
+      }else if(tipo == "E" && num.length == 8){
+        ft(disa,tipo,num.trim())
       }else{
         Swal.fire(
           'Oops',
@@ -333,6 +335,7 @@ function deleteSymbols(event) {
 
   function showDataAfiliate(data) {
     var xmlString = data;
+    console.log(data)
   
     // Parsear el XML
     var parser = new DOMParser();

@@ -170,9 +170,9 @@
 
         <p></p>
 
-        <input type="checkbox" id="checkbox-fua-dig" style="width: 18px;height: 18px;">
-        <label style="font-size: 18px;"><b>Digitador</b></label>
-        <div class="input-group mb-3" style="width: 80%;margin-top: 10px;">
+        <input type="checkbox" id="checkbox-fua-dig" style="width: 18px;height: 18px;display: none;">
+        <label style="font-size: 18px;display: none;"><b>Digitador</b></label>
+        <div class="input-group mb-3" style="width: 80%;margin-top: 10px;display: none;">
        
 
           <span class="input-group-text" >Nombre completo</span>
@@ -205,6 +205,11 @@
           </div>
 
   </div>
+
+</div>
+
+<br>
+<div id="buttons">
 
 </div>
    
@@ -247,6 +252,177 @@
     </div>
   </div>
 </div>
+
+<!--DIAGNOSTICOS-->
+
+<div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="modalDiagnosys" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border border-dark rounded">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Detalle de diagnosticos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <!---->
+        
+        <center><div class="loaderSmall" id="diag-loader"></div></center>
+        <table class="table table-responsive table-bordered display">
+          <thead>
+            <tr>
+              <th class="minText5">#</th>
+              <th class="minText5">Dx Ingreso</th>
+              <th class="minText5">Dx Egreso</th>
+              <th class="minText5">Código</th>
+              <th class="minText5">Descripción</th>
+              <th class="minText5"></th>
+            </tr>
+          </thead>
+          <tbody id="tbodyDiag">
+          </tbody>
+        </table>
+
+      </div>
+          
+    </div>
+  </div>
+</div>
+
+<!--FIN DIAGNOSTICOS-->
+
+
+<!--DIAGNOSTICOS DETALLE-->
+
+<div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="modalDiagnosysDetail" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border border-dark rounded">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Detalle de diagnostico</h1>
+        <label id="id1" style="display: none;"></label><label id="id2" style="display: none;"></label>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+    
+        <div class="input-group mb-3" >
+          <span class="input-group-text minText5">Orden</span>
+          <input type="text" style="background-color: white;color: black;" disabled id="dia-order" class="form-control minText2">
+          <span class="input-group-text minText5">Movimiento</span>
+          <input type="text" style="background-color: white;color: black;" disabled id="dia-mov" class="form-control minText2">
+          <span class="input-group-text minText5">Codigo</span>
+          <input type="text" style="background-color: white;color: black;" disabled id="dia-dx" class="form-control minText2">
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text minText5">Descripción</span>
+          <input type="text" style="background-color: white;color: black;" disabled id="dia-description" class="form-control minText2">
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text minText5" style="background-color: #022e61;color: white;font-weight: 700;">Buscar por</span>
+          <select class="form-select minText5" id="inputGroupSelectTypeDiagnosys">
+            <option value="0" class="minText5">Codigo</option>
+            <option value="1" class="minText5">Descripción</option>
+          </select>
+          <input placeholder="Digite el codigo ó descripción" style="background-color: rgb(220, 236, 255);" type="text" id="dia-search-value" class="form-control minText2">
+        </div>
+
+        <table class="table table-responsive table-bordered display" id="tbDataDia">
+          <thead>
+            <tr>
+              <th class="minText5"></th>
+              <th class="minText5">#</th>
+              <th class="minText5">Código</th>
+              <th class="minText5">Descripción</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyDxQuery">
+          </tbody>
+        </table>
+        
+
+      </div>
+          
+    </div>
+  </div>
+</div>
+
+<!--FIN DIAGNOSTICOS-->
+
+<!--SMI-->
+
+<div class="modal fade" style="background-color: #ffffff8f;" data-bs-backdrop="static" data-bs-keyboard="false" id="modalSMI" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border border-dark rounded">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Servicio materno infantil</h1>
+        &nbsp;
+        <label>-</label>
+        &nbsp;
+        <h1 id="smi-account" class="modal-title fs-5"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <!---->
+
+        <div class="input-group mb-3" id="d-smi-weight-tail">
+          <span class="input-group-text minText5">Peso (003)</span>
+          <input type="number" id="i-weight" class="form-control minText5">
+          <span class="input-group-text minText5">Talla (004)</span>
+          <input type="number" id="i-tail" class="form-control minText5">
+          <span class="input-group-text minText5">IMC (014)</span>
+          <input disabled style="color: black;" type="number" id="i-imc" class="form-control minText5">
+          <button onclick="deleteSMI(1)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-pa">
+          <span class="input-group-text minText5">Presión arterial (301)</span>
+          <input type="number" id="i-p-1" class="form-control minText5">
+          <span class="input-group-text minText5">/</span>
+          <input type="number" id="i-p-2" class="form-control minText5">
+          <button onclick="deleteSMI(2)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+        
+        <div class="input-group mb-3" id="d-smi-age">
+          <span class="input-group-text minText5">Edad gestacional en semanas (005)</span>
+          <input type="number" id="i-age-gest" class="form-control minText5">
+          <button onclick="deleteSMI(3)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-age">
+          <span class="input-group-text minText5">Edad del recién nacido en semanas (304)</span>
+          <input type="number" id="i-age-rn" class="form-control minText5">
+          <button onclick="deleteSMI(6)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-apgar">
+          <span class="input-group-text minText5">APGAR(305)</span>
+          <input type="number" id="i-apgar305" class="form-control minText5">
+          <span class="input-group-text minText5">APGAR(306)</span>
+          <input type="number" id="i-apgar306" class="form-control minText5">
+          <button onclick="deleteSMI(4)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="input-group mb-3" id="d-smi-bcg-hb">
+          <span class="input-group-text minText5">Vacuna BCG (102)</span>
+          <input type="number" id="i-v-bcg" class="form-control minText5">
+          <span class="input-group-text minText5">Vacuna contra hepatitis B Recien Nacidos (315)</span>
+          <input type="number" id="i-v-hb" class="form-control minText5">
+          <button onclick="deleteSMI(5)" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        </div>
+
+        <div class="modal-footer">
+          <button onclick="updateInsertSMI()" class="btn btn-success minText5"><i class="bi bi-box-arrow-in-down"></i>&nbsp;Actualizar</button>
+          <button onclick="deleteSMI(0)" class="btn btn-danger minText5"><i class="bi bi-x-circle"></i>&nbsp;Eliminar todo</button>
+        </div>
+
+      </div>
+          
+    </div>
+  </div>
+</div>
+
+<!--FIN SMI-->
       
 
     <script src="/bootstrap/js/bootstrap.min.js"></script>

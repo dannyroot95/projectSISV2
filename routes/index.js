@@ -2931,7 +2931,50 @@ router.post("/get-quotes", function (req, res,next) {
   });
 });
 
+router.get("/get-smi/:a", function (req, res, next) {
+  let account = req.params.a 
+  sql.getSMI(account).then((result) => {
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json([{success:"error"}])
+    }
+  });
+});
 
+router.post("/get-diagnosys-fua", function (req, res,next) {
+
+  let data = req.body
+  let type = data.type
+  let value = data.value
+
+  sql.getDiagnosysFua(type,value).then((result) => {
+    console.log(result)
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
+
+router.post("/update-diagnosys-fua", function (req, res,next) {
+
+  let data = req.body
+  let id = data.id
+  let account = data.account
+  let dx = data.dx
+
+
+  sql.updateDiagnosysFua(id,account,dx).then((result) => {
+    console.log(result)
+    if(result[0].length>0){
+      res.json(result[0]);
+    }else{
+      res.json({error:"sin datos"})
+    }
+  });
+});
 
 
 //--------------------------------------------------------------------------------------------------
