@@ -2630,8 +2630,8 @@ async function updateDiagnosysFua(id,account,dx) {
   try {
       let pool = await sql.connect(config);
       let res = await pool.request()
-          .input('id', id.parseInt())
-          .input('cuenta', account.parseInt())
+          .input('id', parseInt(id))
+          .input('cuenta', parseInt(account))
           .input('codigo', dx)
           .execute('ACTUALIZAR_DIAGNOSTICO_FUA');
       return res.recordsets;
