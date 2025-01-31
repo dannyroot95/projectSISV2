@@ -984,7 +984,6 @@ function fetchAndLoadData(type, value) {
         $('#tbDataDia').DataTable(); // Reinicia DataTable sin datos
         return;
       }
-
       // Limpia el contenido previo del tbody y destruye la tabla previa
       document.getElementById("tbodyDxQuery").innerHTML = '';
       $('#tbDataDia').DataTable().destroy();
@@ -1011,7 +1010,6 @@ function fetchAndLoadData(type, value) {
           `;
         })
         .join("");
-
       // Reinicia DataTable con los nuevos datos
       $('#tbDataDia').DataTable();
     })
@@ -1021,7 +1019,14 @@ function fetchAndLoadData(type, value) {
     });
 }
 
-function updateDiagnosys(id,account,codigo){
+function updateDiagnosys(id,account,dx){
+
+  let json = {
+    id:id,
+    account:account,
+    dx:dx
+  }
+    
   Swal.fire({
     title: 'Estas seguro de remplazar este diagnostico?',
     showCancelButton: true,
@@ -1036,7 +1041,7 @@ function updateDiagnosys(id,account,codigo){
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, account, codigo }),
+        body: JSON.stringify(json),
       })
       .then(response => response.json())
       .then(data => {
@@ -1047,11 +1052,11 @@ function updateDiagnosys(id,account,codigo){
             'Diagnostico actualizado!',
             'success'
         );
-        $('#modalDiagnosys').modal('hide');
-        $('#modalDiagnosysDetail').modal('hide');
+          $('#modalDiagnosys').modal('hide');
+          $('#modalDiagnosysDetail').modal('hide');
         }
-      })
-    }
-
-  })
+      }).catch(err =>{
+        console.log(err)
+    });
+  }})
 }

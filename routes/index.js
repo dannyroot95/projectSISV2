@@ -2965,7 +2965,6 @@ router.post("/update-diagnosys-fua", function (req, res,next) {
   let account = data.account
   let dx = data.dx
 
-
   sql.updateDiagnosysFua(id,account,dx).then((result) => {
     console.log(result)
     if(result[0].length>0){
