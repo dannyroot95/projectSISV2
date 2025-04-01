@@ -74,7 +74,7 @@ function insertData(data){
             'Medico':d.medico,
             'Digitador':d.digitador,
             'Usuario':d.usuario,
-            'Nombre de usuario':d.nombre_digitador,
+            'Nombre de digitador':d.nombre_digitador,
             'Nombre de servicio':typeService(d.servicio_egreso),
             'Valorizado':d.TotalValorizado,
             'Mes':d.mes,
